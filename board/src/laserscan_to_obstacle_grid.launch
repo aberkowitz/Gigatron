@@ -1,0 +1,3 @@
+<launch>
+<node pkg="board" type="laserscan_to_obstacle_grid" name="laserscan_to_obstacle_grid" output="screen" launch-prefix="gdb -ex run --args"/>
+</launch>
