@@ -29,13 +29,13 @@ private:
 class JetsonCommander: public Commander { //$ wooo
 public:
   JetsonCommander(ros::NodeHandle *nh);
-  virtual void CmdCallback(const std_msgs::Int16MultiArray::ConstPtr& cmd);
+  virtual void CmdCallback(const std_msgs::Int16MultiArray cmd);
   virtual unsigned char GetLeftSpeedCmd();
   virtual unsigned char GetRightSpeedCmd();
   virtual unsigned char GetPositionCmd();
 private:
   ros::NodeHandle *_nh;
-  ros::Subscriber _sub;
+  //ros::Subscriber _sub;
   unsigned char _lSp, _rSp, _pos;
 };
 

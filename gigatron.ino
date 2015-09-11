@@ -9,6 +9,9 @@
 
 #define LOOP_INTERVAL 10
 
+
+
+
 void setup() {
   Serial.begin(38400);
 
@@ -35,7 +38,9 @@ void setup() {
   //$
   ros::NodeHandle nh;
   JetsonCommander jc(&nh);
-
+  ros::Subscriber<std_msgs::Int16MultiArray> sub("cmd_vel", &JetsonCommander::CmdCallback, jc);
+nh.initNode();
+nh.subscribe(sub);
   /* Context(Commander *commander, DCServo *servo,
           SpeedSensor *left, SpeedSensor *right,
           int lPwm, int rPwm,

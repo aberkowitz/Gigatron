@@ -37,7 +37,7 @@ void Context::ConfigureLoop(int sInterval, int pInterval) {
 void Context::Start() {
   _last_st = _last_pt = millis();
   for (;;) {
-    _nh.spinOnce();
+    _nh->spinOnce();
     unsigned long t = millis();
     unsigned long d_st = t - _last_st;
     unsigned long d_pt = t - _last_pt;

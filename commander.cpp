@@ -24,17 +24,17 @@ unsigned char RCCommander::GetPositionCmd() {
 JetsonCommander::JetsonCommander(ros::NodeHandle *nh) {
 
   _nh = nh;
-  _sub = _nh.subscribe("cmd_vel", 1000, &JetsonCommander::CmdCallback, this);
+ // _sub = _nh.subscribe("cmd_vel", 1000, &JetsonCommander::CmdCallback, this);
 
   _lSp = 0; //$ TODO: fix
   _rSp = 0; //$ TODO: fix
   _pos = 0;
 }
 
-void JetsonCommander::CmdCallback(const std_msgs::Int16MultiArray::ConstPtr& cmd) {
-	Serial.println("Steering angle: " << cmd.data[0]);
-    Serial.println(" Left wheel velocity: " << cmd.data[1]);
-    Serial.println(" Right wheel velocity: " << cmd.data[2] << "\n");
+void JetsonCommander::CmdCallback(const std_msgs::Int16MultiArray cmd) {
+	//Serial.println("Steering angle: " << string(cmd.data[0]));
+    //Serial.println(" Left wheel velocity: " << cmd.data[1]);
+    //Serial.println(" Right wheel velocity: " << cmd.data[2] << "\n");
 	_pos = (char) cmd.data[0];
 	_lSp = (char) cmd.data[1];
 	_rSp = (char) cmd.data[2];	
