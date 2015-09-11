@@ -18,9 +18,9 @@ void CmdCallback(const std_msgs::Int16MultiArray& cmd) {
   Serial.println(" Left wheel velocity: " << cmd.data[1]);
   Serial.println(" Right wheel velocity: " << cmd.data[2] << "\n");
 */
-  jc._pos = (char) cmd.data[0];
-  jc._lSp = (char) cmd.data[1];
-  jc._rSp = (char) cmd.data[2];  
+  jc._posCmd = (char) cmd.data[0];
+  jc._leftCmd = (char) cmd.data[1];
+  jc._rightCmd = (char) cmd.data[2];  
 }
 
 void setup() {
@@ -49,15 +49,20 @@ void setup() {
   //$
  // ros::NodeHandle nh;
  // JetsonCommander jc(&nh);
-  ros::Subscriber<std_msgs::Int16MultiArray> sub("cmd_vel", CmdCallback);
+  ros::Subscriber<std_msgs::Int16MultiArray> sub("control", CmdCallback);
   nh.subscribe(sub);
   ros::Publisher pub("odo_val", &odomsg);
   nh.advertise(pub);
+
   /* Context(Commander *commander, DCServo *servo,
           SpeedSensor *left, SpeedSensor *right,
           int lPwm, int rPwm,
           PidController *lSp, PidController *rSp,
-          PidController *pos); */
+          PidController *pos,
+          ros::NodeHandle *nh,
+          JetsonCommander *jcommander,
+          std_msgs::Int16MultiArray *odomsg,
+          ros::Publisher *pub); */
   Context context(&rc, &servo, &left, &right, 9, 10, &lSp, &rSp, &pPos, &nh, &jc, &odomsg, &pub);
 
   // Context::ConfigureLoop(int sInterval, int pInterval);

@@ -33,7 +33,7 @@ public:
   virtual unsigned char GetLeftSpeedCmd();
   virtual unsigned char GetRightSpeedCmd();
   virtual unsigned char GetPositionCmd();
-  unsigned char _lSp, _rSp, _pos;
+  unsigned char _leftCmd, _rightCmd, _posCmd;
 private:
   ros::NodeHandle *_nh;
  // ros::Subscriber _sub;
