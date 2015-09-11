@@ -10,7 +10,9 @@ Context::Context(Commander *commander, DCServo *servo,
           PidController *lSp, PidController *rSp,
           PidController *pos,
           ros::NodeHandle *nh,
-          JetsonCommander *jcommander) {
+          JetsonCommander *jcommander,
+          std_msgs::Int16MultiArray *odomsg,
+          ros::Publisher *pub) {
   _commander = commander;
   _servo = servo;
   _left = left;
@@ -23,6 +25,10 @@ Context::Context(Commander *commander, DCServo *servo,
 
   _nh = nh; //$
   _jcommander = jcommander; //$
+  _odomsg = odomsg; //$
+  _pub = pub;
+
+
   _jetsonMode = true; //$ TODO: implement switching
   
   pinMode(_lPwm, OUTPUT);
@@ -37,18 +43,18 @@ void Context::ConfigureLoop(int sInterval, int pInterval) {
 void Context::Start() {
   _last_st = _last_pt = millis();
   for (;;) {
-    _nh->spinOnce();
+    _nh->spinOnce(); //$ spin node handle
     unsigned long t = millis();
     unsigned long d_st = t - _last_st;
     unsigned long d_pt = t - _last_pt;
     if (d_st > _sInterval) {
       unsigned char lSpC;
       unsigned char rSpC;
-      if (_jetsonMode) {
+      if (_jetsonMode) { //$ Jetson mode
         lSpC = _jcommander->GetLeftSpeedCmd();
         rSpC = _jcommander->GetRightSpeedCmd();
       }
-      else { // RC mode
+      else { //$ RC mode
         lSpC = _commander->GetLeftSpeedCmd();
         rSpC = _commander->GetRightSpeedCmd();
       }
@@ -58,7 +64,7 @@ void Context::Start() {
     }
     if (d_pt > _pInterval) {
       unsigned char pC;
-      if (_jetsonMode) {
+      if (_jetsonMode) { //$ Jetson mode
         pC = _jcommander->GetPositionCmd();
       }
       else { //$ RC mode
@@ -71,6 +77,15 @@ void Context::Start() {
       int vel = _pos->Update(pC, pS);
       //dp(vel);
       _servo->SetVelocity(vel);
+
+      //$ clear message
+      _odomsg->data[0] = _odomsg->data[1] = _odomsg->data[2] = 0;
+      //$ publish steering servo position and Hall effect readings
+      _odomsg->data[0] = _servo->GetPos();
+      _odomsg->data[1] = _left->GetSpeed();
+      _odomsg->data[2] = _right->GetSpeed();
+      _pub->publish(_odomsg);
+      
       _last_pt = t;
     }
   }

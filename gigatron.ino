@@ -9,8 +9,19 @@
 
 #define LOOP_INTERVAL 10
 
+ros::NodeHandle nh; //$ node handle
+JetsonCommander jc(&nh);  //$ Jetson commander
+std_msgs::Int16MultiArray odomsg; //$ odometry message
 
-
+void CmdCallback(const std_msgs::Int16MultiArray& cmd) {
+/*Serial.println("Steering angle: " << cmd.data[0]);
+  Serial.println(" Left wheel velocity: " << cmd.data[1]);
+  Serial.println(" Right wheel velocity: " << cmd.data[2] << "\n");
+*/
+  jc._pos = (char) cmd.data[0];
+  jc._lSp = (char) cmd.data[1];
+  jc._rSp = (char) cmd.data[2];  
+}
 
 void setup() {
   Serial.begin(38400);
@@ -36,17 +47,18 @@ void setup() {
   PidController pPos(500, 0, 100, 255, -255);
 
   //$
-  ros::NodeHandle nh;
-  JetsonCommander jc(&nh);
-  ros::Subscriber<std_msgs::Int16MultiArray> sub("cmd_vel", &JetsonCommander::CmdCallback, jc);
-nh.initNode();
-nh.subscribe(sub);
+ // ros::NodeHandle nh;
+ // JetsonCommander jc(&nh);
+  ros::Subscriber<std_msgs::Int16MultiArray> sub("cmd_vel", CmdCallback);
+  nh.subscribe(sub);
+  ros::Publisher pub("odo_val", &odomsg);
+  nh.advertise(pub);
   /* Context(Commander *commander, DCServo *servo,
           SpeedSensor *left, SpeedSensor *right,
           int lPwm, int rPwm,
           PidController *lSp, PidController *rSp,
           PidController *pos); */
-  Context context(&rc, &servo, &left, &right, 9, 10, &lSp, &rSp, &pPos, &nh, &jc);
+  Context context(&rc, &servo, &left, &right, 9, 10, &lSp, &rSp, &pPos, &nh, &jc, &odomsg, &pub);
 
   // Context::ConfigureLoop(int sInterval, int pInterval);
   context.ConfigureLoop(LOOP_INTERVAL, LOOP_INTERVAL);

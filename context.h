@@ -31,7 +31,9 @@ public:
           PidController *lSp, PidController *rSp,
           PidController *pos,
           ros::NodeHandle *nh,
-          JetsonCommander *jcommander);
+          JetsonCommander *jcommander,
+          std_msgs::Int16MultiArray *odomsg,
+          ros::Publisher *pub);
   void ConfigureLoop(int sInterval, int pInterval);
   void Start();
 private:
@@ -47,6 +49,8 @@ private:
   //$
   ros::NodeHandle *_nh;
   JetsonCommander *_jcommander;
+  std_msgs::Int16MultiArray *_odomsg;
+  ros::Publisher *_pub;
   boolean _jetsonMode; 
 
 };
