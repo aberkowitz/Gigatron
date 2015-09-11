@@ -8,7 +8,9 @@ Context::Context(Commander *commander, DCServo *servo,
           SpeedSensor *left, SpeedSensor *right,
           int lPwm, int rPwm,
           PidController *lSp, PidController *rSp,
-          PidController *pos) {
+          PidController *pos,
+          ros::NodeHandle *nh,
+          JetsonCommander *jcommander) {
   _commander = commander;
   _servo = servo;
   _left = left;
@@ -18,6 +20,10 @@ Context::Context(Commander *commander, DCServo *servo,
   _lSp = lSp;
   _rSp = rSp;
   _pos = pos;
+
+  _nh = nh; //$
+  _jcommander = jcommander; //$
+  _jetsonMode = true; //$ TODO: implement switching
   
   pinMode(_lPwm, OUTPUT);
   pinMode(_rPwm, OUTPUT);
@@ -31,19 +37,35 @@ void Context::ConfigureLoop(int sInterval, int pInterval) {
 void Context::Start() {
   _last_st = _last_pt = millis();
   for (;;) {
+    _nh.spinOnce();
     unsigned long t = millis();
     unsigned long d_st = t - _last_st;
     unsigned long d_pt = t - _last_pt;
     if (d_st > _sInterval) {
-      unsigned char lSpC = _commander->GetLeftSpeedCmd();
-      unsigned char rSpC = _commander->GetRightSpeedCmd();
+      unsigned char lSpC;
+      unsigned char rSpC;
+      if (_jetsonMode) {
+        lSpC = _jcommander->GetLeftSpeedCmd();
+        rSpC = _jcommander->GetRightSpeedCmd();
+      }
+      else { // RC mode
+        lSpC = _commander->GetLeftSpeedCmd();
+        rSpC = _commander->GetRightSpeedCmd();
+      }
       analogWrite(_lPwm, lSpC);
       analogWrite(_rPwm, rSpC);
       _last_st = t;
     }
     if (d_pt > _pInterval) {
-      unsigned char pC = _commander->GetPositionCmd();  
+      unsigned char pC;
+      if (_jetsonMode) {
+        pC = _jcommander->GetPositionCmd();
+      }
+      else { //$ RC mode
+        pC = _commander->GetPositionCmd();
+      }  
       unsigned char pS = _servo->GetPos();
+      
       //dp(pC);
       //dp(pS);
       int vel = _pos->Update(pC, pS);

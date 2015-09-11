@@ -2,6 +2,10 @@
 #include "commander.h"
 #include "context.h"
 #include "shared.h"
+#include <ros.h>
+#include <std_msgs/MultiArrayLayout.h>
+#include <std_msgs/MultiArrayDimension.h>
+#include <std_msgs/Int16MultiArray.h>
 
 #define LOOP_INTERVAL 10
 
@@ -28,12 +32,16 @@ void setup() {
   PidController rSp(0, 100, 0, 255, 0);
   PidController pPos(500, 0, 100, 255, -255);
 
+  //$
+  ros::NodeHandle nh;
+  JetsonCommander jc(&nh);
+
   /* Context(Commander *commander, DCServo *servo,
           SpeedSensor *left, SpeedSensor *right,
           int lPwm, int rPwm,
           PidController *lSp, PidController *rSp,
           PidController *pos); */
-  Context context(&rc, &servo, &left, &right, 9, 10, &lSp, &rSp, &pPos);
+  Context context(&rc, &servo, &left, &right, 9, 10, &lSp, &rSp, &pPos, &nh, &jc);
 
   // Context::ConfigureLoop(int sInterval, int pInterval);
   context.ConfigureLoop(LOOP_INTERVAL, LOOP_INTERVAL);

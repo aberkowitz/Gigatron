@@ -5,6 +5,10 @@
 #include "shared.h"
 #include "classes.h"
 #include "commander.h"
+#include <ros.h>
+#include <std_msgs/MultiArrayLayout.h>
+#include <std_msgs/MultiArrayDimension.h>
+#include <std_msgs/Int16MultiArray.h>
 
 class PidController {
 public:
@@ -25,7 +29,9 @@ public:
           SpeedSensor *left, SpeedSensor *right,
           int lPwm, int rPwm,
           PidController *lSp, PidController *rSp,
-          PidController *pos);
+          PidController *pos,
+          ros::NodeHandle *nh,
+          JetsonCommander *jcommander);
   void ConfigureLoop(int sInterval, int pInterval);
   void Start();
 private:
@@ -37,6 +43,12 @@ private:
   int _sInterval, _pInterval;
   
   unsigned long _last_st, _last_pt;
+
+  //$
+  ros::NodeHandle *_nh;
+  JetsonCommander *_jcommander;
+  boolean _jetsonMode; 
+
 };
 
 #endif

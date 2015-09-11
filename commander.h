@@ -4,6 +4,10 @@
 #include <Arduino.h>
 #include "classes.h"
 #include "shared.h"
+#include <ros.h>
+#include <std_msgs/MultiArrayLayout.h>
+#include <std_msgs/MultiArrayDimension.h>
+#include <std_msgs/Int16MultiArray.h>
 
 class Commander {
 public:
@@ -21,6 +25,21 @@ public:
 private:
   RCDecoder *_sp, *_pos;
 };
+
+class JetsonCommander: public Commander { //$ wooo
+public:
+  JetsonCommander(ros::NodeHandle *nh);
+  virtual void CmdCallback(const std_msgs::Int16MultiArray::ConstPtr& cmd);
+  virtual unsigned char GetLeftSpeedCmd();
+  virtual unsigned char GetRightSpeedCmd();
+  virtual unsigned char GetPositionCmd();
+private:
+  ros::NodeHandle *_nh;
+  ros::Subscriber _sub;
+  unsigned char _lSp, _rSp, _pos;
+};
+
+
   
 #endif
 
