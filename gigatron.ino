@@ -12,6 +12,8 @@
 ros::NodeHandle nh; //$ node handle
 JetsonCommander jc(&nh);  //$ Jetson commander
 std_msgs::UInt16MultiArray odomsg; //$ odometry message
+std_msgs::UInt16MultiArray commsg; //$ command message
+
 
 void CmdCallback(const std_msgs::UInt16MultiArray& cmd) {
 /*Serial.println("Steering angle: " << cmd.data[0]);
@@ -53,6 +55,8 @@ void setup() {
   nh.subscribe(sub);
   ros::Publisher pub("odo_val", &odomsg);
   nh.advertise(pub);
+  ros::Publisher compub("command", &commsg);
+  nh.advertise(compub);
 
   /* Context(Commander *commander, DCServo *servo,
           SpeedSensor *left, SpeedSensor *right,
@@ -63,7 +67,7 @@ void setup() {
           JetsonCommander *jcommander,
           std_msgs::UInt16MultiArray *odomsg,
           ros::Publisher *pub); */
-  Context context(&rc, &servo, &left, &right, 9, 10, &lSp, &rSp, &pPos, &nh, &jc, &odomsg, &pub);
+  Context context(&rc, &servo, &left, &right, 9, 10, &lSp, &rSp, &pPos, &nh, &jc, &odomsg, &pub, &commsg, &compub);
 
   // Context::ConfigureLoop(int sInterval, int pInterval);
   context.ConfigureLoop(LOOP_INTERVAL, LOOP_INTERVAL);

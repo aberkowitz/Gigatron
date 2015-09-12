@@ -33,7 +33,9 @@ public:
           ros::NodeHandle *nh,
           JetsonCommander *jcommander,
           std_msgs::UInt16MultiArray *odomsg,
-          ros::Publisher *pub);
+          ros::Publisher *pub,
+          std_msgs::UInt16MultiArray *commsg,
+          ros::Publisher *compub);
   void ConfigureLoop(int sInterval, int pInterval);
   void Start();
 private:
@@ -49,9 +51,13 @@ private:
   //$
   ros::NodeHandle *_nh;
   JetsonCommander *_jcommander;
+  boolean _jetsonMode; 
+
   std_msgs::UInt16MultiArray *_odomsg;
   ros::Publisher *_pub;
-  boolean _jetsonMode; 
+
+  std_msgs::UInt16MultiArray *_commsg;
+  ros::Publisher *_compub;
 
 };
 

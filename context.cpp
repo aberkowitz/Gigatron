@@ -12,7 +12,9 @@ Context::Context(Commander *commander, DCServo *servo,
           ros::NodeHandle *nh,
           JetsonCommander *jcommander,
           std_msgs::UInt16MultiArray *odomsg,
-          ros::Publisher *pub) {
+          ros::Publisher *pub,
+          std_msgs::UInt16MultiArray *commsg,
+          ros::Publisher *compub) {
   _commander = commander;
   _servo = servo;
   _left = left;
@@ -27,6 +29,8 @@ Context::Context(Commander *commander, DCServo *servo,
   _jcommander = jcommander; //$
   _odomsg = odomsg; //$
   _pub = pub;
+  _commsg = commsg; //$
+  _compub = compub;
 
 
   _jetsonMode = true; //$ TODO: implement switching
@@ -44,6 +48,11 @@ void Context::Start() {
   _last_st = _last_pt = millis();
   for (;;) {
     _nh->spinOnce(); //$ spin node handle
+    
+    //$ clear messages
+    _odomsg->data[0] = _odomsg->data[1] = _odomsg->data[2] = 0;
+    _commsg->data[0] = _commsg->data[1] = _commsg->data[2] = 0;
+
     unsigned long t = millis();
     unsigned long d_st = t - _last_st;
     unsigned long d_pt = t - _last_pt;
@@ -60,6 +69,11 @@ void Context::Start() {
       }
       analogWrite(_lPwm, lSpC);
       analogWrite(_rPwm, rSpC);
+
+      //$ write PWM commands to message
+      _commsg->data[1] = lSpC;
+      _commsg->data[2] = rSpC;
+
       _last_st = t;
     }
     if (d_pt > _pInterval) {
@@ -78,13 +92,17 @@ void Context::Start() {
       //dp(vel);
       _servo->SetVelocity(vel);
 
-      //$ clear message
-      _odomsg->data[0] = _odomsg->data[1] = _odomsg->data[2] = 0;
       //$ publish steering servo position and Hall effect readings
       _odomsg->data[0] = _servo->GetPos();
       _odomsg->data[1] = _left->GetSpeed();
       _odomsg->data[2] = _right->GetSpeed();
+
+      //$ publish steering servo position and Hall effect readings
+      _commsg->data[0] = pC;
+
+      //$ publish messages
       _pub->publish(_odomsg);
+      _compub->publish(_commsg);
       
       _last_pt = t;
     }

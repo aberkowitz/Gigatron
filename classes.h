@@ -15,7 +15,7 @@ private:
 
 class RCDecoder {
 public:
-  RCDecoder(int interrupt, int minV, int maxV);
+  RCDecoder(int interrupt, int minV, int maxV); // edges of pulse widths in microseconds
   unsigned char GetVal();
 private:
   int _interrupt;
