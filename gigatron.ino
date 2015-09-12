@@ -5,22 +5,22 @@
 #include <ros.h>
 #include <std_msgs/MultiArrayLayout.h>
 #include <std_msgs/MultiArrayDimension.h>
-#include <std_msgs/Int16MultiArray.h>
+#include <std_msgs/UInt16MultiArray.h>
 
 #define LOOP_INTERVAL 10
 
 ros::NodeHandle nh; //$ node handle
 JetsonCommander jc(&nh);  //$ Jetson commander
-std_msgs::Int16MultiArray odomsg; //$ odometry message
+std_msgs::UInt16MultiArray odomsg; //$ odometry message
 
-void CmdCallback(const std_msgs::Int16MultiArray& cmd) {
+void CmdCallback(const std_msgs::UInt16MultiArray& cmd) {
 /*Serial.println("Steering angle: " << cmd.data[0]);
   Serial.println(" Left wheel velocity: " << cmd.data[1]);
   Serial.println(" Right wheel velocity: " << cmd.data[2] << "\n");
 */
-  jc._posCmd = (char) cmd.data[0];
-  jc._leftCmd = (char) cmd.data[1];
-  jc._rightCmd = (char) cmd.data[2];  
+  jc._posCmd = (unsigned char) cmd.data[0];
+  jc._leftCmd = (unsigned char) cmd.data[1];
+  jc._rightCmd = (unsigned char) cmd.data[2];  
 }
 
 void setup() {
@@ -49,7 +49,7 @@ void setup() {
   //$
  // ros::NodeHandle nh;
  // JetsonCommander jc(&nh);
-  ros::Subscriber<std_msgs::Int16MultiArray> sub("control", CmdCallback);
+  ros::Subscriber<std_msgs::UInt16MultiArray> sub("control", CmdCallback);
   nh.subscribe(sub);
   ros::Publisher pub("odo_val", &odomsg);
   nh.advertise(pub);
@@ -61,7 +61,7 @@ void setup() {
           PidController *pos,
           ros::NodeHandle *nh,
           JetsonCommander *jcommander,
-          std_msgs::Int16MultiArray *odomsg,
+          std_msgs::UInt16MultiArray *odomsg,
           ros::Publisher *pub); */
   Context context(&rc, &servo, &left, &right, 9, 10, &lSp, &rSp, &pPos, &nh, &jc, &odomsg, &pub);
 

@@ -11,7 +11,7 @@ Context::Context(Commander *commander, DCServo *servo,
           PidController *pos,
           ros::NodeHandle *nh,
           JetsonCommander *jcommander,
-          std_msgs::Int16MultiArray *odomsg,
+          std_msgs::UInt16MultiArray *odomsg,
           ros::Publisher *pub) {
   _commander = commander;
   _servo = servo;

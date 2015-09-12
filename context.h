@@ -8,7 +8,7 @@
 #include <ros.h>
 #include <std_msgs/MultiArrayLayout.h>
 #include <std_msgs/MultiArrayDimension.h>
-#include <std_msgs/Int16MultiArray.h>
+#include <std_msgs/UInt16MultiArray.h>
 
 class PidController {
 public:
@@ -32,7 +32,7 @@ public:
           PidController *pos,
           ros::NodeHandle *nh,
           JetsonCommander *jcommander,
-          std_msgs::Int16MultiArray *odomsg,
+          std_msgs::UInt16MultiArray *odomsg,
           ros::Publisher *pub);
   void ConfigureLoop(int sInterval, int pInterval);
   void Start();
@@ -49,7 +49,7 @@ private:
   //$
   ros::NodeHandle *_nh;
   JetsonCommander *_jcommander;
-  std_msgs::Int16MultiArray *_odomsg;
+  std_msgs::UInt16MultiArray *_odomsg;
   ros::Publisher *_pub;
   boolean _jetsonMode; 
 
