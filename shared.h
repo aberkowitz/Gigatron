@@ -7,8 +7,8 @@ extern volatile unsigned int _speed_2, _speed_3;
 
 void ISR0();
 void ISR1();
-void ISR2();
-void ISR3();
+void ISR4();
+void ISR5();
 
 #endif
 

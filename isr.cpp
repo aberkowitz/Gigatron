@@ -23,11 +23,11 @@ void ISR1() {
   }
 }
 
-void ISR2() {
+void ISR4() {
   _speed_2++;
 }
 
-void ISR3() {
+void ISR5() {
   _speed_3++;
 }
 

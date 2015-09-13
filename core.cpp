@@ -73,13 +73,13 @@ SpeedSensor::SpeedSensor(int interrupt, int poles, int interval) {
   _poles = poles;
   _interval = interval;
   
-  pinMode(20, INPUT);
-  pinMode(21, INPUT);
+  pinMode(18, INPUT);
+  pinMode(19, INPUT);
   
-  if (_interrupt == 2) {
-    attachInterrupt(2, ISR2, RISING);
+  if (_interrupt == 4) {
+    attachInterrupt(4, ISR4, RISING);
   } else {
-    attachInterrupt(3, ISR3, RISING);
+    attachInterrupt(5, ISR5, RISING);
   }
   
   _speed_2 = _speed_3 = 0;
@@ -87,7 +87,7 @@ SpeedSensor::SpeedSensor(int interrupt, int poles, int interval) {
 
 unsigned int SpeedSensor::GetSpeed() {
   long sp;
-  if (_interrupt == 2) {
+  if (_interrupt == 4) {
     sp = _speed_2;
     _speed_2 = 0;
   } else {
