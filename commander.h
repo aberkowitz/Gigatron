@@ -5,9 +5,6 @@
 #include "classes.h"
 #include "shared.h"
 #include <ros.h>
-#include <std_msgs/MultiArrayLayout.h>
-#include <std_msgs/MultiArrayDimension.h>
-#include <std_msgs/Int16MultiArray.h>
 
 class Commander {
 public:
@@ -29,14 +26,13 @@ private:
 class JetsonCommander: public Commander { //$ wooo
 public:
   JetsonCommander(ros::NodeHandle *nh);
-//  virtual void CmdCallback(const std_msgs::Int16MultiArray::ConstPtr& cmd);
-  virtual unsigned char GetLeftSpeedCmd();
-  virtual unsigned char GetRightSpeedCmd();
+  unsigned int GetLeftRPMCmd();
+  unsigned int GetRightRPMCmd();
   virtual unsigned char GetPositionCmd();
-  unsigned char _leftCmd, _rightCmd, _posCmd;
+  unsigned char _posCmd;
+  unsigned int _leftRPMCmd, _rightRPMCmd;
 private:
   ros::NodeHandle *_nh;
- // ros::Subscriber _sub;
 };
 
 

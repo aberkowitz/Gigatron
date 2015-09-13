@@ -3,6 +3,20 @@
 #include "classes.h"
 #include "commander.h"
 #include "context.h"
+#define PI 3.1415926535897932384626433832795
+
+const static double INCHES_TO_M = 0.0254; //$ conversion from inches to meters
+//const static double PI = 3.141592653589793238463;
+
+const static double wheelBaseWidth = 23.0 * INCHES_TO_M;  //$ [m]
+const static double wheelRadius = 4.90 * INCHES_TO_M;     //$ [m]
+const static double gearRatio = 11.0 / 60.0;  //$ gear ratio between motor and wheels
+
+const static double RPM_TO_M_S = (2 * PI * wheelRadius) / 60.0;   //$ conversion from RPM to meters per second
+
+const static double STEERING_PWM_RANGE = 255.0;
+const static double STEERING_ANGLE_RANGE = 50 * (PI / 180); //$ [radians] this is the correct steering range
+const static double ABS_MAX_STEERING_ANGLE = 25 * (PI / 180); //$ [radians]
 
 Context::Context(Commander *commander, DCServo *servo,
           SpeedSensor *left, SpeedSensor *right,
@@ -61,16 +75,27 @@ void Context::Start() {
       _commsg->y = 0;
       _commsg->z = 0;
       if (d_st > _sInterval) {
-        unsigned char lSpC;
-        unsigned char rSpC;
+        //$ left and right speed commands
+        unsigned int lSpC;
+        unsigned int rSpC;
+
+        //$ get values from RC commander or Jetson commander
         if (_jetsonMode) { //$ Jetson mode
-          lSpC = _jcommander->GetLeftSpeedCmd();
-          rSpC = _jcommander->GetRightSpeedCmd();
+          //$ sensed RPM values
+          unsigned int lRPMS = _left->GetSpeed();
+          unsigned int rRPMS = _right->GetSpeed();
+          //$ commanded values
+          unsigned int lRPMC = _jcommander->GetLeftRPMCmd();
+          unsigned int rRPMC = _jcommander->GetRightRPMCmd();
+          //$ update PID controllers
+          lSpC = _lSp->Update(lRPMC, lRPMS);
+          rSpC = _rSp->Update(rRPMC, rRPMS);
         }
         else { //$ RC mode
           lSpC = _commander->GetLeftSpeedCmd();
           rSpC = _commander->GetRightSpeedCmd();
         }
+        //$ write commands
         analogWrite(_lPwm, lSpC);
         analogWrite(_rPwm, rSpC);
 
@@ -92,14 +117,24 @@ void Context::Start() {
         
         //dp(pC);
         //dp(pS);
+
         int vel = _pos->Update(pC, pS);
+        
         //dp(vel);
+        // command analogWrite/digitalWrite
         _servo->SetVelocity(vel);
 
         //$ publish steering servo position and Hall effect readings
-        _odomsg->x = _servo->GetPos();
-        _odomsg->y = _left->GetSpeed();
-        _odomsg->z = _right->GetSpeed();
+        
+        double servoPWM = (double) pS;
+        double leftWheelRPM = (double) _left->GetSpeed();
+        double rightWheelRPM = (double) _right->GetSpeed();
+
+        double steeringAngle = STEERING_ANGLE_RANGE * (servoPWM / STEERING_PWM_RANGE) - ABS_MAX_STEERING_ANGLE;
+
+        _odomsg->x = steeringAngle;
+        _odomsg->y = leftWheelRPM * RPM_TO_M_S;
+        _odomsg->z = rightWheelRPM * RPM_TO_M_S;
 
         //$ publish servo PWM command
         _commsg->x = pC;

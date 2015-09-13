@@ -6,9 +6,6 @@
 #include "classes.h"
 #include "commander.h"
 #include <ros.h>
-#include <std_msgs/MultiArrayLayout.h>
-#include <std_msgs/MultiArrayDimension.h>
-#include <std_msgs/Int16MultiArray.h>
 #include <geometry_msgs/Vector3.h>
 
 class PidController {

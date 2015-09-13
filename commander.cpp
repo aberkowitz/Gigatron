@@ -26,8 +26,8 @@ JetsonCommander::JetsonCommander(ros::NodeHandle *nh) {
   _nh = nh;
 //  _sub = _nh.subscribe("cmd_vel", 1000, &JetsonCommander::CmdCallback, this);
 
-  _leftCmd = 0; //$ TODO: fix
-  _rightCmd = 0; //$ TODO: fix
+  _leftRPMCmd = 0; //$ TODO: fix
+  _rightRPMCmd = 0; //$ TODO: fix
   _posCmd = 128;
 }
 
@@ -44,12 +44,12 @@ void JetsonCommander::CmdCallback(const std_msgs::Int16MultiArray::ConstPtr& cmd
 */
 
 
-unsigned char JetsonCommander::GetLeftSpeedCmd() {
-  return _leftCmd;
+unsigned int JetsonCommander::GetLeftRPMCmd() {
+  return _leftRPMCmd;
 }
 
-unsigned char JetsonCommander::GetRightSpeedCmd() {
-  return _rightCmd;
+unsigned int JetsonCommander::GetRightRPMCmd() {
+  return _rightRPMCmd;
 }
 
 unsigned char JetsonCommander::GetPositionCmd() {

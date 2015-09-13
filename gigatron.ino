@@ -3,12 +3,23 @@
 #include "context.h"
 #include "shared.h"
 #include <ros.h>
-#include <std_msgs/MultiArrayLayout.h>
-#include <std_msgs/MultiArrayDimension.h>
-#include <std_msgs/Int16MultiArray.h>
 #include <geometry_msgs/Vector3.h>
-
+#define PI 3.1415926535897932384626433832795
+ 
 #define LOOP_INTERVAL 10
+
+const static double INCHES_TO_M = 0.0254; //$ conversion from inches to meters
+//const static double PI = 3.141592653589793238463;
+
+const static double wheelBaseWidth = 23.0 * INCHES_TO_M;  //$ [m]
+const static double wheelRadius = 4.90 * INCHES_TO_M;     //$ [m]
+const static double gearRatio = 11.0 / 60.0;  //$ gear ratio between motor and wheels
+
+const static double RPM_TO_M_S = (2 * PI * wheelRadius) / 60.0;   //$ conversion from RPM to meters per second
+
+const static double STEERING_PWM_RANGE = 255.0;
+const static double STEERING_ANGLE_RANGE = 50 * (PI / 180); //$ [radians] this is the correct steering range
+const static double ABS_MAX_STEERING_ANGLE = 25 * (PI / 180); //$ [radians]
 
 ros::NodeHandle nh; //$ node handle
 JetsonCommander jc(&nh);  //$ Jetson commander
@@ -16,14 +27,15 @@ geometry_msgs::Vector3 odomsg; //$ odometry message
 geometry_msgs::Vector3 commsg; //$ command message
 
 
-void CmdCallback(const std_msgs::Int16MultiArray& cmd) {
-/*Serial.println("Steering angle: " << cmd.data[0]);
-  Serial.println(" Left wheel velocity: " << cmd.data[1]);
-  Serial.println(" Right wheel velocity: " << cmd.data[2] << "\n");
-*/
-  jc._posCmd = (unsigned char) cmd.data[0];
-  jc._leftCmd = (unsigned char) cmd.data[1];
-  jc._rightCmd = (unsigned char) cmd.data[2];  
+void CmdCallback(const geometry_msgs::Vector3& cmd) {
+  
+  double desiredSteeringAngle = cmd.x;
+
+  unsigned char servoPWM = (desiredSteeringAngle + ABS_MAX_STEERING_ANGLE) * (STEERING_PWM_RANGE / STEERING_ANGLE_RANGE);
+
+  jc._posCmd = servoPWM;
+  jc._leftRPMCmd = (unsigned int) (cmd.y / RPM_TO_M_S);
+  jc._rightRPMCmd = (unsigned int) (cmd.z / RPM_TO_M_S);
 }
 
 void setup() {
@@ -45,14 +57,18 @@ void setup() {
   RCCommander rc(&sp, &pos);
 
   // PidController(long kp, long ki, long kd, long out_max, long out_min);
-  PidController lSp(0, 100, 0, 255, 0);
-  PidController rSp(0, 100, 0, 255, 0);
+  //PidController lSp(0, 100, 0, 255, 0);
+  //PidController rSp(0, 100, 0, 255, 0);
+
+  PidController lSp(0.1, 0, 0, 255, 0);
+  PidController rSp(0.1, 0, 0, 255, 0);
+
   PidController pPos(500, 0, 100, 255, -255);
 
   //$
  // ros::NodeHandle nh;
  // JetsonCommander jc(&nh);
-  ros::Subscriber<std_msgs::Int16MultiArray> sub("control", CmdCallback);
+  ros::Subscriber<geometry_msgs::Vector3> sub("control", CmdCallback);
   nh.subscribe(sub);
   ros::Publisher pub("odo_val", &odomsg);
   nh.advertise(pub);
