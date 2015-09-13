@@ -46,7 +46,8 @@ Context::Context(Commander *commander, DCServo *servo,
   _commsg = commsg; //$
   _compub = compub;
 
-  _jetsonMode = true; //$ TODO: implement switching
+  //_jetsonMode = true; //$ TODO: implement switching
+  _jetsonMode = false; //$ TODO: implement switching
   
   pinMode(_lPwm, OUTPUT);
   pinMode(_rPwm, OUTPUT);
@@ -139,11 +140,13 @@ void Context::Start() {
         //$ publish servo PWM command
         _commsg->x = pC;
 
+        //$ publish messages
+        _pub->publish(_odomsg);
+        _compub->publish(_commsg);
+
         _last_pt = t;
       }
-      //$ publish messages
-      _pub->publish(_odomsg);
-      _compub->publish(_commsg);
+
     }
   }
 }

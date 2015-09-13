@@ -7,6 +7,7 @@
 #define PI 3.1415926535897932384626433832795
  
 #define LOOP_INTERVAL 10
+#define S_LOOP_INTERVAL 100
 
 const static double INCHES_TO_M = 0.0254; //$ conversion from inches to meters
 //const static double PI = 3.141592653589793238463;
@@ -46,8 +47,8 @@ void setup() {
   RCDecoder sp(1, 1480, 1990);
 
   // SpeedSensor(int interrupt, int poles, int interval);
-  SpeedSensor left(2, 14, LOOP_INTERVAL); 
-  SpeedSensor right(3, 14, LOOP_INTERVAL);
+  SpeedSensor left(4, 14, S_LOOP_INTERVAL); 
+  SpeedSensor right(5, 14, S_LOOP_INTERVAL);
 
   // DCServo(int pwmPin, int dirPin, int posPin);
   DCServo servo(5, 4, A0); 
@@ -60,8 +61,8 @@ void setup() {
   //PidController lSp(0, 100, 0, 255, 0);
   //PidController rSp(0, 100, 0, 255, 0);
 
-  PidController lSp(0.1, 0, 0, 255, 0);
-  PidController rSp(0.1, 0, 0, 255, 0);
+  PidController lSp(0, 5, 0, 255, 0);
+  PidController rSp(0, 5, 0, 255, 0);
 
   PidController pPos(500, 0, 100, 255, -255);
 
@@ -87,7 +88,7 @@ void setup() {
   Context context(&rc, &servo, &left, &right, 9, 10, &lSp, &rSp, &pPos, &nh, &jc, &odomsg, &pub, &commsg, &compub);
 
   // Context::ConfigureLoop(int sInterval, int pInterval);
-  context.ConfigureLoop(LOOP_INTERVAL, LOOP_INTERVAL);
+  context.ConfigureLoop(S_LOOP_INTERVAL, LOOP_INTERVAL);
 
   context.Start(); // the actual looping happens here
 }
