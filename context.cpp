@@ -11,9 +11,9 @@ Context::Context(Commander *commander, DCServo *servo,
           PidController *pos,
           ros::NodeHandle *nh,
           JetsonCommander *jcommander,
-          std_msgs::UInt16MultiArray *odomsg,
+          geometry_msgs::Vector3 *odomsg,
           ros::Publisher *pub,
-          std_msgs::UInt16MultiArray *commsg,
+          geometry_msgs::Vector3 *commsg,
           ros::Publisher *compub) {
   _commander = commander;
   _servo = servo;
@@ -32,7 +32,6 @@ Context::Context(Commander *commander, DCServo *servo,
   _commsg = commsg; //$
   _compub = compub;
 
-
   _jetsonMode = true; //$ TODO: implement switching
   
   pinMode(_lPwm, OUTPUT);
@@ -49,62 +48,67 @@ void Context::Start() {
   for (;;) {
     _nh->spinOnce(); //$ spin node handle
     
-    //$ clear messages
-    _odomsg->data[0] = _odomsg->data[1] = _odomsg->data[2] = 0;
-    _commsg->data[0] = _commsg->data[1] = _commsg->data[2] = 0;
-
     unsigned long t = millis();
     unsigned long d_st = t - _last_st;
     unsigned long d_pt = t - _last_pt;
-    if (d_st > _sInterval) {
-      unsigned char lSpC;
-      unsigned char rSpC;
-      if (_jetsonMode) { //$ Jetson mode
-        lSpC = _jcommander->GetLeftSpeedCmd();
-        rSpC = _jcommander->GetRightSpeedCmd();
+
+    if (d_st > _sInterval || d_pt > _pInterval) {
+      //$ clear messages
+      _odomsg->x = 128;
+      _odomsg->y = 0;
+      _odomsg->z = 0;
+      _commsg->x = 128;
+      _commsg->y = 0;
+      _commsg->z = 0;
+      if (d_st > _sInterval) {
+        unsigned char lSpC;
+        unsigned char rSpC;
+        if (_jetsonMode) { //$ Jetson mode
+          lSpC = _jcommander->GetLeftSpeedCmd();
+          rSpC = _jcommander->GetRightSpeedCmd();
+        }
+        else { //$ RC mode
+          lSpC = _commander->GetLeftSpeedCmd();
+          rSpC = _commander->GetRightSpeedCmd();
+        }
+        analogWrite(_lPwm, lSpC);
+        analogWrite(_rPwm, rSpC);
+
+        //$ write PWM commands to message
+        _commsg->y = lSpC;
+        _commsg->z = rSpC;
+
+        _last_st = t;
       }
-      else { //$ RC mode
-        lSpC = _commander->GetLeftSpeedCmd();
-        rSpC = _commander->GetRightSpeedCmd();
+      if (d_pt > _pInterval) {
+        unsigned char pC;
+        if (_jetsonMode) { //$ Jetson mode
+          pC = _jcommander->GetPositionCmd();
+        }
+        else { //$ RC mode
+          pC = _commander->GetPositionCmd();
+        }  
+        unsigned char pS = _servo->GetPos();
+        
+        //dp(pC);
+        //dp(pS);
+        int vel = _pos->Update(pC, pS);
+        //dp(vel);
+        _servo->SetVelocity(vel);
+
+        //$ publish steering servo position and Hall effect readings
+        _odomsg->x = _servo->GetPos();
+        _odomsg->y = _left->GetSpeed();
+        _odomsg->z = _right->GetSpeed();
+
+        //$ publish servo PWM command
+        _commsg->x = pC;
+
+        _last_pt = t;
       }
-      analogWrite(_lPwm, lSpC);
-      analogWrite(_rPwm, rSpC);
-
-      //$ write PWM commands to message
-      _commsg->data[1] = lSpC;
-      _commsg->data[2] = rSpC;
-
-      _last_st = t;
-    }
-    if (d_pt > _pInterval) {
-      unsigned char pC;
-      if (_jetsonMode) { //$ Jetson mode
-        pC = _jcommander->GetPositionCmd();
-      }
-      else { //$ RC mode
-        pC = _commander->GetPositionCmd();
-      }  
-      unsigned char pS = _servo->GetPos();
-      
-      //dp(pC);
-      //dp(pS);
-      int vel = _pos->Update(pC, pS);
-      //dp(vel);
-      _servo->SetVelocity(vel);
-
-      //$ publish steering servo position and Hall effect readings
-      _odomsg->data[0] = _servo->GetPos();
-      _odomsg->data[1] = _left->GetSpeed();
-      _odomsg->data[2] = _right->GetSpeed();
-
-      //$ publish steering servo position and Hall effect readings
-      _commsg->data[0] = pC;
-
       //$ publish messages
       _pub->publish(_odomsg);
       _compub->publish(_commsg);
-      
-      _last_pt = t;
     }
   }
 }

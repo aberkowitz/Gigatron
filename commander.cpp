@@ -28,12 +28,12 @@ JetsonCommander::JetsonCommander(ros::NodeHandle *nh) {
 
   _leftCmd = 0; //$ TODO: fix
   _rightCmd = 0; //$ TODO: fix
-  _posCmd = 0;
+  _posCmd = 128;
 }
 
 /*
 
-void JetsonCommander::CmdCallback(const std_msgs::UInt16MultiArray::ConstPtr& cmd) {
+void JetsonCommander::CmdCallback(const std_msgs::Int16MultiArray::ConstPtr& cmd) {
 	Serial.println("Steering angle: " << cmd.data[0]);
     Serial.println(" Left wheel velocity: " << cmd.data[1]);
     Serial.println(" Right wheel velocity: " << cmd.data[2] << "\n");
