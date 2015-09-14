@@ -69,12 +69,14 @@ void Context::Start() {
 
     if (d_st > _sInterval || d_pt > _pInterval) {
       //$ clear messages
+      /*
       _odomsg->x = 128;
       _odomsg->y = 0;
       _odomsg->z = 0;
       _commsg->x = 128;
       _commsg->y = 0;
       _commsg->z = 0;
+      */
       if (d_st > _sInterval) {
         //$ left and right speed commands
         unsigned int lSpC;

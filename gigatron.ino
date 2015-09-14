@@ -54,7 +54,7 @@ void setup() {
   DCServo servo(5, 4, A0); 
 
   // DCServo::ConfigSensor(int minV, int maxV);
-  servo.ConfigSensor(280, 430);
+  servo.ConfigSensor(232, 463);
   RCCommander rc(&sp, &pos);
 
   // PidController(long kp, long ki, long kd, long out_max, long out_min);
