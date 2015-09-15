@@ -54,7 +54,7 @@ void setup() {
   DCServo servo(5, 4, A0); 
 
   // DCServo::ConfigSensor(int minV, int maxV);
-  servo.ConfigSensor(232, 463);
+  servo.ConfigSensor(830, 920);
   RCCommander rc(&sp, &pos);
 
   // PidController(long kp, long ki, long kd, long out_max, long out_min);
@@ -67,8 +67,6 @@ void setup() {
   PidController pPos(500, 0, 100, 255, -255);
 
   //$
- // ros::NodeHandle nh;
- // JetsonCommander jc(&nh);
   ros::Subscriber<geometry_msgs::Vector3> sub("control", CmdCallback);
   nh.subscribe(sub);
   ros::Publisher pub("odo_val", &odomsg);
