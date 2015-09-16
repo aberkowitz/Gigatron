@@ -7,6 +7,7 @@
 #include "commander.h"
 #include <ros.h>
 #include <geometry_msgs/Vector3.h>
+#include <std_msgs/Float32.h>
 
 class PidController {
 public:
@@ -33,9 +34,14 @@ public:
           geometry_msgs::Vector3 *odomsg,
           ros::Publisher *pub,
           geometry_msgs::Vector3 *commsg,
-          ros::Publisher *compub);
+          ros::Publisher *compub,
+          std_msgs::Float32 *angmsg,
+          ros::Publisher *angpub,
+          std_msgs::Float32 *angcommsg,
+          ros::Publisher *angcompub);
   void ConfigureLoop(int sInterval, int pInterval);
   void Start();
+
 private:
   Commander *_commander;
   DCServo *_servo;
@@ -49,13 +55,18 @@ private:
   //$
   ros::NodeHandle *_nh;
   JetsonCommander *_jcommander;
-  boolean _jetsonMode; 
 
   geometry_msgs::Vector3 *_odomsg;
   ros::Publisher *_pub;
 
   geometry_msgs::Vector3 *_commsg;
   ros::Publisher *_compub;
+
+  std_msgs::Float32 *_angmsg;
+  ros::Publisher *_angpub;
+
+  std_msgs::Float32 *_angcommsg;
+  ros::Publisher *_angcompub;
 
 };
 

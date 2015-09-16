@@ -3,30 +3,52 @@
 #include "context.h"
 #include "shared.h"
 #include <ros.h>
-#include <geometry_msgs/Vector3.h>
+#include <geometry_msgs/Vector3.h> 
+#include <std_msgs/Float32.h> //$ for steering odometry stuff
+#include <std_msgs/String.h>  //$ for switching modes
+
 #define PI 3.1415926535897932384626433832795
  
 #define LOOP_INTERVAL 10
 #define S_LOOP_INTERVAL 100
 
 const static double INCHES_TO_M = 0.0254; //$ conversion from inches to meters
-//const static double PI = 3.141592653589793238463;
 
+//$ car dimensions
 const static double wheelBaseWidth = 23.0 * INCHES_TO_M;  //$ [m]
 const static double wheelRadius = 4.90 * INCHES_TO_M;     //$ [m]
 const static double gearRatio = 11.0 / 60.0;  //$ gear ratio between motor and wheels
 
+//$ steering pot calibration
+int minADU = 779;
+int maxADU = 983; //$ 890
+
+//$ constants
 const static double RPM_TO_M_S = (2 * PI * wheelRadius) / 60.0;   //$ conversion from RPM to meters per second
 
 const static double STEERING_PWM_RANGE = 255.0;
 const static double STEERING_ANGLE_RANGE = 50 * (PI / 180); //$ [radians] this is the correct steering range
 const static double ABS_MAX_STEERING_ANGLE = 25 * (PI / 180); //$ [radians]
 
-ros::NodeHandle nh; //$ node handle
+ros::NodeHandle nh;       //$ node handle
 JetsonCommander jc(&nh);  //$ Jetson commander
-geometry_msgs::Vector3 odomsg; //$ odometry message
-geometry_msgs::Vector3 commsg; //$ command message
 
+geometry_msgs::Vector3 odomsg;  //$ odometry message
+std_msgs::Float32 angmsg;       //$ measured steering angle message
+geometry_msgs::Vector3 commsg;  //$ command message
+std_msgs::Float32 angcommsg;    //$ command message
+//$ TODO: fix sending back odometry values on separate channels
+
+
+void SwitchCallback(const std_msgs::String& mode) {
+  
+  if (mode.data == "RC") {
+    jc._jetsonMode = false;
+  }
+  else if (mode.data == "Autonomous") {
+    jc._jetsonMode = true;
+  }
+}
 
 void CmdCallback(const geometry_msgs::Vector3& cmd) {
   
@@ -54,7 +76,7 @@ void setup() {
   DCServo servo(5, 4, A0); 
 
   // DCServo::ConfigSensor(int minV, int maxV);
-  servo.ConfigSensor(830, 920);
+  servo.ConfigSensor(minADU, maxADU);
   RCCommander rc(&sp, &pos);
 
   // PidController(long kp, long ki, long kd, long out_max, long out_min);
@@ -66,13 +88,21 @@ void setup() {
 
   PidController pPos(500, 0, 100, 255, -255);
 
-  //$
+  //$ set up subscribers
   ros::Subscriber<geometry_msgs::Vector3> sub("control", CmdCallback);
   nh.subscribe(sub);
+  ros::Subscriber<std_msgs::String> switchsub("switch", SwitchCallback);
+  nh.subscribe(switchsub);
+
+  //$ set up publishers
   ros::Publisher pub("odo_val", &odomsg);
   nh.advertise(pub);
   ros::Publisher compub("command", &commsg);
   nh.advertise(compub);
+  ros::Publisher angpub("ang_val", &angmsg);
+  nh.advertise(angpub);
+  ros::Publisher angcompub("ang_command", &angcommsg);
+  nh.advertise(angcompub);
 
   /* Context(Commander *commander, DCServo *servo,
           SpeedSensor *left, SpeedSensor *right,
@@ -83,7 +113,7 @@ void setup() {
           JetsonCommander *jcommander,
           std_msgs::Int16MultiArray *odomsg,
           ros::Publisher *pub); */
-  Context context(&rc, &servo, &left, &right, 9, 10, &lSp, &rSp, &pPos, &nh, &jc, &odomsg, &pub, &commsg, &compub);
+  Context context(&rc, &servo, &left, &right, 9, 10, &lSp, &rSp, &pPos, &nh, &jc, &odomsg, &pub, &commsg, &compub, &angmsg, &angpub, &angcommsg, &angcompub);
 
   // Context::ConfigureLoop(int sInterval, int pInterval);
   context.ConfigureLoop(S_LOOP_INTERVAL, LOOP_INTERVAL);

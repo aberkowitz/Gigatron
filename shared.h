@@ -1,3 +1,10 @@
+/**
+ * shared.h
+ * Gigatron motor control Arduino code.
+ * 
+ * @author  Bayley Wang   <bayleyw@mit.edu>
+ **/
+
 #ifndef __SHARED_H
 #define __SHARED_H
 

@@ -1,3 +1,10 @@
+/**
+ * isr.cpp
+ * Gigatron motor control Arduino code.
+ * 
+ * @author  Bayley Wang   <bayleyw@mit.edu>
+ **/
+
 #include <Arduino.h>
 #include "shared.h"
 

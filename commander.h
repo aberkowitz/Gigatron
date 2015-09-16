@@ -1,4 +1,14 @@
-#ifndef __COMMANDER_H
+/**
+ * commander.h
+ * Gigatron motor control Arduino code.
+ * 
+ * @author  Bayley Wang   <bayleyw@mit.edu>
+ * @author  Syler Wagner  <syler@mit.edu>
+ *
+ * @date    2015-09-16    syler   fixed odometry message sending
+ **/
+
+ #ifndef __COMMANDER_H
 #define __COMMANDER_H
 
 #include <Arduino.h>
@@ -31,6 +41,7 @@ public:
   virtual unsigned char GetPositionCmd();
   unsigned char _posCmd;
   unsigned int _leftRPMCmd, _rightRPMCmd;
+  boolean _jetsonMode; //$ true for Jetson control, false for RC
 private:
   ros::NodeHandle *_nh;
 };

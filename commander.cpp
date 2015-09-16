@@ -1,3 +1,13 @@
+/**
+ * commander.cpp
+ * Gigatron motor control Arduino code.
+ * 
+ * @author  Bayley Wang   <bayleyw@mit.edu>
+ * @author  Syler Wagner  <syler@mit.edu>
+ *
+ * @date    2015-09-16    syler   fixed odometry message sending
+ **/
+
 #include <Arduino.h>
 #include "classes.h"
 #include "shared.h"
@@ -24,25 +34,13 @@ unsigned char RCCommander::GetPositionCmd() {
 JetsonCommander::JetsonCommander(ros::NodeHandle *nh) {
 
   _nh = nh;
-//  _sub = _nh.subscribe("cmd_vel", 1000, &JetsonCommander::CmdCallback, this);
 
-  _leftRPMCmd = 0; //$ TODO: fix
-  _rightRPMCmd = 0; //$ TODO: fix
+  _jetsonMode = true;
+
+  _leftRPMCmd = 0; 
+  _rightRPMCmd = 0; 
   _posCmd = 128;
 }
-
-/*
-
-void JetsonCommander::CmdCallback(const std_msgs::Int16MultiArray::ConstPtr& cmd) {
-	Serial.println("Steering angle: " << cmd.data[0]);
-    Serial.println(" Left wheel velocity: " << cmd.data[1]);
-    Serial.println(" Right wheel velocity: " << cmd.data[2] << "\n");
-	_pos = (char) cmd.data[0];
-	_lSp = (char) cmd.data[1];
-	_rSp = (char) cmd.data[2];	
-}
-*/
-
 
 unsigned int JetsonCommander::GetLeftRPMCmd() {
   return _leftRPMCmd;

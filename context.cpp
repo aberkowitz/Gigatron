@@ -1,3 +1,12 @@
+/**
+ * context.cpp
+ * Gigatron motor control Arduino code.
+ * 
+ * @author  Bayley Wang   <bayleyw@mit.edu>
+ * @author  Syler Wagner  <syler@mit.edu>
+ * @date    2015-09-16    syler   fixed odometry message sending
+ **/
+
 #include <Arduino.h>
 #include "shared.h"
 #include "classes.h"
@@ -28,7 +37,11 @@ Context::Context(Commander *commander, DCServo *servo,
           geometry_msgs::Vector3 *odomsg,
           ros::Publisher *pub,
           geometry_msgs::Vector3 *commsg,
-          ros::Publisher *compub) {
+          ros::Publisher *compub,
+          std_msgs::Float32 *angmsg,
+          ros::Publisher *angpub,
+          std_msgs::Float32 *angcommsg,
+          ros::Publisher *angcompub) {
   _commander = commander;
   _servo = servo;
   _left = left;
@@ -39,27 +52,48 @@ Context::Context(Commander *commander, DCServo *servo,
   _rSp = rSp;
   _pos = pos;
 
-  _nh = nh; //$
-  _jcommander = jcommander; //$
-  _odomsg = odomsg; //$
+  _nh = nh; //$ ROS node handle
+  _jcommander = jcommander; //$ Jetson commander
+  
+  //$ ROS publishers and messages
+  _odomsg = odomsg; 
   _pub = pub;
-  _commsg = commsg; //$
+  _commsg = commsg; 
   _compub = compub;
-
-  _jetsonMode = true; //$ TODO: implement switching
-  //_jetsonMode = false; //$ TODO: implement switching
+  _angmsg = angmsg; 
+  _angpub = angpub;
+  _angcommsg = angcommsg; 
+  _angcompub = angcompub;
   
   pinMode(_lPwm, OUTPUT);
   pinMode(_rPwm, OUTPUT);
 }
 
+/*$ Configure time intervals for speed (drive motor) and 
+  position (steering servo) loops.
+  @param  sInterval  [ms] speed loop interval 
+  @param  pInterval  [ms] position loop interval 
+  */
 void Context::ConfigureLoop(int sInterval, int pInterval) {
   _sInterval = sInterval;
   _pInterval = pInterval;
 }
 
+
 void Context::Start() {
+
+  //$ clear messages
+  _odomsg->x = -1;
+  _odomsg->y = 0;
+  _odomsg->z = 0;
+  _commsg->x = -1;
+  _commsg->y = 0;
+  _commsg->z = 0;
+  _angmsg->data = 0;
+  _angcommsg->data = 128;
+  
   _last_st = _last_pt = millis();
+
   for (;;) {
     _nh->spinOnce(); //$ spin node handle
     
@@ -67,91 +101,84 @@ void Context::Start() {
     unsigned long d_st = t - _last_st;
     unsigned long d_pt = t - _last_pt;
 
-    if (d_st > _sInterval || d_pt > _pInterval) {
-      //$ clear messages
-      /*
-      _odomsg->x = 128;
-      _odomsg->y = 0;
-      _odomsg->z = 0;
-      _commsg->x = 128;
-      _commsg->y = 0;
-      _commsg->z = 0;
-      */
-      if (d_st > _sInterval) {
-        //$ left and right speed commands
-        unsigned int lSpC;
-        unsigned int rSpC;
+    if (d_st > _sInterval) {  //$ speed (drive motor) loop
+      //$ left and right speed commands
+      unsigned int lSpC;
+      unsigned int rSpC;
 
-        //$ get values from RC commander or Jetson commander
-        if (_jetsonMode) { //$ Jetson mode
-          //$ sensed RPM values
-          unsigned int lRPMS = _left->GetSpeed();
-          unsigned int rRPMS = _right->GetSpeed();
-          //$ commanded values
-          unsigned int lRPMC = _jcommander->GetLeftRPMCmd();
-          unsigned int rRPMC = _jcommander->GetRightRPMCmd();
-          //$ update PID controllers
-          lSpC = _lSp->Update(lRPMC, lRPMS);
-          rSpC = _rSp->Update(rRPMC, rRPMS);
-        }
-        else { //$ RC mode
-          lSpC = _commander->GetLeftSpeedCmd();
-          rSpC = _commander->GetRightSpeedCmd();
-        }
-        //$ write commands
-        analogWrite(_lPwm, lSpC);
-        analogWrite(_rPwm, rSpC);
-
-        //$ write PWM commands to message
-        _commsg->y = lSpC;
-        _commsg->z = rSpC;
-
-        _last_st = t;
+      //$ get values from RC commander or Jetson commander
+      if (_jcommander->_jetsonMode) { //$ Jetson mode
+        //$ sensed RPM values
+        unsigned int lRPMS = _left->GetSpeed();
+        unsigned int rRPMS = _right->GetSpeed();
+        //$ commanded values
+        unsigned int lRPMC = _jcommander->GetLeftRPMCmd();
+        unsigned int rRPMC = _jcommander->GetRightRPMCmd();
+        //$ update PID controllers
+        lSpC = _lSp->Update(lRPMC, lRPMS);
+        rSpC = _rSp->Update(rRPMC, rRPMS);
       }
-      if (d_pt > _pInterval) {
-        unsigned char pC;
-        if (_jetsonMode) { //$ Jetson mode
-          pC = _jcommander->GetPositionCmd();
-        }
-        else { //$ RC mode
-          pC = _commander->GetPositionCmd();
-        }  
-        unsigned char pS = _servo->GetPos();
-        
-        //dp(pC);
-        //dp(pS);
-
-        int vel = _pos->Update(pC, pS);
-        
-        //dp(vel);
-        // command analogWrite/digitalWrite
-        _servo->SetVelocity(vel);
-
-        //$ publish steering servo position and Hall effect readings
-        
-        double servoPWM = (double) pS;
-        double leftWheelRPM = (double) _left->GetSpeed();
-        double rightWheelRPM = (double) _right->GetSpeed();
-
-        double steeringAngle = STEERING_ANGLE_RANGE * (servoPWM / STEERING_PWM_RANGE) - ABS_MAX_STEERING_ANGLE;
-
-        _odomsg->x = steeringAngle;
-        _odomsg->y = leftWheelRPM * RPM_TO_M_S;
-        _odomsg->z = rightWheelRPM * RPM_TO_M_S;
-
-        //$ publish servo PWM command
-        _commsg->x = pC;
-
-        //$ publish messages
-        _pub->publish(_odomsg);
-        _compub->publish(_commsg);
-
-        _last_pt = t;
+      else { //$ RC mode
+        lSpC = _commander->GetLeftSpeedCmd();
+        rSpC = _commander->GetRightSpeedCmd();
       }
+      //$ write commands
+      analogWrite(_lPwm, lSpC);
+      analogWrite(_rPwm, rSpC);
+
+      _last_st = t;
+
+      //$ write PWM commands to command message
+      _commsg->y = lSpC;
+      _commsg->z = rSpC;
+
+      double leftWheelRPM = (double) _left->GetSpeed();
+      double rightWheelRPM = (double) _right->GetSpeed();
+
+      //$ write wheel velocities
+      _odomsg->y = leftWheelRPM * RPM_TO_M_S;
+      _odomsg->z = rightWheelRPM * RPM_TO_M_S;
+
+      //$ publish messages
+      _pub->publish(_odomsg);
+      _compub->publish(_commsg);
+    }
+    if (d_pt > _pInterval) { //$ position (steering servo) loop
+      unsigned char pC;
+      if (_jcommander->_jetsonMode) { //$ Jetson mode
+        pC = _jcommander->GetPositionCmd();
+      }
+      else { //$ RC mode
+        pC = _commander->GetPositionCmd();
+      }  
+      unsigned char pS = _servo->GetPos();
+      
+      //dp(pC);
+      //dp(pS);
+      int vel = _pos->Update(pC, pS); //$ update PID controller
+      //dp(vel);
+
+      //$ command analogWrite/digitalWrite
+      _servo->SetVelocity(vel);
+
+      _last_pt = t;
+
+      //$ steering servo position and Hall effect readings
+      double servoPWM = (double) pS;
+      double steeringAngle = STEERING_ANGLE_RANGE * (servoPWM / STEERING_PWM_RANGE) - ABS_MAX_STEERING_ANGLE;
+
+      //$ write steering angle and servo PWM command to message
+      _angmsg->data = steeringAngle;
+      _angcommsg->data = pC;
+
+      //$ publish messages
+      _angpub->publish(_angmsg);
+      _angcompub->publish(_angcommsg);
 
     }
   }
 }
+
 
 PidController::PidController(long kp, long ki, long kd, long out_max, long out_min) {
   _kp = kp;
