@@ -1,3 +1,14 @@
+/**
+ * gigatron.ino
+ * Gigatron motor control Arduino code.
+ * 
+ * @author  Bayley Wang   <bayleyw@mit.edu>
+ * @author  Syler Wagner  <syler@mit.edu>
+ *
+ * @date    2015-09-16    syler   fixed odometry message sending
+ * @date    2015-09-16    syler   added PID gain tuning via ROS messages
+ **/
+
 #include "classes.h"
 #include "commander.h"
 #include "context.h"
@@ -33,6 +44,11 @@ const static double ABS_MAX_STEERING_ANGLE = 25 * (PI / 180); //$ [radians]
 ros::NodeHandle nh;       //$ node handle
 JetsonCommander jc(&nh);  //$ Jetson commander
 
+PidController lSp(0, 5, 0, 255, 0);
+PidController rSp(0, 5, 0, 255, 0);
+
+PidController pPos(500, 0, 100, 255, -255);
+
 geometry_msgs::Vector3 odomsg;  //$ odometry message
 std_msgs::Float32 angmsg;       //$ measured steering angle message
 geometry_msgs::Vector3 commsg;  //$ command message
@@ -40,6 +56,18 @@ std_msgs::Float32 angcommsg;    //$ command message
 //$ TODO: fix sending back odometry values on separate channels
 
 
+void CmdCallback(const geometry_msgs::Vector3& cmd) {
+  
+  double desiredSteeringAngle = cmd.x;
+  unsigned char servoPWM = (desiredSteeringAngle + ABS_MAX_STEERING_ANGLE) * (STEERING_PWM_RANGE / STEERING_ANGLE_RANGE);
+
+  jc._posCmd = servoPWM;
+  jc._leftRPMCmd = (unsigned int) (cmd.y / RPM_TO_M_S);
+  jc._rightRPMCmd = (unsigned int) (cmd.z / RPM_TO_M_S);
+}
+
+/*$ Swith between radio RC and autonomous/Jetson RC mode.
+  */
 void SwitchCallback(const std_msgs::String& mode) {
   
   if (mode.data == "RC") {
@@ -50,15 +78,16 @@ void SwitchCallback(const std_msgs::String& mode) {
   }
 }
 
-void CmdCallback(const geometry_msgs::Vector3& cmd) {
-  
-  double desiredSteeringAngle = cmd.x;
-
-  unsigned char servoPWM = (desiredSteeringAngle + ABS_MAX_STEERING_ANGLE) * (STEERING_PWM_RANGE / STEERING_ANGLE_RANGE);
-
-  jc._posCmd = servoPWM;
-  jc._leftRPMCmd = (unsigned int) (cmd.y / RPM_TO_M_S);
-  jc._rightRPMCmd = (unsigned int) (cmd.z / RPM_TO_M_S);
+/*$ Set PID controller gains for both drive motors with a 
+  Vector3 ROS message (kp, ki, kd) published on the /gains 
+  topic.
+  */
+void GainsCallback(const geometry_msgs::Vector3& gain) {
+  long kp = (long) gain.x;
+  long ki = (long) gain.y;
+  long kd = (long) gain.z;
+  lSp.ResetGains(kp, ki, kd);
+  rSp.ResetGains(kp, ki, kd);
 }
 
 void setup() {
@@ -79,20 +108,18 @@ void setup() {
   servo.ConfigSensor(minADU, maxADU);
   RCCommander rc(&sp, &pos);
 
-  // PidController(long kp, long ki, long kd, long out_max, long out_min);
-  //PidController lSp(0, 100, 0, 255, 0);
-  //PidController rSp(0, 100, 0, 255, 0);
-
-  PidController lSp(0, 5, 0, 255, 0);
-  PidController rSp(0, 5, 0, 255, 0);
-
-  PidController pPos(500, 0, 100, 255, -255);
+  /*$ The PID controller definitions got moved up top so that GainsCallback works */
+    // PidController(long kp, long ki, long kd, long out_max, long out_min);
+    //PidController lSp(0, 100, 0, 255, 0);
+    //PidController rSp(0, 100, 0, 255, 0);
 
   //$ set up subscribers
   ros::Subscriber<geometry_msgs::Vector3> sub("control", CmdCallback);
   nh.subscribe(sub);
   ros::Subscriber<std_msgs::String> switchsub("switch", SwitchCallback);
   nh.subscribe(switchsub);
+  ros::Subscriber<geometry_msgs::Vector3> gainsub("gains", GainsCallback);
+  nh.subscribe(gainsub);
 
   //$ set up publishers
   ros::Publisher pub("odo_val", &odomsg);
@@ -111,8 +138,14 @@ void setup() {
           PidController *pos,
           ros::NodeHandle *nh,
           JetsonCommander *jcommander,
-          std_msgs::Int16MultiArray *odomsg,
-          ros::Publisher *pub); */
+          geometry_msgs::Vector3 *odomsg,
+          ros::Publisher *pub,
+          geometry_msgs::Vector3 *commsg,
+          ros::Publisher *compub,
+          std_msgs::Float32 *angmsg,
+          ros::Publisher *angpub,
+          std_msgs::Float32 *angcommsg,
+          ros::Publisher *angcompub) */
   Context context(&rc, &servo, &left, &right, 9, 10, &lSp, &rSp, &pPos, &nh, &jc, &odomsg, &pub, &commsg, &compub, &angmsg, &angpub, &angcommsg, &angcompub);
 
   // Context::ConfigureLoop(int sInterval, int pInterval);
