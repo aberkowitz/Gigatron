@@ -35,7 +35,7 @@ JetsonCommander::JetsonCommander(ros::NodeHandle *nh) {
 
   _nh = nh;
 
-  _jetsonMode = true;
+  _jetsonMode = false;
 
   _leftRPMCmd = 0; 
   _rightRPMCmd = 0; 

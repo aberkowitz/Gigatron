@@ -1,3 +1,13 @@
+/**
+ * context.h
+ * Gigatron motor control Arduino code.
+ * 
+ * @author  Bayley Wang   <bayleyw@mit.edu>
+ * @author  Syler Wagner  <syler@mit.edu>
+ *
+ * @date    2015-09-16    syler   fixed odometry message sending
+ **/
+
 #ifndef __CONTEXT_H
 #define __CONTEXT_H
 
@@ -14,6 +24,7 @@ public:
   PidController(long kp, long ki, long kd, long out_max, long out_min);
   int Update(int ref, int in);
   int ZeroIntegrator();
+  void ResetGains(long kp, long ki, long kd);
 private:
   long _kp, _ki, _kd;
   long _out_max, _out_min;

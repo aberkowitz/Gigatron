@@ -4,6 +4,7 @@
  * 
  * @author  Bayley Wang   <bayleyw@mit.edu>
  * @author  Syler Wagner  <syler@mit.edu>
+ *
  * @date    2015-09-16    syler   fixed odometry message sending
  **/
 
@@ -188,6 +189,14 @@ PidController::PidController(long kp, long ki, long kd, long out_max, long out_m
   _integral = 0;
   _out_max = out_max;
   _out_min = out_min;
+}
+
+void PidController::ResetGains(long kp, long ki, long kd) {
+  _kp = kp;
+  _ki = ki;
+  _kd = kd;
+  _last_in = 0;
+  _integral = 0;
 }
 
 int PidController::Update(int ref, int in) {
