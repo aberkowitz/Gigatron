@@ -30,9 +30,13 @@ const static double wheelBaseWidth = 23.0 * INCHES_TO_M;  //$ [m]
 const static double wheelRadius = 4.90 * INCHES_TO_M;     //$ [m]
 const static double gearRatio = 11.0 / 60.0;  //$ gear ratio between motor and wheels
 
+//pin 30 left reverse
+//pin 31 right reverse
+
 //$ steering pot calibration
-int minADU = 779;
-int maxADU = 983; //$ 890
+//this is incorrect, the pot was shot
+int minADU = 769;
+int maxADU = 875; //$ 890
 
 //$ constants
 const static double RPM_TO_M_S = (2 * PI * wheelRadius) / 60.0;   //$ conversion from RPM to meters per second
@@ -95,7 +99,8 @@ void setup() {
 
   // RCDecoder(int interrupt, int minV, int maxV);
   RCDecoder pos(0, 984, 2004); 
-  RCDecoder sp(1, 1480, 1990);
+  //Was 1480, expanded to add reverse
+  RCDecoder sp(1, 1020, 1990);
 
   // SpeedSensor(int interrupt, int poles, int interval);
   SpeedSensor left(4, 14, S_LOOP_INTERVAL); 
@@ -146,7 +151,7 @@ void setup() {
           ros::Publisher *angpub,
           std_msgs::Float32 *angcommsg,
           ros::Publisher *angcompub) */
-  Context context(&rc, &servo, &left, &right, 9, 10, &lSp, &rSp, &pPos, &nh, &jc, &odomsg, &pub, &commsg, &compub, &angmsg, &angpub, &angcommsg, &angcompub);
+  Context context(&rc, &servo, &left, &right, 9, 10, 30, 31, &lSp, &rSp, &pPos, &nh, &jc, &odomsg, &pub, &commsg, &compub, &angmsg, &angpub, &angcommsg, &angcompub);
 
   // Context::ConfigureLoop(int sInterval, int pInterval);
   context.ConfigureLoop(S_LOOP_INTERVAL, LOOP_INTERVAL);

@@ -31,7 +31,7 @@ void DCServo::SetVelocity(int vel) {
 
 unsigned char DCServo::GetPos() {
   long adu = analogRead(_posPin);
-  Serial.println(adu); //$ uncomment for pot calibration
+  //Serial.println(adu); //$ uncomment for pot calibration
   long tmp = (adu - _minV) << 8 ;;
   tmp /= (_maxV - _minV);
   if (tmp < 0) tmp = 0;
@@ -61,6 +61,7 @@ unsigned char RCDecoder::GetVal() {
   } else {
     pw = _pw1_us;
   }
+  Serial.println(pw);
   //dp(pw);
   pw = (pw - _minV) << 8;
   pw /= (_maxV - _minV);
