@@ -21,7 +21,7 @@
 #define PI 3.1415926535897932384626433832795
  
 #define LOOP_INTERVAL 10
-#define S_LOOP_INTERVAL 100
+#define S_LOOP_INTERVAL 85
 
 const static double INCHES_TO_M = 0.0254; //$ conversion from inches to meters
 
@@ -30,9 +30,13 @@ const static double wheelBaseWidth = 23.0 * INCHES_TO_M;  //$ [m]
 const static double wheelRadius = 4.90 * INCHES_TO_M;     //$ [m]
 const static double gearRatio = 11.0 / 60.0;  //$ gear ratio between motor and wheels
 
+//pin 30 left reverse
+//pin 31 right reverse
+
 //$ steering pot calibration
-int minADU = 779;
-int maxADU = 983; //$ 890
+//this is incorrect, the pot was shot
+int minADU = 769;
+int maxADU = 875; //$ 890
 
 //$ constants
 const static double RPM_TO_M_S = (2 * PI * wheelRadius) / 60.0;   //$ conversion from RPM to meters per second
@@ -44,10 +48,10 @@ const static double ABS_MAX_STEERING_ANGLE = 25 * (PI / 180); //$ [radians]
 ros::NodeHandle nh;       //$ node handle
 JetsonCommander jc(&nh);  //$ Jetson commander
 
-PidController lSp(0, 5, 0, 255, 0);
-PidController rSp(0, 5, 0, 255, 0);
+PidController lSp(2, 1, 1, 255, 0);
+PidController rSp(2, 1, 1, 255, 0);
 
-PidController pPos(500, 0, 100, 255, -255);
+PidController pPos(250, 1, 50, 255, -255);
 
 geometry_msgs::Vector3 odomsg;  //$ odometry message
 std_msgs::Float32 angmsg;       //$ measured steering angle message
@@ -64,6 +68,7 @@ void CmdCallback(const geometry_msgs::Vector3& cmd) {
   jc._posCmd = servoPWM;
   jc._leftRPMCmd = (unsigned int) (cmd.y / RPM_TO_M_S);
   jc._rightRPMCmd = (unsigned int) (cmd.z / RPM_TO_M_S);
+  jc._rightRPMCmd = 100;
 }
 
 /*$ Swith between radio RC and autonomous/Jetson RC mode.
@@ -95,7 +100,8 @@ void setup() {
 
   // RCDecoder(int interrupt, int minV, int maxV);
   RCDecoder pos(0, 984, 2004); 
-  RCDecoder sp(1, 1480, 1990);
+  //Was 1480, expanded to add reverse
+  RCDecoder sp(1, 1020, 1990);
 
   // SpeedSensor(int interrupt, int poles, int interval);
   SpeedSensor left(4, 14, S_LOOP_INTERVAL); 
@@ -146,7 +152,7 @@ void setup() {
           ros::Publisher *angpub,
           std_msgs::Float32 *angcommsg,
           ros::Publisher *angcompub) */
-  Context context(&rc, &servo, &left, &right, 9, 10, &lSp, &rSp, &pPos, &nh, &jc, &odomsg, &pub, &commsg, &compub, &angmsg, &angpub, &angcommsg, &angcompub);
+  Context context(&rc, &servo, &left, &right, 9, 10, 30, 31, &lSp, &rSp, &pPos, &nh, &jc, &odomsg, &pub, &commsg, &compub, &angmsg, &angpub, &angcommsg, &angcompub);
 
   // Context::ConfigureLoop(int sInterval, int pInterval);
   context.ConfigureLoop(S_LOOP_INTERVAL, LOOP_INTERVAL);

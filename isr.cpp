@@ -31,10 +31,12 @@ void ISR1() {
 }
 
 void ISR4() {
+  //Serial.println("AYY");
   _speed_2++;
 }
 
 void ISR5() {
+  //Serial.println("AYY");
   _speed_3++;
 }
 

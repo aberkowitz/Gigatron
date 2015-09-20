@@ -21,6 +21,8 @@ public:
   virtual unsigned char GetLeftSpeedCmd(){return 0;}
   virtual unsigned char GetRightSpeedCmd(){return 0;}
   virtual unsigned char GetPositionCmd(){return 0;}
+  virtual int GetLeftDirectionCmd(){return 0;}
+  virtual int GetRightDirectionCmd(){return 0;}
 };
 
 class RCCommander: public Commander {
@@ -29,6 +31,8 @@ public:
   virtual unsigned char GetLeftSpeedCmd();
   virtual unsigned char GetRightSpeedCmd();
   virtual unsigned char GetPositionCmd();
+  virtual int GetLeftDirectionCmd();
+  virtual int GetRightDirectionCmd();
 private:
   RCDecoder *_sp, *_pos;
 };

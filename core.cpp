@@ -31,7 +31,7 @@ void DCServo::SetVelocity(int vel) {
 
 unsigned char DCServo::GetPos() {
   long adu = analogRead(_posPin);
-  Serial.println(adu); //$ uncomment for pot calibration
+  //Serial.println(adu); //$ uncomment for pot calibration
   long tmp = (adu - _minV) << 8 ;;
   tmp /= (_maxV - _minV);
   if (tmp < 0) tmp = 0;
@@ -61,6 +61,7 @@ unsigned char RCDecoder::GetVal() {
   } else {
     pw = _pw1_us;
   }
+  //Serial.println(pw); //RC decoder vals
   //dp(pw);
   pw = (pw - _minV) << 8;
   pw /= (_maxV - _minV);
@@ -88,16 +89,22 @@ SpeedSensor::SpeedSensor(int interrupt, int poles, int interval) {
 
 unsigned int SpeedSensor::GetSpeed() {
   long sp;
-  if (_interrupt == 4) {
+  if (_interrupt == 4) {// If we are the left sensor
     sp = _speed_2;
     _speed_2 = 0;
-  } else {
+  } else { // right sensor
     sp = _speed_3;
     _speed_3 = 0;
   }
-  long hz = sp * 1000 / _interval;
-  long rpm = 120 * hz / _poles;
+  
+  //Serial.println(sp);
+  //Ticks *60000 millis/minute*(1/interval)*revolutions/ 7 ticks = RPM
+  //long hz = sp * 1000 / _interval;
+  //long rpm = 120 * hz / _poles;
+
+  double rpm = sp*60.0*1000.0/_interval/7.0;
+  rpmSmooth = (rpm * (1 - filterVal)) + (rpmSmooth  *  filterVal);
   if (rpm < 0) rpm = 0;
-  return (unsigned int) rpm;
+  return (unsigned int) rpmSmooth;
 }
 

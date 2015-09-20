@@ -38,6 +38,7 @@ public:
   Context(Commander *commander, DCServo *servo,
           SpeedSensor *left, SpeedSensor *right,
           int lPwm, int rPwm,
+          int lRev, int rRev,
           PidController *lSp, PidController *rSp,
           PidController *pos,
           ros::NodeHandle *nh,
@@ -57,7 +58,7 @@ private:
   Commander *_commander;
   DCServo *_servo;
   SpeedSensor *_left, *_right;
-  int _lPwm, _rPwm;
+  int _lPwm, _rPwm, _lRev, _rRev;
   PidController *_lSp, *_rSp, *_pos;
   int _sInterval, _pInterval;
   

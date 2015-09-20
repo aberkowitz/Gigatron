@@ -26,6 +26,8 @@ class SpeedSensor {
 public:
   SpeedSensor(int interrupt, int poles, int interval);
   unsigned int GetSpeed();
+  double rpmSmooth;
+  double filterVal = 0.25;
 private:
   int _interrupt;
   int _poles, _interval;

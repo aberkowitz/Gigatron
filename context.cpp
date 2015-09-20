@@ -31,6 +31,7 @@ const static double ABS_MAX_STEERING_ANGLE = 25 * (PI / 180); //$ [radians]
 Context::Context(Commander *commander, DCServo *servo,
           SpeedSensor *left, SpeedSensor *right,
           int lPwm, int rPwm,
+          int lRev, int rRev,
           PidController *lSp, PidController *rSp,
           PidController *pos,
           ros::NodeHandle *nh,
@@ -48,13 +49,17 @@ Context::Context(Commander *commander, DCServo *servo,
   _left = left;
   _right = right;
   _lPwm = lPwm;
-  _rPwm = rPwm;  
+  _rPwm = rPwm;
+  _lRev = lRev;
+  _rRev = rRev;  
   _lSp = lSp;
   _rSp = rSp;
   _pos = pos;
 
   _nh = nh; //$ ROS node handle
   _jcommander = jcommander; //$ Jetson commander
+
+  
   
   //$ ROS publishers and messages
   _odomsg = odomsg; 
@@ -68,6 +73,10 @@ Context::Context(Commander *commander, DCServo *servo,
   
   pinMode(_lPwm, OUTPUT);
   pinMode(_rPwm, OUTPUT);
+  pinMode(_lRev, OUTPUT);
+  pinMode(_rRev, OUTPUT);
+  digitalWrite(_lRev, HIGH);
+  digitalWrite(_rRev, HIGH);
 }
 
 /*$ Configure time intervals for speed (drive motor) and 
@@ -112,6 +121,7 @@ void Context::Start() {
         //$ sensed RPM values
         unsigned int lRPMS = _left->GetSpeed();
         unsigned int rRPMS = _right->GetSpeed();
+        Serial.println(rRPMS); //Controller's perceived RPM 
         //$ commanded values
         unsigned int lRPMC = _jcommander->GetLeftRPMCmd();
         unsigned int rRPMC = _jcommander->GetRightRPMCmd();
@@ -122,6 +132,32 @@ void Context::Start() {
       else { //$ RC mode
         lSpC = _commander->GetLeftSpeedCmd();
         rSpC = _commander->GetRightSpeedCmd();
+        int lDir = _commander->GetLeftDirectionCmd();
+        int rDir = _commander->GetRightDirectionCmd();
+        
+        if (lDir == 0) {
+          lSpC = 0;
+        }
+        else if (lDir == 1) {
+          lSpC = (lSpC - 122) * (255 / (255 - 124));
+          digitalWrite(_lRev, HIGH);
+        }
+        else {
+          lSpC = (255 -lSpC) * (255 / (255 - (255 - 116)));
+          digitalWrite(_lRev, LOW);
+        }
+        
+        if (rDir == 0) {
+          rSpC = 0;
+        }
+        else if (rDir == 1) {
+          rSpC = (rSpC - 124) * (255 / (255 - 124));
+          digitalWrite(_rRev, HIGH);
+        }
+        else {
+          rSpC = (255 - rSpC) * (255 / (255 - (255 - 116)));
+          digitalWrite(_rRev, LOW);
+        }
       }
       //$ write commands
       analogWrite(_lPwm, lSpC);
