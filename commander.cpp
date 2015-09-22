@@ -60,12 +60,12 @@ unsigned char RCCommander::GetPositionCmd() {
 }
 
 //$
-JetsonCommander::JetsonCommander(ros::NodeHandle *nh, bool jetsonMode, bool mixedMode) {
+JetsonCommander::JetsonCommander(ros::NodeHandle *nh) {
 
   _nh = nh;
 
-  _jetsonMode = jetsonMode;
-  _mixedMode = mixedMode;
+  _jetsonMode = false;
+  _semiautomaticMode = false;
 
   _leftRPMCmd = 0; 
   _rightRPMCmd = 0; 

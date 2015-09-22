@@ -21,8 +21,8 @@ public:
   virtual unsigned char GetLeftSpeedCmd(){return 0;}
   virtual unsigned char GetRightSpeedCmd(){return 0;}
   virtual unsigned char GetPositionCmd(){return 0;}
-  virtual int GetLeftDirectionCmd(){return 0;}
-  virtual int GetRightDirectionCmd(){return 0;}
+  virtual int GetLeftDirectionCmd(){return 1;}
+  virtual int GetRightDirectionCmd(){return 1;}
 };
 
 class RCCommander: public Commander {
@@ -46,7 +46,7 @@ public:
   unsigned char _posCmd;
   unsigned int _leftRPMCmd, _rightRPMCmd;
   boolean _jetsonMode; //$ true for Jetson control, false for RC
-  boolean _mixedMode; //$ true for Jetson control, false for RCprivate:
+  boolean _semiautomaticMode; //$ true for Jetson control, false for RCprivate:
   ros::NodeHandle *_nh;
 };
 

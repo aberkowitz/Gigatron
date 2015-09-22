@@ -47,8 +47,8 @@ const static double ABS_MAX_STEERING_ANGLE = 25 * (PI / 180); //$ [radians]
 
 ros::NodeHandle nh;       //$ node handle
 
-// JetsonCommander(ros::NodeHandle *nh, bool jetsonMode, bool mixedMode);
-JetsonCommander jc(&nh, false, true);  //$ Jetson commander
+// JetsonCommander(ros::NodeHandle *nh);
+JetsonCommander jc(&nh);  //$ Jetson commander
 
 PidController lSp(2, 1, 1, 255, 0);
 PidController rSp(2, 1, 1, 255, 0);
@@ -77,18 +77,18 @@ void CmdCallback(const geometry_msgs::Vector3& cmd) {
   */
 void SwitchCallback(const std_msgs::String& mode) {
   
-//  if (mode.data == "RC") {
-//    jc._jetsonMode = false;
-//    jc._mixedMode = false;
-//  }
-//  else if (mode.data == "Autonomous") {
-//    jc._jetsonMode = true;
-//    jc._mixedMode = false;
-//  }
-//  else if (mode.data == "Mixed") { //$ manual throttle, autonomous steering
-//    jc._jetsonMode = false;
-//    jc._mixedMode = true;
-//  }
+ if (mode.data == "RC") {
+   jc._jetsonMode = false;
+   jc._semiautomaticMode = false;
+ }
+ else if (mode.data == "Autonomous") {
+   jc._jetsonMode = true;
+   jc._semiautomaticMode = false;
+ }
+ else if (mode.data == "Semiautomatic") { //$ manual throttle, autonomous steering
+   jc._jetsonMode = false;
+   jc._semiautomaticMode = true;
+ }
 }
 
 /*$ Set PID controller gains for both drive motors with a 
