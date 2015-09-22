@@ -129,7 +129,7 @@ void Context::Start() {
         lSpC = _lSp->Update(lRPMC, lRPMS);
         rSpC = _rSp->Update(rRPMC, rRPMS);
       }
-      else { //$ RC mode
+      else { //$ RC mode and mixed mode
         lSpC = _commander->GetLeftSpeedCmd();
         rSpC = _commander->GetRightSpeedCmd();
         int lDir = _commander->GetLeftDirectionCmd();
@@ -182,11 +182,14 @@ void Context::Start() {
     }
     if (d_pt > _pInterval) { //$ position (steering servo) loop
       unsigned char pC;
-      if (_jcommander->_jetsonMode || _jcommander->_mixedMode) { //$ Jetson mode
+      if (_jcommander->_jetsonMode) { //$ Jetson mode
         pC = _jcommander->GetPositionCmd();
       }
-      else { //$ RC mode
+      else  if (!(_jcommander->_mixedMode)) { //$ RC mode
         pC = _commander->GetPositionCmd();
+      }
+      else if (_jcommander->_mixedMode) { //$ mixed mode
+        pC = _jcommander->GetPositionCmd();
       }  
       unsigned char pS = _servo->GetPos();
       

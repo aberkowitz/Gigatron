@@ -1,3 +1,4 @@
+
 /**
  * gigatron.ino
  * Gigatron motor control Arduino code.
@@ -34,8 +35,8 @@ const static double gearRatio = 11.0 / 60.0;  //$ gear ratio between motor and w
 //pin 31 right reverse
 
 //$ steering pot calibration
-int minADU = 534;
-int maxADU = 691; //$ 
+int minADU = 496;
+int maxADU = 676; //$ 
 
 //$ constants
 const static double RPM_TO_M_S = (2 * PI * wheelRadius) / 60.0;   //$ conversion from RPM to meters per second
@@ -76,18 +77,18 @@ void CmdCallback(const geometry_msgs::Vector3& cmd) {
   */
 void SwitchCallback(const std_msgs::String& mode) {
   
-  if (mode.data == "RC") {
-    jc._jetsonMode = false;
-    jc._mixedMode = false;
-  }
-  else if (mode.data == "Autonomous") {
-    jc._jetsonMode = true;
-    jc._mixedMode = false;
-  }
-  else if (mode.data == "Mixed") { //$ manual throttle, autonomous steering
-    jc._jetsonMode = false;
-    jc._mixedMode = true;
-  }
+//  if (mode.data == "RC") {
+//    jc._jetsonMode = false;
+//    jc._mixedMode = false;
+//  }
+//  else if (mode.data == "Autonomous") {
+//    jc._jetsonMode = true;
+//    jc._mixedMode = false;
+//  }
+//  else if (mode.data == "Mixed") { //$ manual throttle, autonomous steering
+//    jc._jetsonMode = false;
+//    jc._mixedMode = true;
+//  }
 }
 
 /*$ Set PID controller gains for both drive motors with a 
