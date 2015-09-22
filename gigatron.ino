@@ -84,7 +84,7 @@ void SwitchCallback(const std_msgs::String& mode) {
     jc._jetsonMode = true;
     jc._mixedMode = false;
   }
-  else if (mode.data == "Mixed") {
+  else if (mode.data == "Mixed") { //$ manual throttle, autonomous steering
     jc._jetsonMode = false;
     jc._mixedMode = true;
   }
