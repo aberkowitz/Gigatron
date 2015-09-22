@@ -34,9 +34,8 @@ const static double gearRatio = 11.0 / 60.0;  //$ gear ratio between motor and w
 //pin 31 right reverse
 
 //$ steering pot calibration
-//this is incorrect, the pot was shot
-int minADU = 769;
-int maxADU = 875; //$ 890
+int minADU = 534;
+int maxADU = 691; //$ 
 
 //$ constants
 const static double RPM_TO_M_S = (2 * PI * wheelRadius) / 60.0;   //$ conversion from RPM to meters per second
@@ -46,12 +45,14 @@ const static double STEERING_ANGLE_RANGE = 50 * (PI / 180); //$ [radians] this i
 const static double ABS_MAX_STEERING_ANGLE = 25 * (PI / 180); //$ [radians]
 
 ros::NodeHandle nh;       //$ node handle
-JetsonCommander jc(&nh);  //$ Jetson commander
+
+// JetsonCommander(ros::NodeHandle *nh, bool jetsonMode, bool mixedMode);
+JetsonCommander jc(&nh, false, true);  //$ Jetson commander
 
 PidController lSp(2, 1, 1, 255, 0);
 PidController rSp(2, 1, 1, 255, 0);
 
-PidController pPos(250, 1, 50, 255, -255);
+PidController pPos(150, 0, 0, 255, -255);
 
 geometry_msgs::Vector3 odomsg;  //$ odometry message
 std_msgs::Float32 angmsg;       //$ measured steering angle message
@@ -77,9 +78,15 @@ void SwitchCallback(const std_msgs::String& mode) {
   
   if (mode.data == "RC") {
     jc._jetsonMode = false;
+    jc._mixedMode = false;
   }
   else if (mode.data == "Autonomous") {
     jc._jetsonMode = true;
+    jc._mixedMode = false;
+  }
+  else if (mode.data == "Mixed") {
+    jc._jetsonMode = false;
+    jc._mixedMode = true;
   }
 }
 

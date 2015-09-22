@@ -39,14 +39,14 @@ private:
 
 class JetsonCommander: public Commander { //$ wooo
 public:
-  JetsonCommander(ros::NodeHandle *nh);
+  JetsonCommander(ros::NodeHandle *nh, bool jetsonMode, bool mixedMode);
   unsigned int GetLeftRPMCmd();
   unsigned int GetRightRPMCmd();
   virtual unsigned char GetPositionCmd();
   unsigned char _posCmd;
   unsigned int _leftRPMCmd, _rightRPMCmd;
   boolean _jetsonMode; //$ true for Jetson control, false for RC
-private:
+  boolean _mixedMode; //$ true for Jetson control, false for RCprivate:
   ros::NodeHandle *_nh;
 };
 

@@ -121,7 +121,7 @@ void Context::Start() {
         //$ sensed RPM values
         unsigned int lRPMS = _left->GetSpeed();
         unsigned int rRPMS = _right->GetSpeed();
-        Serial.println(rRPMS); //Controller's perceived RPM 
+        //Serial.println(rRPMS); //Controller's perceived RPM 
         //$ commanded values
         unsigned int lRPMC = _jcommander->GetLeftRPMCmd();
         unsigned int rRPMC = _jcommander->GetRightRPMCmd();
@@ -182,7 +182,7 @@ void Context::Start() {
     }
     if (d_pt > _pInterval) { //$ position (steering servo) loop
       unsigned char pC;
-      if (_jcommander->_jetsonMode) { //$ Jetson mode
+      if (_jcommander->_jetsonMode || _jcommander->_mixedMode) { //$ Jetson mode
         pC = _jcommander->GetPositionCmd();
       }
       else { //$ RC mode

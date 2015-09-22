@@ -60,11 +60,12 @@ unsigned char RCCommander::GetPositionCmd() {
 }
 
 //$
-JetsonCommander::JetsonCommander(ros::NodeHandle *nh) {
+JetsonCommander::JetsonCommander(ros::NodeHandle *nh, bool jetsonMode, bool mixedMode) {
 
   _nh = nh;
 
-  _jetsonMode = true;
+  _jetsonMode = jetsonMode;
+  _mixedMode = mixedMode;
 
   _leftRPMCmd = 0; 
   _rightRPMCmd = 0; 
@@ -72,17 +73,17 @@ JetsonCommander::JetsonCommander(ros::NodeHandle *nh) {
 }
 
 unsigned int JetsonCommander::GetLeftRPMCmd() {
-//  return _leftRPMCmd;
-  return 0;
+  return _leftRPMCmd;
+  //return 0;
 }
 
 unsigned int JetsonCommander::GetRightRPMCmd() {
-//  return _rightRPMCmd;
-return 1200;
+  return _rightRPMCmd;
+  //return 1200;
 }
 
 unsigned char JetsonCommander::GetPositionCmd() {
-//  return _posCmd;
-return 0;
+  return _posCmd;
+  //return 0;
 }
 
