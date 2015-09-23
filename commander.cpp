@@ -74,12 +74,12 @@ JetsonCommander::JetsonCommander(ros::NodeHandle *nh) {
 
 unsigned int JetsonCommander::GetLeftRPMCmd() {
   return _leftRPMCmd;
-  //return 0;
+  //return 500;
 }
 
 unsigned int JetsonCommander::GetRightRPMCmd() {
   return _rightRPMCmd;
-  //return 1200;
+  //return 500;
 }
 
 unsigned char JetsonCommander::GetPositionCmd() {

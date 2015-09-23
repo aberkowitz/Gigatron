@@ -69,7 +69,7 @@ void CmdCallback(const geometry_msgs::Vector3& cmd) {
   unsigned char servoPWM = (desiredSteeringAngle + ABS_MAX_STEERING_ANGLE) * (STEERING_PWM_RANGE / STEERING_ANGLE_RANGE);
 
   jc._posCmd = servoPWM;
-  jc._leftRPMCmd = (unsigned int) 3.0/RPM_TO_M_S; //(cmd.y / RPM_TO_M_S);
+  jc._leftRPMCmd = (unsigned int) (cmd.y / RPM_TO_M_S);
   jc._rightRPMCmd = (unsigned int) (cmd.z / RPM_TO_M_S);
   //jc._rightRPMCmd = 1200;
 }
