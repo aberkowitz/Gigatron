@@ -64,7 +64,7 @@ JetsonCommander::JetsonCommander(ros::NodeHandle *nh) {
 
   _nh = nh;
 
-  _jetsonMode = false;
+  _jetsonMode = true;
   _semiautomaticMode = false;
 
   _leftRPMCmd = 0; 

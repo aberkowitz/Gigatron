@@ -24,6 +24,10 @@
 #define LOOP_INTERVAL 10
 #define S_LOOP_INTERVAL 85
 
+//$ steering pot calibration
+int minADU = 449;
+int maxADU = 631; //$ 
+
 const static double INCHES_TO_M = 0.0254; //$ conversion from inches to meters
 
 //$ car dimensions
@@ -34,9 +38,6 @@ const static double gearRatio = 11.0 / 60.0;  //$ gear ratio between motor and w
 //pin 30 left reverse
 //pin 31 right reverse
 
-//$ steering pot calibration
-int minADU = 496;
-int maxADU = 676; //$ 
 
 //$ constants
 const static double RPM_TO_M_S = (2 * PI * wheelRadius) / 60.0;   //$ conversion from RPM to meters per second
@@ -68,9 +69,9 @@ void CmdCallback(const geometry_msgs::Vector3& cmd) {
   unsigned char servoPWM = (desiredSteeringAngle + ABS_MAX_STEERING_ANGLE) * (STEERING_PWM_RANGE / STEERING_ANGLE_RANGE);
 
   jc._posCmd = servoPWM;
-  jc._leftRPMCmd = (unsigned int) (cmd.y / RPM_TO_M_S);
+  jc._leftRPMCmd = (unsigned int) 3.0/RPM_TO_M_S; //(cmd.y / RPM_TO_M_S);
   jc._rightRPMCmd = (unsigned int) (cmd.z / RPM_TO_M_S);
-  jc._rightRPMCmd = 100;
+  //jc._rightRPMCmd = 1200;
 }
 
 /*$ Swith between radio RC and autonomous/Jetson RC mode.

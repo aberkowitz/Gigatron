@@ -185,10 +185,10 @@ void Context::Start() {
       if (_jcommander->_jetsonMode) { //$ Jetson mode
         pC = _jcommander->GetPositionCmd();
       }
-      else  if (!(_jcommander->_mixedMode)) { //$ RC mode
+      else if (!(_jcommander->_semiautomaticMode)) { //$ RC mode
         pC = _commander->GetPositionCmd();
       }
-      else if (_jcommander->_mixedMode) { //$ mixed mode
+      else if (_jcommander->_semiautomaticMode) { //$ mixed mode
         pC = _jcommander->GetPositionCmd();
       }  
       unsigned char pS = _servo->GetPos();

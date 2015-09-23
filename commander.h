@@ -39,7 +39,7 @@ private:
 
 class JetsonCommander: public Commander { //$ wooo
 public:
-  JetsonCommander(ros::NodeHandle *nh, bool jetsonMode, bool mixedMode);
+  JetsonCommander(ros::NodeHandle *nh);
   unsigned int GetLeftRPMCmd();
   unsigned int GetRightRPMCmd();
   virtual unsigned char GetPositionCmd();
