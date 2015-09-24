@@ -79,6 +79,10 @@ void CmdCallback(const geometry_msgs::Vector3& cmd) {
 void SwitchCallback(const std_msgs::UInt16& mode) {
   
   jc._autonomous = mode.data;
+  if (mode.data == 2) {
+    digitalWrite(_lRev, HIGH);
+    digitalWrite(_rRev, HIGH);
+  }
 /*
  if (mode.data == 0) {
    jc._jetsonMode = false;
