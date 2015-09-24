@@ -7,6 +7,7 @@ DCServo::DCServo(int pwmPin, int dirPin, int posPin) {
   _dirPin = dirPin;
   _posPin = posPin;
   _minV = 0;
+  _midV = 511;
   _maxV = 1023;
   
   pinMode(_pwmPin, OUTPUT);
@@ -14,8 +15,9 @@ DCServo::DCServo(int pwmPin, int dirPin, int posPin) {
   pinMode(_posPin, INPUT);
 }
 
-void DCServo::ConfigSensor(int minV, int maxV) {
+void DCServo::ConfigPot(int minV, int midV, int maxV) {
   _minV = minV;
+  _midV = midV;
   _maxV = maxV;
 }
 
@@ -38,6 +40,27 @@ unsigned char DCServo::GetPos() {
   if (tmp > 255) tmp = 255;
   //dp (tmp);
   return (unsigned char) tmp;
+}
+
+//$ takes pot limits and middle value and linearizes the output
+unsigned char DCServo::GetPosLinearized() {
+  long adu = analogRead(_posPin);
+  dp(adu); //$ uncomment for pot calibration
+  long tmp;
+  if (adu < _midV) {
+    tmp = (adu - _minV) << 7 ;;
+    tmp /= (_midV - _minV);
+    }
+  else {
+    tmp = (adu - _midV) << 7 ;;
+    tmp /= (_maxV - _midV);
+    tmp += 127;
+  }
+  if (tmp < 0) tmp = 0;
+  if (tmp > 255) tmp = 255;
+  unsigned char res = (unsigned char) tmp;
+  //dp (tmp);
+  return res;
 }
 
 RCDecoder::RCDecoder(int interrupt, int minV, int maxV) {

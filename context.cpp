@@ -188,7 +188,7 @@ void Context::Start() {
       else  { //$ mixed mode and fully autonomous mode
         pC = _jcommander->GetPositionCmd();
       }  
-      unsigned char pS = _servo->GetPos();
+      unsigned char pS = _servo->GetPosLinearized();
       
       //dp(pC);
       //dp(pS);

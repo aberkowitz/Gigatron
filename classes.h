@@ -5,12 +5,13 @@
 class DCServo {
 public:
   DCServo(int pwmPin, int dirPin, int posPin);
-  void ConfigSensor(int minV, int maxV);
+  void ConfigPot(int minV, int midV, int maxV);
   void SetVelocity(int vel);
   unsigned char GetPos();
+  unsigned char GetPosLinearized();
 private:
   int _pwmPin, _dirPin, _posPin;
-  int _minV, _maxV;
+  int _minV, _midV, _maxV;
 };
 
 class RCDecoder {
