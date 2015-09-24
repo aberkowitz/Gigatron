@@ -25,8 +25,9 @@
 #define S_LOOP_INTERVAL 85
 
 //$ steering pot calibration
-int minADU = 449;
-int maxADU = 631; //$ 
+int minADU = 439;
+int midADU = 549; //$ value at zero steering angle
+int maxADU = 622; 
 
 //$ pin numbers
 int lPwm = 9;
@@ -132,7 +133,7 @@ void setup() {
   DCServo servo(5, 4, A0); 
 
   // DCServo::ConfigSensor(int minV, int maxV);
-  servo.ConfigSensor(minADU, maxADU);
+  servo.ConfigPot(minADU, midADU, maxADU);
   RCCommander rc(&sp, &pos);
 
   /*$ The PID controller definitions got moved up top so that GainsCallback works */
