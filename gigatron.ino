@@ -28,6 +28,12 @@
 int minADU = 449;
 int maxADU = 631; //$ 
 
+//$ pin numbers
+int lPwm = 9;
+int rPwm = 10;
+int lRev = 30;
+int rRev = 31;
+
 const static double INCHES_TO_M = 0.0254; //$ conversion from inches to meters
 
 //$ car dimensions
@@ -79,9 +85,9 @@ void CmdCallback(const geometry_msgs::Vector3& cmd) {
 void SwitchCallback(const std_msgs::UInt16& mode) {
   
   jc._autonomous = mode.data;
-  if (mode.data == 2) {
-    digitalWrite(_lRev, HIGH);
-    digitalWrite(_rRev, HIGH);
+  if (mode.data == 2) { //$ set pins for fully autonomous throttle
+    digitalWrite(lRev, HIGH);
+    digitalWrite(rRev, HIGH);
   }
 /*
  if (mode.data == 0) {
@@ -167,7 +173,7 @@ void setup() {
           ros::Publisher *angpub,
           std_msgs::Float32 *angcommsg,
           ros::Publisher *angcompub) */
-  Context context(&rc, &servo, &left, &right, 9, 10, 30, 31, &lSp, &rSp, &pPos, &nh, &jc, &odomsg, &pub, &commsg, &compub, &angmsg, &angpub, &angcommsg, &angcompub);
+  Context context(&rc, &servo, &left, &right, lPwm, rPwm, lRev, rRev, &lSp, &rSp, &pPos, &nh, &jc, &odomsg, &pub, &commsg, &compub, &angmsg, &angpub, &angcommsg, &angcompub);
 
   // Context::ConfigureLoop(int sInterval, int pInterval);
   context.ConfigureLoop(S_LOOP_INTERVAL, LOOP_INTERVAL);
