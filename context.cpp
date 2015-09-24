@@ -117,7 +117,7 @@ void Context::Start() {
       unsigned int rSpC;
 
       //$ get values from RC commander or Jetson commander
-      if (_jcommander->_jetsonMode) { //$ Jetson mode
+      if (_jcommander->_autonomous > 1) { //$ fully autonomous mode
         //$ sensed RPM values
         unsigned int lRPMS = _left->GetSpeed();
         unsigned int rRPMS = _right->GetSpeed();
@@ -129,7 +129,7 @@ void Context::Start() {
         lSpC = _lSp->Update(lRPMC, lRPMS);
         rSpC = _rSp->Update(rRPMC, rRPMS);
       }
-      else { //$ RC mode and mixed mode
+      else { //$ RC mode and semiautomatic mode
         lSpC = _commander->GetLeftSpeedCmd();
         rSpC = _commander->GetRightSpeedCmd();
         int lDir = _commander->GetLeftDirectionCmd();
@@ -182,13 +182,10 @@ void Context::Start() {
     }
     if (d_pt > _pInterval) { //$ position (steering servo) loop
       unsigned char pC;
-      if (_jcommander->_jetsonMode) { //$ Jetson mode
-        pC = _jcommander->GetPositionCmd();
-      }
-      else if (!(_jcommander->_semiautomaticMode)) { //$ RC mode
+      if (_jcommander->_autonomous == 0) { //$ RC mode
         pC = _commander->GetPositionCmd();
       }
-      else if (_jcommander->_semiautomaticMode) { //$ mixed mode
+      else  { //$ mixed mode and fully autonomous mode
         pC = _jcommander->GetPositionCmd();
       }  
       unsigned char pS = _servo->GetPos();

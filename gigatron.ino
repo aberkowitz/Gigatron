@@ -16,8 +16,8 @@
 #include "shared.h"
 #include <ros.h>
 #include <geometry_msgs/Vector3.h> 
-#include <std_msgs/Float32.h> //$ for steering odometry stuff
-#include <std_msgs/String.h>  //$ for switching modes
+#include <std_msgs/Float32.h> //$ for steering odometry stuff and mode
+#include <std_msgs/UInt16.h> //$ for mode switching
 
 #define PI 3.1415926535897932384626433832795
  
@@ -76,20 +76,22 @@ void CmdCallback(const geometry_msgs::Vector3& cmd) {
 
 /*$ Swith between radio RC and autonomous/Jetson RC mode.
   */
-void SwitchCallback(const std_msgs::String& mode) {
+void SwitchCallback(const std_msgs::UInt16& mode) {
   
- if (mode.data == "RC") {
+  jc._autonomous = mode.data;
+/*
+ if (mode.data == 0) {
    jc._jetsonMode = false;
    jc._semiautomaticMode = false;
  }
- else if (mode.data == "Autonomous") {
+ else if (mode.data == 2) {
    jc._jetsonMode = true;
    jc._semiautomaticMode = false;
  }
- else if (mode.data == "Semiautomatic") { //$ manual throttle, autonomous steering
+ else if (mode.data == 1) { //$ manual throttle, autonomous steering
    jc._jetsonMode = false;
    jc._semiautomaticMode = true;
- }
+ }*/
 }
 
 /*$ Set PID controller gains for both drive motors with a 
@@ -131,7 +133,7 @@ void setup() {
   //$ set up subscribers
   ros::Subscriber<geometry_msgs::Vector3> sub("control", CmdCallback);
   nh.subscribe(sub);
-  ros::Subscriber<std_msgs::String> switchsub("switch", SwitchCallback);
+  ros::Subscriber<std_msgs::UInt16> switchsub("switch", SwitchCallback);
   nh.subscribe(switchsub);
   ros::Subscriber<geometry_msgs::Vector3> gainsub("gains", GainsCallback);
   nh.subscribe(gainsub);

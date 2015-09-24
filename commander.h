@@ -45,8 +45,12 @@ public:
   virtual unsigned char GetPositionCmd();
   unsigned char _posCmd;
   unsigned int _leftRPMCmd, _rightRPMCmd;
+  
+  unsigned int _autonomous;
+/*
   boolean _jetsonMode; //$ true for Jetson control, false for RC
   boolean _semiautomaticMode; //$ true for Jetson control, false for RCprivate:
+*/
   ros::NodeHandle *_nh;
 };
 
