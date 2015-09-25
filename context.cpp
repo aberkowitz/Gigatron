@@ -104,8 +104,8 @@ void Context::Start() {
   
   _last_st = _last_pt = millis();
 
-  unsigned int oldMode = _jcommander->_autonomous;
-  
+  //unsigned int oldMode = _jcommander->_autonomous;
+  unsigned int oldMode = 2;
 
   for (;;) {
     _nh->spinOnce(); //$ spin node handle
@@ -114,13 +114,22 @@ void Context::Start() {
     unsigned long d_st = t - _last_st;
     unsigned long d_pt = t - _last_pt;
 
-    
-    // KILLSWITCH ENGAGE \m/
-    if(_commander->GetKillCmd() > 75){
-        if(_jcommander->_autonomous == 0) _jcommander->_autonomous = oldMode;
-    }else{
-        if(_jcommander->_autonomous > 0) oldMode = _jcommander->_autonomous;
-        _jcommander->_autonomous = 0;
+        // KILLSWITCH ENGAGE \m/
+    if (_commander->GetKillCmd() > 75) {
+      if (_jcommander->_autonomous == 0) {
+        _jcommander->_autonomous = oldMode;
+        //$ HALP IT'S GOING IN REVERSE
+//        digitalWrite(_lRev, LOW);
+        digitalWrite(_rRev, HIGH); 
+        digitalWrite(_lRev, HIGH); 
+
+      }
+    }
+    else {
+      if (_jcommander->_autonomous > 0) {
+        oldMode = _jcommander->_autonomous;
+      }
+      _jcommander->_autonomous = 0;
     }
 
     //dp(_jcommander->_autonomous);
