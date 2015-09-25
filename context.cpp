@@ -117,11 +117,13 @@ void Context::Start() {
     
     // KILLSWITCH ENGAGE \m/
     if(_commander->GetKillCmd() > 75){
-        _jcommander->_autonomous = oldMode;
+        if(_jcommander->_autonomous == 0) _jcommander->_autonomous = oldMode;
     }else{
         if(_jcommander->_autonomous > 0) oldMode = _jcommander->_autonomous;
         _jcommander->_autonomous = 0;
     }
+
+    //dp(_jcommander->_autonomous);
 
     if (d_st > _sInterval) {  //$ speed (drive motor) loop
       //$ left and right speed commands
@@ -201,6 +203,8 @@ void Context::Start() {
         pC = _jcommander->GetPositionCmd();
       }  
       unsigned char pS = _servo->GetPosLinearized();
+
+      
       
       //dp(pC);
       //dp(pS);
