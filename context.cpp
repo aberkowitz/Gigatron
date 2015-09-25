@@ -104,12 +104,24 @@ void Context::Start() {
   
   _last_st = _last_pt = millis();
 
+  unsigned int oldMode = _jcommander->_autonomous;
+  
+
   for (;;) {
     _nh->spinOnce(); //$ spin node handle
     
     unsigned long t = millis();
     unsigned long d_st = t - _last_st;
     unsigned long d_pt = t - _last_pt;
+
+    
+    // KILLSWITCH ENGAGE \m/
+    if(_commander->GetKillCmd() > 75){
+        _jcommander->_autonomous = oldMode;
+    }else{
+        if(_jcommander->_autonomous > 0) oldMode = _jcommander->_autonomous;
+        _jcommander->_autonomous = 0;
+    }
 
     if (d_st > _sInterval) {  //$ speed (drive motor) loop
       //$ left and right speed commands

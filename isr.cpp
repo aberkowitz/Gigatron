@@ -8,8 +8,8 @@
 #include <Arduino.h>
 #include "shared.h"
 
-volatile unsigned long _pw0_us, _pw1_us;
-volatile unsigned long _pw0_last_t, _pw1_last_t;
+volatile unsigned long _pw0_us, _pw1_us, _pw2_us;
+volatile unsigned long _pw0_last_t, _pw1_last_t, _pw2_last_t;
 volatile unsigned int _speed_2, _speed_3;
 
 void ISR0() {
@@ -29,6 +29,17 @@ void ISR1() {
     _pw1_us = micros() - _pw1_last_t;
   }
 }
+
+void ISR2() {
+  int state = digitalRead(21);
+  if (state) {
+    _pw2_last_t = micros();
+  } else {
+    _pw2_us = micros() - _pw2_last_t;
+  }
+}
+
+
 
 void ISR4() {
   //Serial.println("AYY");

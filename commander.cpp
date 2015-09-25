@@ -13,9 +13,10 @@
 #include "shared.h"
 #include "commander.h"
 
-RCCommander::RCCommander(RCDecoder *sp, RCDecoder *pos) {
+RCCommander::RCCommander(RCDecoder *sp, RCDecoder *pos, RCDecoder *kill) {
   _sp = sp;
   _pos = pos;
+  _kill = kill;
 }
 
 int RCCommander::GetLeftDirectionCmd() {
@@ -58,6 +59,11 @@ unsigned char RCCommander::GetRightSpeedCmd() {
 unsigned char RCCommander::GetPositionCmd() {
   return _pos->GetVal();
 }
+
+unsigned char RCCommander::GetKillCmd() {
+  return _kill->GetVal();
+}
+
 
 //$
 JetsonCommander::JetsonCommander(ros::NodeHandle *nh) {

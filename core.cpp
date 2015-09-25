@@ -58,7 +58,7 @@ unsigned char DCServo::GetPosLinearized() {
   }
   if (tmp < 0) tmp = 0;
   if (tmp > 255) tmp = 255;
-  dp(tmp);
+  //dp(tmp);
   unsigned char res = (unsigned char) tmp;
   //dp (tmp);
   return res;
@@ -71,11 +71,14 @@ RCDecoder::RCDecoder(int interrupt, int minV, int maxV) {
   
   pinMode(2, INPUT);
   pinMode(3, INPUT);
+  pinMode(21, INPUT);
   
   if (_interrupt == 0) {
     attachInterrupt(0, ISR0, CHANGE);
-  } else {
+  } else if (_interrupt == 1) {
     attachInterrupt(1, ISR1, CHANGE);
+  }else if (_interrupt == 2) {
+    attachInterrupt(2, ISR2, CHANGE);
   }
 }
 
@@ -83,9 +86,12 @@ unsigned char RCDecoder::GetVal() {
   long pw;
   if (_interrupt == 0) {
     pw = _pw0_us;
-  } else {
+  } else if (_interrupt == 1) {
     pw = _pw1_us;
+  }if (_interrupt == 2) {
+    pw = _pw2_us;
   }
+  
   //Serial.println(pw); //RC decoder vals
   //dp(pw);
   pw = (pw - _minV) << 8;

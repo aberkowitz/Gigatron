@@ -61,7 +61,7 @@ JetsonCommander jc(&nh);  //$ Jetson commander
 PidController lSp(2, 1, 1, 255, 0);
 PidController rSp(2, 1, 1, 255, 0);
 
-PidController pPos(150, 0, 0, 255, -255);
+PidController pPos(250, 1, 50, 255, -255);
 
 geometry_msgs::Vector3 odomsg;  //$ odometry message
 std_msgs::Float32 angmsg;       //$ measured steering angle message
@@ -121,9 +121,11 @@ void setup() {
   Serial.begin(38400);
 
   // RCDecoder(int interrupt, int minV, int maxV);
-  RCDecoder pos(0, 984, 2004); 
+  RCDecoder pos(0, 984, 1996); 
   //Was 1480, expanded to add reverse
   RCDecoder sp(1, 1020, 1990);
+  //Was 1480, expanded to add reverse
+  RCDecoder kill(2, 996, 1988);
 
   // SpeedSensor(int interrupt, int poles, int interval);
   SpeedSensor left(4, 14, S_LOOP_INTERVAL); 
@@ -134,7 +136,7 @@ void setup() {
 
   // DCServo::ConfigSensor(int minV, int maxV);
   servo.ConfigPot(minADU, midADU, maxADU);
-  RCCommander rc(&sp, &pos);
+  RCCommander rc(&sp, &pos, &kill);
 
   /*$ The PID controller definitions got moved up top so that GainsCallback works */
     // PidController(long kp, long ki, long kd, long out_max, long out_min);
