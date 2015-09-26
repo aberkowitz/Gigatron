@@ -123,13 +123,16 @@ SpeedSensor::SpeedSensor(int interrupt, int poles, int interval) {
   _speed_2 = _speed_3 = 0;
 }
 
+
 unsigned int SpeedSensor::GetSpeed() {
   long sp;
   if (_interrupt == 4) {// If we are the left sensor
     sp = _speed_2;
+    dp(sp); //$ do not uncomment this print statement if you want your Hall sensors to work
     _speed_2 = 0;
-  } else { // right sensor
+  } else if (_interrupt == 5) { // right sensor
     sp = _speed_3;
+    dp(sp); //$ see above - do not uncomment this print statement unless you add delay somehow  
     _speed_3 = 0;
   }
   
@@ -141,6 +144,7 @@ unsigned int SpeedSensor::GetSpeed() {
   double rpm = sp*60.0*1000.0/_interval/7.0;
   rpmSmooth = (rpm * (1 - filterVal)) + (rpmSmooth  *  filterVal);
   if (rpm < 0) rpm = 0;
+  dp(rpm);
   return (unsigned int) rpmSmooth;
 }
 
