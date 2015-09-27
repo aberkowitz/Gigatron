@@ -23,15 +23,12 @@ from sensor_msgs.msg import LaserScan   # for switching Jetson/RC mode
 from geometry_msgs.msg import Vector3   # for sending controls
 
 follow_syler = False
-with_intensity = True
-cautious = False
+cautious = True
 reverse = False
 
-v_forward = 4
+v_forward = 5
 v_slowest = 2
-v_fastest = 5
-
-v_faster = 6 #no longer usd - proportional thrott
+v_faster = 6
 fast_dist = 5   #Assumes with 5m of clearance ahead we can go as fast as possible
 ABS_MAX_STEERING_ANGLE = 25.0 * (math.pi / 180.0)
 INCHES_TO_M = 0.0254
@@ -96,22 +93,6 @@ def polar_integrate(narrow):
     #print integral, dirintegral, dirintegral/integral
     return dirintegral/integral
 
-def polar_integrate_with_intensity(narrow):
-    integral = 0
-    dirintegral = 0
-    for p in zip(narrow[0], narrow[1], narrow[2]):
-        r = p[0]
-        theta = p[1]
-	intensity = p[2]
-        if theta >= 0:
-            dirintegral -= (1/r) * math.cos(theta) * intensity
-        elif theta < 0:
-            dirintegral += (1/r) * math.cos(theta) * intensity
-        integral += (1/r) * math.cos(theta) * intensity
-        #print r, theta
-    #print integral, dirintegral, dirintegral/integral
-    return dirintegral/integral
-
 def polar_integrate_with_stop(narrow):
     integral = 0
     dirintegral = 0
@@ -134,8 +115,6 @@ def steer(ranges, intensities, theta_min=-math.pi/2, theta_max=math.pi/2):
     narrow = generate_narrow_fov_points(ranges, intensities, theta_min, theta_max)
     if cautious:
         return polar_integrate_with_stop(narrow)
-    elif with_intensity:
-        return polar_integrate_with_intensity(narrow), False
     else:
         return polar_integrate(narrow), False
 
@@ -189,8 +168,8 @@ def callback(scan):
 
     # set velocity commands
     control.x = drive_angle  # driveing angle 
-    control.y = min(v_fastest, max(v_left, 0))  # left wheel velocity
-    control.z = min(v_fastest, max(v_right, 0)) # right wheel velocity
+    control.y = max(v_left, 0)  # left wheel velocity
+    control.z = max(v_right, 0) # right wheel velocity
     
 
     print " [ > ] angle: %4.1f rad  V_l: %4.1f m/s  V_r: %4.1f m/s" % (control.x, control.y, control.z)
