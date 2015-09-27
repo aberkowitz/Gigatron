@@ -26,7 +26,7 @@
 
 //$ steering pot calibration
 int minADU = 439;
-int midADU = 549; //$ value at zero steering angle
+int midADU = 556; //$ value at zero steering angle
 int maxADU = 622; 
 
 //$ pin numbers
@@ -61,7 +61,7 @@ JetsonCommander jc(&nh);  //$ Jetson commander
 PidController lSp(2, 1, 1, 255, 0);
 PidController rSp(2, 1, 1, 255, 0);
 
-PidController pPos(250, 1, 50, 255, -255);
+PidController pPos(200, 0, 5, 255, -255); //250, 1, 50
 
 geometry_msgs::Vector3 odomsg;  //$ odometry message
 std_msgs::Float32 angmsg;       //$ measured steering angle message
@@ -180,8 +180,10 @@ void setup() {
 
   // Context::ConfigureLoop(int sInterval, int pInterval);
   context.ConfigureLoop(S_LOOP_INTERVAL, LOOP_INTERVAL);
-
+  TCCR3B&=~7;
+  TCCR3B|=2;
   context.Start(); // the actual looping happens here
+
 }
 
 void loop() {

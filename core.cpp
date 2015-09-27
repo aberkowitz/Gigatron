@@ -22,6 +22,8 @@ void DCServo::ConfigPot(int minV, int midV, int maxV) {
 }
 
 void DCServo::SetVelocity(int vel) {
+  //if (vel>200) vel = 200; //200 is my cap
+  
   if (vel > 0) {
     analogWrite(_pwmPin, vel);
     digitalWrite(_dirPin, LOW);
@@ -50,7 +52,7 @@ unsigned char DCServo::GetPos() {
  */
 unsigned char DCServo::GetPosLinearized() {
   long adu = analogRead(_posPin);
-//  dp(adu); //$ uncomment for pot calibration
+  //dp(adu); //$ uncomment for pot calibration
   long tmp;
   if (adu < _midV) {
     tmp = (adu - _minV) << 7 ;;
