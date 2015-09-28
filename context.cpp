@@ -194,7 +194,7 @@ void Context::Start() {
 
       double leftWheelRPM = (double) _left->GetSpeed();
       double rightWheelRPM = (double) _right->GetSpeed();
-
+      
       //$ write wheel velocities
       _odomsg->y = leftWheelRPM * RPM_TO_M_S;
       _odomsg->z = rightWheelRPM * RPM_TO_M_S;

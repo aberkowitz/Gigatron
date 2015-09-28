@@ -145,8 +145,9 @@ unsigned int SpeedSensor::GetSpeed() {
 
   double rpm = sp*60.0*1000.0/_interval/7.0;
   rpmSmooth = (rpm * (1 - filterVal)) + (rpmSmooth  *  filterVal);
-  if (rpm < 0) rpm = 0;
-  dp(rpm);
+  //Serial.println(rpmSmooth);
+  if (rpmSmooth < 0) rpmSmooth = 0;
+  dp(rpmSmooth);
   return (unsigned int) rpmSmooth;
 }
 

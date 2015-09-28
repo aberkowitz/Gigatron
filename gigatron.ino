@@ -1,10 +1,11 @@
-
 /**
  * gigatron.ino
  * Gigatron motor control Arduino code.
  * 
- * @author  Bayley Wang   <bayleyw@mit.edu>
- * @author  Syler Wagner  <syler@mit.edu>
+ * @author  Bayley Wang       <bayleyw@mit.edu>
+ * @author  Syler Wagner      <syler@mit.edu>
+ * @author  Chris Desnoyers   <cjdesno@mit.edu>
+ * @author  Daniel Gonzalez   <dgonz@mit.edu>
  *
  * @date    2015-09-16    syler   fixed odometry message sending
  * @date    2015-09-16    syler   added PID gain tuning via ROS messages
@@ -25,15 +26,15 @@
 #define S_LOOP_INTERVAL 85
 
 //$ steering pot calibration
-int minADU = 439;
-int midADU = 556; //$ value at zero steering angle
-int maxADU = 622; 
+int minADU = 474; //462, all right
+int midADU = 566; //$ value at zero steering angle
+int maxADU = 624; //638, all left
 
 //$ pin numbers
 int lPwm = 9;
 int rPwm = 10;
-int lRev = 30;
-int rRev = 31;
+int lRev = 30; //pin 30 left reverse
+int rRev = 31; //pin 31 right reverse
 
 const static double INCHES_TO_M = 0.0254; //$ conversion from inches to meters
 
@@ -41,9 +42,6 @@ const static double INCHES_TO_M = 0.0254; //$ conversion from inches to meters
 const static double wheelBaseWidth = 23.0 * INCHES_TO_M;  //$ [m]
 const static double wheelRadius = 4.90 * INCHES_TO_M;     //$ [m]
 const static double gearRatio = 11.0 / 60.0;  //$ gear ratio between motor and wheels
-
-//pin 30 left reverse
-//pin 31 right reverse
 
 
 //$ constants
@@ -61,13 +59,12 @@ JetsonCommander jc(&nh);  //$ Jetson commander
 PidController lSp(2, 1, 1, 255, 0);
 PidController rSp(2, 1, 1, 255, 0);
 
-PidController pPos(200, 0, 5, 255, -255); //250, 1, 50
+PidController pPos(150, 0, 15, 255, -255); //250, 1, 50
 
 geometry_msgs::Vector3 odomsg;  //$ odometry message
 std_msgs::Float32 angmsg;       //$ measured steering angle message
 geometry_msgs::Vector3 commsg;  //$ command message
 std_msgs::Float32 angcommsg;    //$ command message
-//$ TODO: fix sending back odometry values on separate channels
 
 
 void CmdCallback(const geometry_msgs::Vector3& cmd) {
