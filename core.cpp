@@ -148,6 +148,8 @@ unsigned int SpeedSensor::GetSpeed() {
   //long hz = sp * 1000 / _interval;
   //long rpm = 120 * hz / _poles;
 
+  //TODO how does 600 pulses per motor revolution affect this code?
+
   double rpm = sp*60.0*1000.0/_interval/7.0;
   rpmSmooth = (rpm * (1 - filterVal)) + (rpmSmooth  *  filterVal);
   //Serial.println(rpmSmooth);
