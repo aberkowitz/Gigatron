@@ -112,6 +112,11 @@ SpeedSensor::SpeedSensor(int interrupt, int poles, int interval) {
   _interrupt = interrupt;
   _poles = poles;
   _interval = interval;
+  //interval is set in gigatron.ino; it is the interval at which the context loop runs, 
+  //and not related to any property of the encoders
+
+  //see https://www.arduino.cc/en/Reference/AttachInterrupt for interrupt documentation
+  //in summary, attachInterrupt(4) likely attaches an interrupt to pin 18, and does not attach one to pin 4
   
   pinMode(18, INPUT);
   pinMode(19, INPUT);
