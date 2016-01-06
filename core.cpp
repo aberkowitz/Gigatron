@@ -117,7 +117,9 @@ SpeedSensor::SpeedSensor(int interrupt, int poles, int interval) {
 
   //see https://www.arduino.cc/en/Reference/AttachInterrupt for interrupt documentation
   //in summary, attachInterrupt(4) likely attaches an interrupt to pin 18, and does not attach one to pin 4
-  
+
+  pinMode(16, INPUT);
+  pinMode(17, INPUT);
   pinMode(18, INPUT);
   pinMode(19, INPUT);
   
@@ -154,7 +156,7 @@ unsigned int SpeedSensor::GetSpeed() {
   rpmSmooth = (rpm * (1 - filterVal)) + (rpmSmooth  *  filterVal);
   //Serial.println(rpmSmooth);
   if (rpmSmooth < 0) rpmSmooth = 0;
-  dp(rpmSmooth);
+//  dp(rpmSmooth);
   return (unsigned int) rpmSmooth;
 }
 

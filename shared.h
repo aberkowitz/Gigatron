@@ -10,7 +10,7 @@
 
 extern volatile unsigned long _pw0_us, _pw1_us, _pw2_us;
 extern volatile unsigned long _pw0_last_t, _pw1_last_t, _pw2_last_t;
-extern volatile unsigned int _speed_2, _speed_3;
+extern volatile int _speed_2, _speed_3;
 
 void ISR0();
 void ISR1();

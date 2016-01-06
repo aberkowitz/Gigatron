@@ -45,9 +45,11 @@ void ISR2() {
 void ISR4() {
   //Serial.println("AYY");
   if (digitalRead(16)) {
+    Serial.println("ISR4 digitalRead(16)");
     _speed_2++;
   }
   else{
+    Serial.println("ISR4");
     _speed_2--;
   }
 }
@@ -55,9 +57,11 @@ void ISR4() {
 void ISR5() {
   //Serial.println("AYY");
   if (digitalRead(17)) {
+    Serial.println("ISR5 digitalRead(17)");
     _speed_3++;
   }
   else{
+    Serial.println("ISR5");
     _speed_3--;
   }
 }
