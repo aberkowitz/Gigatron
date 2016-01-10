@@ -4,6 +4,8 @@ Icon*
 *.DS_Store
 *.tmp
 
+documentation/Gigadocs/*
+
 ###########################
 
 ## C++ ####################
