@@ -57,10 +57,10 @@ ros::NodeHandle nh;       //$ node handle
 // JetsonCommander(ros::NodeHandle *nh);
 JetsonCommander jc(&nh);  //$ Jetson commander
 
-PidController lSp(2, 1, 1, 255, 0);
-PidController rSp(2, 1, 1, 255, 0);
+PIDController lSp(2, 1, 1, 255, 0);
+PIDController rSp(2, 1, 1, 255, 0);
 
-PidController pPos(150, 0, 15, 255, -255); //250, 1, 50
+PIDController pPos(150, 0, 15, 255, -255); //250, 1, 50
 
 geometry_msgs::Vector3 odomsg;  //$ odometry message
 std_msgs::Float32 angmsg;       //$ measured steering angle message
@@ -137,9 +137,9 @@ void setup() {
   RCCommander rc(&sp, &pos, &kill);
 
   /*$ The PID controller definitions got moved up top so that GainsCallback works */
-    // PidController(long kp, long ki, long kd, long out_max, long out_min);
-    //PidController lSp(0, 100, 0, 255, 0);
-    //PidController rSp(0, 100, 0, 255, 0);
+    // PIDController(long kp, long ki, long kd, long out_max, long out_min);
+    //PIDController lSp(0, 100, 0, 255, 0);
+    //PIDController rSp(0, 100, 0, 255, 0);
 
   //$ set up subscribers
   ros::Subscriber<geometry_msgs::Vector3> sub("control", CmdCallback);
@@ -162,8 +162,8 @@ void setup() {
   /* Context(Commander *commander, DCServo *servo,
           SpeedSensor *left, SpeedSensor *right,
           int lPwm, int rPwm,
-          PidController *lSp, PidController *rSp,
-          PidController *pos,
+          PIDController *lSp, PIDController *rSp,
+          PIDController *pos,
           ros::NodeHandle *nh,
           JetsonCommander *jcommander,
           geometry_msgs::Vector3 *odomsg,
