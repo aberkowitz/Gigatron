@@ -1,0 +1,184 @@
+##
+# .bash_gigatron
+# Bash aliases for Gigatron
+# 
+# @author   Syler Wagner    <syler@mit.edu>
+# @date     2015-07-06      creation
+#           2015-07-12      renamed and added content
+#
+# CONFIGURATION INFO
+# Source from this in your .bashrc by adding the following three lines:
+# if [ -f ~/Gigatron/Bash/.bash_gigatron ]; then
+#	. ~/Gigatron/Bash/.bash_gigatron
+# fi
+#
+# You need to source your .bashrc in order for this to have an immediate effect:
+# $ source ~/.bashrc
+##
+
+## BASH ALIASES #------------------------------------------------------------------##
+
+GP='/media/syler/IDRIVE/Gigatron' # 2015-09-13
+
+# GO PLACES
+cs() { cd $*; ls; } # cd + ls 2015-01-09
+alias cdc='cd ~/catkin_ws/' # 2015-07-06
+alias cdcs='cd ~/catkin_ws/src/' # 2015-07-06
+alias cdcsg='cd ~/catkin_ws/src/gigatron/' # 2015-07-06
+alias cdcsgl='cd ~/catkin_ws/src/gigatron/launch/' # 2015-09-12
+alias cdcsgs='cd ~/catkin_ws/src/gigatron/src/' # 2015-09-12
+
+alias cdg='cd ~/Gigatron/' # 2015-07-06
+alias cdga='cd ~/Gigatron/Arduino/' # 2015-07-16
+alias cdgag='cd ~/Gigatron/Arduino/gigatron/' # 2015-09-12
+alias cdgb='cd ~/Gigatron/Bash/' # 2015-07-16
+alias cdgd='cd ~/Gigatron/Documentation/' # 2015-07-16
+alias cdgds='cd ~/Gigatron/Documentation/Screenshots/' # 2015-09-12
+alias cdgl='cd ~/Gigatron/Logs' # 2015-09-09
+alias cdgr='cd ~/Gigatron/ROS-Packages/' # 2015-07-16
+alias cdgrg='cd ~/Gigatron/ROS-Packages/gigatron/' # 2015-07-16
+alias cdgrgl='cd ~/Gigatron/ROS-Packages/gigatron/launch/' # 2015-09-12
+alias cdgrgs='cd ~/Gigatron/ROS-Packages/gigatron/src/' # 2015-09-12
+
+alias ..='cd ..' # 2015-03-23
+alias ...='cd ../..' # 2015-03-23
+alias ....='cd ../../..' # 2015-03-23
+alias .....='cd ../../../..' # 2015-03-23
+alias ......='cd ../../../../..' # 2015-03-23
+
+# CATKIN
+alias cm='cdc; catkin_make' # 2015-07-06
+alias ckp='cdc; catkin_create_pkg' # 2015-07-12
+
+# ARDUINO MESSAGE LIBRARIES
+alias msgino='cd ~/Gigatron/Arduino/libraries; rm -rf ros_lib; rosrun rosserial_arduino make_libraries.py .' # 2015-09-12 
+
+# SOURCE STUFF
+alias scw='source ~/catkin_ws/devel/setup.bash' # 2015-07-06
+alias sri='source /opt/ros/indigo/setup.bash' # 2015-07-06
+alias rosfix='sri' # 2015-07-12
+
+# RUN ROS STUFF
+alias rc='roscore' # 2015-07-06
+
+alias rt='rostopic' # 2015-09-12
+alias rtl='rostopic list' # 2015-07-26
+alias rte='rostopic echo' # 2015-07-26
+
+alias ru='scw; rosrun' # 2015-09-12
+alias rug='ru gigatron' # 2015-09-12
+
+alias rl='scw; roslaunch' # 2015-09-12
+alias rlg='rl gigatron' # 2015-09-12
+
+alias rb='rosbag' # 2015-09-12
+alias rbp='rosbag play' # 2015-09-12
+alias rbr='rosbag record -a' # 2015-07-26
+
+alias rqt_plot='sri; rosrun rqt_plot rqt_plot' # 2015-07-12
+alias rqt_graph='sri; rosrun rqt_graph rqt_graph' # 2015-07-16
+
+alias rsp='sri; rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0' # 2015-07-06
+alias rosserial='rsp' # 2015-07-12
+alias throttle='cdc; scw; rosrun gigatron ThrottlePub' # 2015-07-06
+alias steering='cdc; scw; rosrun gigatron SteeringPub' # 2015-07-12
+alias on2='sri; roslaunch openni2_launch openni2.launch' # 2015-07-12
+alias rqt_plot='sri; rosrun rqt_plot rqt_plot' # 2015-07-12
+alias rqt_graph='sri; rosrun rqt_graph rqt_graph' # 2015-07-16
+alias lidar='cdc; scw; rosrun lidar_lite lidar' # 2015-07-12
+alias imulib='cdc; scw; roslaunch rtimulib_ros rtimulib_ros.launch' # 2015-07-18
+alias imu='cdc; scw; roslaunch razor_imu_9dof razor-display.launch' # 2015-07-18
+alias gps='rosrun nmea_navsat_driver nmea_serial_driver _port:=/dev/ttyACM0 _baud:=115200' # 2015-07-26
+
+alias a='scw; rlg arduino_control.launch'
+alias rplidar='scw; rosrun rplidar_ros rplidarNode'
+alias switch='scw; rug switch'
+alias drive='scw; rug drive'
+
+# MAKE MY LIFE EASIER
+alias ag='sudo apt-get install' # 1969-12-31
+alias q='exit'
+alias h='history 25'
+#alias ls='ls -G -s -a --color'
+alias p='pico'
+alias py='python'
+alias zz='pmset sleepnow'
+alias onstart='bash /home/syler/Gigatron/Bash/on_start.sh' # 1969-12-31
+
+
+#BASHING 
+alias bpu='source ~/.bashrc'
+alias ba='p ~/Gigatron/Bash/.bash_gigatron'
+alias bp='p ~/Gigatron/Bash/.bash_gigatron'
+alias bax='tail -n800 ~/Gigatron/Bash/.bash_gigatron'
+alias flist='declare -F' 	# list defined functions
+alias alist='alias'		# list aliases
+alias funlist='declare -f'	# list function definitions
+
+
+# UPDATE UBUNTU
+alias ubup="sudo apt-get update        # Fetches the list of available updates
+sudo apt-get upgrade       # Strictly upgrades the current packages
+sudo apt-get dist-upgrade  # Installs updates (new ones)"
+
+
+# GITHUB #————————————————————————————————————————————————————————#
+alias ga='git add' # 2015-03-25
+alias gc='git pull; echo " "; echo "Pulled."; echo " "; git commit -m ' # pull and then commit
+alias gp='git push' # 2015-03-24
+alias gd='git pull' # 2015-03-24
+alias gi='git status' # 2015-03-24
+alias gl='git log --pretty=format:"%h %ad%x09%an%x09%s" --date=short' # 2015-03-28
+# alias gll='git log --pretty=format:"%h %ad%x09%an%x09%s"' # 2015-03-28
+alias gll='git log --pretty=format:"%h %ad %an %s" --date=iso' # 2015-03-28
+alias gm='git diff master' # 2015-09-12
+#—————————————————————————————————————————————————————————————————#
+
+## BASH FUNCTIONS #----------------------------------------------------------------##
+
+al() { # add alias
+	echo 'alias '$1"='"${*:2}"' # "$(date +%Y-%m-%d) >> ~/Gigatron/Bash/.bash_gigatron;
+	bpu;
+}
+ev() { # add environmental variable
+	echo $1'="'${*:2}'" # '$(date +%Y-%m-%d) >> ~/Gigatron/Bash/.bash_gigatron;
+	bpu;
+}
+ip() { # get IP address by running 'echo $(ip)'
+	ipconfig getifaddr en0;
+}
+
+## ENVIRONMENT SETTINGS #-----------------------------------------------------------##
+
+export GREP_OPTIONS='--color=auto' #2015-02-20
+export HISTTIMEFORMAT="%m-%d %H%M " #2015-03-17
+
+# better history settings - syler 2015-06-29
+# export HISTCONTROL=ignoredups:erasedups  # no duplicate entries
+export HISTSIZE=100000                   # big big history
+export HISTFILESIZE=100000               # big big history
+shopt -s histappend                      # append to history, don't overwrite it
+
+# Save and reload the history after each command finishes - syler 2015-06-29
+export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+
+# show only commands, no time and other data prefixed
+alias hco='history | cut -c 19-' # 2015-07-19
+
+
+# use nano instead of vim for rosed - syler 2015-07-04
+export EDITOR='nano'
+
+# up/down key history completion - syler 2015-09-05
+bind '"\e[A":history-search-backward'
+bind '"\e[B":history-search-forward'
+
+## FANCY PROMPT #-----------------------------------------------------------##
+
+
+reset=$(tput sgr0)
+white=$(tput setaf 7)
+PS1="\[$reset\]\[\e[2;49;36m\]\A\[$reset\] \[\e[0;49;96m\]\h\[$reset\]\
+\[\e[2;49;90m\] \w\[$reset\]\[$white\]\[$reset\] "
+
+alias suno='sudo nano' # 2015-09-04
