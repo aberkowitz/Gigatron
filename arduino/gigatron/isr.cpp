@@ -1,12 +1,13 @@
 /**
  * isr.cpp
- * Gigatron motor control Arduino code.
+ * Gigatron motor control Arduino code for interrupts.
  * 
  * @author  Bayley Wang   <bayleyw@mit.edu>
+ *
  **/
 
 #include <Arduino.h>
-#include "shared.h"
+#include "isr.h"
 
 volatile unsigned long _pw0_us, _pw1_us, _pw2_us;
 volatile unsigned long _pw0_last_t, _pw1_last_t, _pw2_last_t;

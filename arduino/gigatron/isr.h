@@ -1,12 +1,15 @@
 /**
- * shared.h
- * Gigatron motor control Arduino code.
+ * isr.h
+ * Gigatron motor control Arduino code for interrupts.
  * 
  * @author  Bayley Wang   <bayleyw@mit.edu>
+ *
+ * @date    2016-01-10    syler   renamed from shared.h to isr.h
+ *
  **/
 
-#ifndef __SHARED_H
-#define __SHARED_H
+#ifndef __ISR_H
+#define __ISR_H
 
 extern volatile unsigned long _pw0_us, _pw1_us, _pw2_us;
 extern volatile unsigned long _pw0_last_t, _pw1_last_t, _pw2_last_t;

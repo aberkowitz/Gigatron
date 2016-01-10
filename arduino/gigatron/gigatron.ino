@@ -9,12 +9,13 @@
  *
  * @date    2015-09-16    syler   fixed odometry message sending
  * @date    2015-09-16    syler   added PID gain tuning via ROS messages
+ * 
  **/
 
 #include "classes.h"
 #include "commander.h"
 #include "context.h"
-#include "shared.h"
+#include "isr.h"
 #include <ros.h>
 #include <geometry_msgs/Vector3.h> 
 #include <std_msgs/Float32.h> //$ for steering odometry stuff and mode

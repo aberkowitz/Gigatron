@@ -6,32 +6,20 @@
  * @author  Syler Wagner  <syler@mit.edu>
  *
  * @date    2015-09-16    syler   fixed odometry message sending
+ * @date    2016-01-10    syler   moved PID controller to separate class
+ *
  **/
 
 #ifndef __CONTEXT_H
 #define __CONTEXT_H
 
 #include <Arduino.h>
-#include "shared.h"
+#include "isr.h"
 #include "classes.h"
 #include "commander.h"
 #include <ros.h>
 #include <geometry_msgs/Vector3.h>
 #include <std_msgs/Float32.h>
-
-class PidController {
-public:
-  PidController(long kp, long ki, long kd, long out_max, long out_min);
-  int Update(int ref, int in);
-  int ZeroIntegrator();
-  void ResetGains(long kp, long ki, long kd);
-private:
-  long _kp, _ki, _kd;
-  long _out_max, _out_min;
-  
-  int _last_in;
-  long _integral;
-};
 
 class Context {
 public:
