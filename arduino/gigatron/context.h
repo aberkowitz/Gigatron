@@ -27,8 +27,8 @@ public:
           SpeedSensor *left, SpeedSensor *right,
           int lPwm, int rPwm,
           int lRev, int rRev,
-          PidController *lSp, PidController *rSp,
-          PidController *pos,
+          PIDController *lSp, PIDController *rSp,
+          PIDController *pos,
           ros::NodeHandle *nh,
           JetsonCommander *jcommander,
           geometry_msgs::Vector3 *odomsg,
@@ -47,7 +47,7 @@ private:
   DCServo *_servo;
   SpeedSensor *_left, *_right;
   int _lPwm, _rPwm, _lRev, _rRev;
-  PidController *_lSp, *_rSp, *_pos;
+  PIDController *_lSp, *_rSp, *_pos;
   int _sInterval, _pInterval;
   
   unsigned long _last_st, _last_pt;

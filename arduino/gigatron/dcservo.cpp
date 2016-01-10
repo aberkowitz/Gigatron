@@ -1,3 +1,14 @@
+/**
+ * dcservo.cpp
+ * Gigatron motor control Arduino code for steering servo.
+ * 
+ * @author  Bayley Wang   <bayleyw@mit.edu>
+ * @author  Syler Wagner      <syler@mit.edu>
+ *
+ * @date    2016-01-10    syler   moved to separate .cpp file, header is in classes.h
+ *
+ **/
+
 #include <Arduino.h>
 #include "classes.h"
 #include "isr.h"
