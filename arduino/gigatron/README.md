@@ -4,7 +4,7 @@
 The main Arduino sketch file. 
 * ROS publishers and subscribers are set up here
 * callbacks for ROS messages are defined here
-* the setup() function creates an instance of the `Context` class, which is where the loop that you would expect in loop() happens
+* the `setup()` function creates an instance of the `Context` class, which is where the loop that you would expect in `loop()` happens
 
 ### `context.h` and `context.cpp`
 This is where everything comes together and all the magic happens.
