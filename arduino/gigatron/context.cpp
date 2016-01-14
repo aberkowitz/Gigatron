@@ -11,6 +11,7 @@
  **/
 
 #include <Arduino.h>
+#include <Servo.h>
 #include "isr.h"
 #include "classes.h"
 #include "commander.h"
@@ -30,6 +31,9 @@ const static double RPM_TO_M_S = (2 * PI * wheelRadius) / 60.0;   //$ conversion
 const static double STEERING_PWM_RANGE = 255.0;
 const static double STEERING_ANGLE_RANGE = 50 * (PI / 180); //$ [radians] this is the correct steering range
 const static double ABS_MAX_STEERING_ANGLE = 25 * (PI / 180); //$ [radians]
+
+Servo leftMotor;
+Servo rightMotor;
 
 Context::Context(Commander *commander, DCServo *servo,
           SpeedSensor *left, SpeedSensor *right,
@@ -80,6 +84,12 @@ Context::Context(Commander *commander, DCServo *servo,
   pinMode(_rRev, OUTPUT);
   digitalWrite(_lRev, HIGH);
   digitalWrite(_rRev, HIGH);
+
+  //ROBOCLAW
+  /*
+  leftMotor.attach(_lpwm);
+  rightMotor.attach(_rpwm);
+  */
 }
 
 /*$ Configure time intervals for speed (drive motor) and 
@@ -188,6 +198,28 @@ void Context::Start() {
       //$ write commands
       analogWrite(_lPwm, lSpC);
       analogWrite(_rPwm, rSpC);
+
+      /*
+      //ROBOCLAW
+      if (lSpC > 250) {
+        lSpC = 250;
+      }
+      if (rSpC > 250) {
+        rSpC = 250;
+      }
+      if (lDir) {
+        lSpC = 1500 + lSpC;
+      } else {
+        lSpC = 1500 - lSpC;
+      }
+      if (rDir) {
+        rSpC = 1500 + rSpC;
+      } else {
+        rSpC = 1500 - rSpC;
+      }
+      leftMotor.writeMicroseconds(lSpC);
+      rightMotor.writeMicroseconds(rSpC);
+      */
 
       _last_st = t;
 
