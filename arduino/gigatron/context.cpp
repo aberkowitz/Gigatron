@@ -80,16 +80,14 @@ Context::Context(Commander *commander, DCServo *servo,
   
   pinMode(_lPwm, OUTPUT);
   pinMode(_rPwm, OUTPUT);
-  pinMode(_lRev, OUTPUT);
-  pinMode(_rRev, OUTPUT);
-  digitalWrite(_lRev, HIGH);
-  digitalWrite(_rRev, HIGH);
+  //pinMode(_lRev, OUTPUT);
+  //pinMode(_rRev, OUTPUT);
+  //digitalWrite(_lRev, HIGH);
+  //digitalWrite(_rRev, HIGH);
 
   //ROBOCLAW
-  /*
-  leftMotor.attach(_lpwm);
-  rightMotor.attach(_rpwm);
-  */
+  leftMotor.attach(_lPwm);
+  rightMotor.attach(_rPwm);
 }
 
 /*$ Configure time intervals for speed (drive motor) and 
@@ -133,8 +131,8 @@ void Context::Start() {
         _jcommander->_autonomous = oldMode;
         //$ HALP IT'S GOING IN REVERSE
 //        digitalWrite(_lRev, LOW);
-        digitalWrite(_rRev, HIGH); 
-        digitalWrite(_lRev, HIGH); 
+        //digitalWrite(_rRev, HIGH); 
+        //digitalWrite(_lRev, HIGH); 
 
       }
     }
@@ -151,9 +149,18 @@ void Context::Start() {
       //$ left and right speed commands
       unsigned int lSpC;
       unsigned int rSpC;
+      //left and right microsecond write values for ROBOCLAW
+      unsigned int luSec;
+      unsigned int ruSec;
+      int lDir;
+      int rDir;
 
       //$ get values from RC commander or Jetson commander
       if (_jcommander->_autonomous > 1) { //$ fully autonomous mode
+        //Direction is forward by default
+        //Autonomous Gigatron doesn't know how to go backwards yet
+        lDir = 0;
+        rDir = 0;
         //$ sensed RPM values
         unsigned int lRPMS = _left->GetSpeed();
         unsigned int rRPMS = _right->GetSpeed();
@@ -168,19 +175,19 @@ void Context::Start() {
       else { //$ RC mode and semiautomatic mode
         lSpC = _commander->GetLeftSpeedCmd();
         rSpC = _commander->GetRightSpeedCmd();
-        int lDir = _commander->GetLeftDirectionCmd();
-        int rDir = _commander->GetRightDirectionCmd();
+        lDir = _commander->GetLeftDirectionCmd();
+        rDir = _commander->GetRightDirectionCmd();
         
         if (lDir == 0) {
           lSpC = 0;
         }
         else if (lDir == 1) {
           lSpC = (lSpC - 122) * (255 / (255 - 124));
-          digitalWrite(_lRev, HIGH);
+          //digitalWrite(_lRev, HIGH);
         }
         else {
           lSpC = (255 -lSpC) * (255 / (255 - (255 - 116)));
-          digitalWrite(_lRev, LOW);
+          //digitalWrite(_lRev, LOW);
         }
         
         if (rDir == 0) {
@@ -188,19 +195,19 @@ void Context::Start() {
         }
         else if (rDir == 1) {
           rSpC = (rSpC - 124) * (255 / (255 - 124));
-          digitalWrite(_rRev, HIGH);
+          //digitalWrite(_rRev, HIGH);
         }
         else {
           rSpC = (255 - rSpC) * (255 / (255 - (255 - 116)));
-          digitalWrite(_rRev, LOW);
+          //digitalWrite(_rRev, LOW);
         }
       }
       //$ write commands
-      analogWrite(_lPwm, lSpC);
-      analogWrite(_rPwm, rSpC);
+      //analogWrite(_lPwm, lSpC);
+      //analogWrite(_rPwm, rSpC);
 
-      /*
       //ROBOCLAW
+      //This is a bit uglier than it maybe needs to be because everything is unsigned...
       if (lSpC > 250) {
         lSpC = 250;
       }
@@ -208,22 +215,22 @@ void Context::Start() {
         rSpC = 250;
       }
       if (lDir) {
-        lSpC = 1500 + lSpC;
+        luSec = 1500 + lSpC;
       } else {
-        lSpC = 1500 - lSpC;
+        luSec = 1500 - lSpC;
       }
       if (rDir) {
-        rSpC = 1500 + rSpC;
+        ruSec = 1500 + rSpC;
       } else {
-        rSpC = 1500 - rSpC;
+        ruSec = 1500 - rSpC;
       }
       leftMotor.writeMicroseconds(lSpC);
       rightMotor.writeMicroseconds(rSpC);
-      */
 
       _last_st = t;
 
       //$ write PWM commands to command message
+      //note that max is now 250, not 255
       _commsg->y = lSpC;
       _commsg->z = rSpC;
 
