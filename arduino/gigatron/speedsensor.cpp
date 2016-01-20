@@ -28,6 +28,10 @@ SpeedSensor::SpeedSensor(int interrupt, int poles, int interval) {
   pinMode(17, INPUT);
   pinMode(18, INPUT);
   pinMode(19, INPUT);
+  digitalWrite(16, HIGH);
+  digitalWrite(17, HIGH);
+  digitalWrite(18, HIGH);
+  digitalWrite(19, HIGH);
   
   if (_interrupt == 4) {
     attachInterrupt(4, ISR4, RISING);
