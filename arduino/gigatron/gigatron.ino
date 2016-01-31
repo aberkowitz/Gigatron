@@ -12,6 +12,9 @@
  * 
  **/
 
+//old servo: 5 pwm, 4 dir, a0 pot
+//new servo: 5 pwm1, 3 pwm2, a0 pot
+
 #include "classes.h"
 #include "commander.h"
 #include "context.h"
@@ -85,8 +88,8 @@ void SwitchCallback(const std_msgs::UInt16& mode) {
   
   jc._autonomous = mode.data;
   if (mode.data == 2) { //$ set pins for fully autonomous throttle
-    digitalWrite(lRev, HIGH);
-    digitalWrite(rRev, HIGH);
+    //digitalWrite(lRev, HIGH);
+    //digitalWrite(rRev, HIGH);
   }
 /*
  if (mode.data == 0) {
@@ -129,8 +132,8 @@ void setup() {
   SpeedSensor left(4, 14, S_LOOP_INTERVAL); 
   SpeedSensor right(5, 14, S_LOOP_INTERVAL);
 
-  // DCServo(int pwmPin, int dirPin, int posPin);
-  DCServo servo(5, 4, A0); 
+  // DCServo(int pwmPin1, int pwmPin2, int posPin);
+  DCServo servo(5, 6, A0); 
 
   // DCServo::ConfigSensor(int minV, int maxV);
   servo.ConfigPot(minADU, midADU, maxADU);

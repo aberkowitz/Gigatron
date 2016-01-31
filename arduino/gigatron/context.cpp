@@ -178,7 +178,7 @@ void Context::Start() {
         lDir = _commander->GetLeftDirectionCmd();
         rDir = _commander->GetRightDirectionCmd();
         
-        if (lDir == 0) {
+        if (lDir == -1) {
           lSpC = 0;
         }
         else if (lDir == 1) {
@@ -190,11 +190,11 @@ void Context::Start() {
           //digitalWrite(_lRev, LOW);
         }
         
-        if (rDir == 0) {
+        if (rDir == -1) {
           rSpC = 0;
         }
         else if (rDir == 1) {
-          rSpC = (rSpC - 124) * (255 / (255 - 124));
+          rSpC = (rSpC - 122) * (255 / (255 - 124));
           //digitalWrite(_rRev, HIGH);
         }
         else {
@@ -224,8 +224,8 @@ void Context::Start() {
       } else {
         ruSec = 1500 - rSpC;
       }
-      leftMotor.writeMicroseconds(lSpC);
-      rightMotor.writeMicroseconds(rSpC);
+      leftMotor.writeMicroseconds(luSec);
+      rightMotor.writeMicroseconds(ruSec);
 
       _last_st = t;
 

@@ -25,7 +25,7 @@ int RCCommander::GetLeftDirectionCmd() {
   if (spd > 124) {
     return 1;
   }
-  else if (spd > 116) {
+  else if (spd < 116) {
     return 0;
   }
   else {
@@ -41,7 +41,7 @@ int RCCommander::GetRightDirectionCmd() {
   if (spd > 124) {
     return 1;
   }
-  else if (spd > 116) {
+  else if (spd < 116) {
     return 0;
   }
   else {

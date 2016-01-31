@@ -13,16 +13,16 @@
 #include "classes.h"
 #include "isr.h"
 
-DCServo::DCServo(int pwmPin, int dirPin, int posPin) {
-  _pwmPin = pwmPin;
-  _dirPin = dirPin;
+DCServo::DCServo(int pwmPin1, int pwmPin2, int posPin) {
+  _pwmPin1 = pwmPin1;
+  _pwmPin2 = pwmPin2;
   _posPin = posPin;
   _minV = 0;
   _midV = 511;
   _maxV = 1023;
   
-  pinMode(_pwmPin, OUTPUT);
-  pinMode(_dirPin, OUTPUT);
+  pinMode(_pwmPin1, OUTPUT);
+  pinMode(_pwmPin2, OUTPUT);
   pinMode(_posPin, INPUT);
 }
 
@@ -36,11 +36,11 @@ void DCServo::SetVelocity(int vel) {
   //if (vel>200) vel = 200; //200 is my cap
   
   if (vel > 0) {
-    analogWrite(_pwmPin, vel);
-    digitalWrite(_dirPin, LOW);
+    analogWrite(_pwmPin1, vel);
+    digitalWrite(_pwmPin2, LOW);
   } else {
-    analogWrite(_pwmPin, -vel);
-    digitalWrite(_dirPin, HIGH);
+    analogWrite(_pwmPin2, -vel);
+    digitalWrite(_pwmPin1, LOW);
   }
 }
 
@@ -56,7 +56,7 @@ unsigned char DCServo::GetPos() {
 }
 
 //$ takes pot limits and middle value and linearizes the output
-/* DGonz's measurements as of 9:49pm 9/24/2051
+/* DGonz's measurements as of 9:49pm 9/24/2015
  * 439 in, 0 out
  * 549 in, 127 out
  * 622 in, 255 out
@@ -68,9 +68,9 @@ unsigned char DCServo::GetPosLinearized() {
   if (adu < _midV) {
     tmp = (adu - _minV) << 7 ;;
     tmp /= (_midV - _minV);
-    }
+  }
   else {
-    tmp = (adu - _midV) << 7 ;;
+    tmp = (adu - _midV) << 7 ;
     tmp /= (_maxV - _midV);
     tmp += 127;
   }

@@ -1,0 +1,11 @@
+arduino 5 -> atmega 5
+arduino 4 -> atmega 7
+
+maybe use arduino pins 3 and 5: OC3A (5), OC3B (3)
+COM3A0
+COM3A1
+
+COM3B0
+COM3B1
+
+page 122
