@@ -35,11 +35,11 @@ void DCServo::ConfigPot(int minV, int midV, int maxV) {
 void DCServo::SetVelocity(int vel) {
   //if (vel>200) vel = 200; //200 is my cap
   
-  if (vel > 0) {
-    analogWrite(_pwmPin1, vel);
+  if (vel < 0) {
+    analogWrite(_pwmPin1, -vel);
     digitalWrite(_pwmPin2, LOW);
   } else {
-    analogWrite(_pwmPin2, -vel);
+    analogWrite(_pwmPin2, vel);
     digitalWrite(_pwmPin1, LOW);
   }
 }

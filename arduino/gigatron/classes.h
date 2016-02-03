@@ -16,13 +16,13 @@
 
 class DCServo {
 public:
-  DCServo(int pwmPin, int dirPin, int posPin);
+  DCServo(int pwmPin1, int pwmPin2, int posPin);
   void ConfigPot(int minV, int midV, int maxV);
   void SetVelocity(int vel);
   unsigned char GetPos();
   unsigned char GetPosLinearized();
 private:
-  int _pwmPin, _dirPin, _posPin;
+  int _pwmPin1, _pwmPin2, _posPin;
   int _minV, _midV, _maxV;
 };
 
