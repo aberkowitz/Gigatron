@@ -30,6 +30,7 @@ void ISR1() {
   } else {
     _pw1_us = micros() - _pw1_last_t;
   }
+  Serial.println(_pw1_us);
 }
 
 void ISR2() {

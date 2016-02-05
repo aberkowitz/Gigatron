@@ -13,7 +13,7 @@
  **/
 
 //old servo: 5 pwm, 4 dir, a0 pot
-//new servo: 5 pwm1, 3 pwm2, a0 pot
+//new servo: 5 pwm1, 6 pwm2, a0 pot
 
 #include "classes.h"
 #include "commander.h"
