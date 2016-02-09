@@ -13,6 +13,9 @@ documentation/Gigadocs/*
 # Compiled python code
 *.pyc
 
+# iPython checkpoints
+.ipynb_checkpoints
+
 ## C++ ####################
 # Compiled Object files
 *.slo

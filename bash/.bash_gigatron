@@ -1,6 +1,6 @@
 ##
 # .bash_gigatron
-# Bash aliases for Gigatron
+# bash aliases for Gigatron
 # 
 # @author   Syler Wagner    <syler@mit.edu>
 # @date     2015-07-06      creation
@@ -8,8 +8,8 @@
 #
 # CONFIGURATION INFO
 # Source from this in your .bashrc by adding the following three lines:
-# if [ -f ~/Gigatron/Bash/.bash_gigatron ]; then
-#	. ~/Gigatron/Bash/.bash_gigatron
+# if [ -f ~/Gigatron/bash/.bash_gigatron ]; then
+#	. ~/Gigatron/bash/.bash_gigatron
 # fi
 #
 # You need to source your .bashrc in order for this to have an immediate effect:
@@ -17,8 +17,6 @@
 ##
 
 ## BASH ALIASES #------------------------------------------------------------------##
-
-GP='/media/syler/IDRIVE/Gigatron' # 2015-09-13
 
 # GO PLACES
 cs() { cd $*; ls; } # cd + ls 2015-01-09
@@ -29,16 +27,16 @@ alias cdcsgl='cd ~/catkin_ws/src/gigatron/launch/' # 2015-09-12
 alias cdcsgs='cd ~/catkin_ws/src/gigatron/src/' # 2015-09-12
 
 alias cdg='cd ~/Gigatron/' # 2015-07-06
-alias cdga='cd ~/Gigatron/Arduino/' # 2015-07-16
-alias cdgag='cd ~/Gigatron/Arduino/gigatron/' # 2015-09-12
-alias cdgb='cd ~/Gigatron/Bash/' # 2015-07-16
-alias cdgd='cd ~/Gigatron/Documentation/' # 2015-07-16
-alias cdgds='cd ~/Gigatron/Documentation/Screenshots/' # 2015-09-12
-alias cdgl='cd ~/Gigatron/Logs' # 2015-09-09
-alias cdgr='cd ~/Gigatron/ROS-Packages/' # 2015-07-16
-alias cdgrg='cd ~/Gigatron/ROS-Packages/gigatron/' # 2015-07-16
-alias cdgrgl='cd ~/Gigatron/ROS-Packages/gigatron/launch/' # 2015-09-12
-alias cdgrgs='cd ~/Gigatron/ROS-Packages/gigatron/src/' # 2015-09-12
+alias cdga='cd ~/Gigatron/arduino/' # 2015-07-16
+alias cdgag='cd ~/Gigatron/arduino/gigatron/' # 2015-09-12
+alias cdgb='cd ~/Gigatron/bash/' # 2015-07-16
+alias cdgd='cd ~/Gigatron/documentation/' # 2015-07-16
+alias cdgds='cd ~/Gigatron/documentation/screenshots/' # 2015-09-12
+alias cdgl='cd ~/Gigatron/logs' # 2015-09-09
+alias cdgr='cd ~/Gigatron/ros_packages/' # 2015-07-16
+alias cdgrg='cd ~/Gigatron/ros_packages/gigatron/' # 2015-07-16
+alias cdgrgl='cd ~/Gigatron/ros_packages/gigatron/launch/' # 2015-09-12
+alias cdgrgs='cd ~/Gigatron/ros_packages/gigatron/src/' # 2015-09-12
 
 alias ..='cd ..' # 2015-03-23
 alias ...='cd ../..' # 2015-03-23
@@ -51,7 +49,7 @@ alias cm='cdc; catkin_make' # 2015-07-06
 alias ckp='cdc; catkin_create_pkg' # 2015-07-12
 
 # ARDUINO MESSAGE LIBRARIES
-alias msgino='cd ~/Gigatron/Arduino/libraries; rm -rf ros_lib; rosrun rosserial_arduino make_libraries.py .' # 2015-09-12 
+alias msgino='cd ~/Gigatron/arduino/libraries; rm -rf ros_lib; rosrun rosserial_arduino make_libraries.py .' # 2015-09-12 
 
 # SOURCE STUFF
 alias scw='source ~/catkin_ws/devel/setup.bash' # 2015-07-06
@@ -103,14 +101,13 @@ alias h='history 25'
 alias p='pico'
 alias py='python'
 alias zz='pmset sleepnow'
-alias onstart='bash /home/syler/Gigatron/Bash/on_start.sh' # 1969-12-31
 
 
 #BASHING 
 alias bpu='source ~/.bashrc'
-alias ba='p ~/Gigatron/Bash/.bash_gigatron'
-alias bp='p ~/Gigatron/Bash/.bash_gigatron'
-alias bax='tail -n800 ~/Gigatron/Bash/.bash_gigatron'
+alias ba='p ~/Gigatron/bash/.bash_gigatron'
+alias bp='p ~/Gigatron/bash/.bash_gigatron'
+alias bax='tail -n800 ~/Gigatron/bash/.bash_gigatron'
 alias flist='declare -F' 	# list defined functions
 alias alist='alias'		# list aliases
 alias funlist='declare -f'	# list function definitions
@@ -137,11 +134,11 @@ alias gm='git diff master' # 2015-09-12
 ## BASH FUNCTIONS #----------------------------------------------------------------##
 
 al() { # add alias
-	echo 'alias '$1"='"${*:2}"' # "$(date +%Y-%m-%d) >> ~/Gigatron/Bash/.bash_gigatron;
+	echo 'alias '$1"='"${*:2}"' # "$(date +%Y-%m-%d) >> ~/Gigatron/bash/.bash_gigatron;
 	bpu;
 }
 ev() { # add environmental variable
-	echo $1'="'${*:2}'" # '$(date +%Y-%m-%d) >> ~/Gigatron/Bash/.bash_gigatron;
+	echo $1'="'${*:2}'" # '$(date +%Y-%m-%d) >> ~/Gigatron/bash/.bash_gigatron;
 	bpu;
 }
 ip() { # get IP address by running 'echo $(ip)'
@@ -165,9 +162,9 @@ export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 # show only commands, no time and other data prefixed
 alias hco='history | cut -c 19-' # 2015-07-19
 
-
 # use nano instead of vim for rosed - syler 2015-07-04
 export EDITOR='nano'
+alias suno='sudo nano' # 2015-09-04
 
 # up/down key history completion - syler 2015-09-05
 bind '"\e[A":history-search-backward'
@@ -175,10 +172,8 @@ bind '"\e[B":history-search-forward'
 
 ## FANCY PROMPT #-----------------------------------------------------------##
 
-
 reset=$(tput sgr0)
 white=$(tput setaf 7)
 PS1="\[$reset\]\[\e[2;49;36m\]\A\[$reset\] \[\e[0;49;96m\]\h\[$reset\]\
 \[\e[2;49;90m\] \w\[$reset\]\[$white\]\[$reset\] "
 
-alias suno='sudo nano' # 2015-09-04
