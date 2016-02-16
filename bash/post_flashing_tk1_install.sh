@@ -25,7 +25,6 @@ sudo apt-get install tmux # tmux for splitting terminal into panes
 sudo ntpdate ntp.ubuntu.com # set ubuntu date server
 # This will ensure that your machine polls the ubuntu server to get the right time and date for your timezone. 
 
-
 #####################################################################################
 ## Get CUDA Toolkit #################################################################
 
@@ -52,7 +51,6 @@ source ~/.bashrc
 # Verify that the CUDA Toolkit is installed on your device:
 nvcc -V
 
-
 #####################################################################################
 ## Get OpenCV4Tegra #################################################################
 
@@ -62,7 +60,6 @@ sudo apt-get update
 sudo apt-get install libopencv4tegra libopencv4tegra-dev
 
 # Details: http://elinux.org/Jetson/Installing_OpenCV
-
 
 #####################################################################################
 ## Get ROS Indigo ###################################################################
@@ -90,13 +87,11 @@ source ~/.bashrc
 # Install rosinstall
 sudo apt-get install python-rosinstall -y
 
-
 #####################################################################################
 ## Get OpenNI 2 for RGBD Sensors ####################################################
 
 sudo apt-get install ros-indigo-rgbd-launch ros-indigo-openni2-camera ros-indigo-openni2-launch
 sudo apt-get install ros-indigo-rqt ros-indigo-rqt-common-plugins ros-indigo-rqt-robot-plugins
-
 
 #####################################################################################
 ## Install Arduino IDE  #############################################################
@@ -107,14 +102,12 @@ sudo apt-get install arduino arduino-core
 sudo apt-get install ros-indigo-rosserial-arduino
 sudo apt-get install ros-indigo-rosserial
 
-
 #####################################################################################
 ## Configure Neato XV Lidar #########################################################
 
 sudo apt-get install ros-indigo-xv-11-laser-driver 
 
 # Details: http://wiki.ros.org/xv_11_laser_driver
-
 
 #####################################################################################
 ## RViz Setup #######################################################################
@@ -136,7 +129,6 @@ sudo apt-mark hold libpcre3
 sudo apt-mark hold libpcre3-dev
 sudo apt-mark hold libpcrecpp0
 
-
 #####################################################################################
 ## GPS and Localization/Navigation ##################################################
 
@@ -150,7 +142,6 @@ sudo apt-get install ros-indigo-navigation
 sudo apt-get install ros-indigo-hector-slam
 # URDF Model
 sudo apt-get install liburdfdom-tools # need this for check_urdf
-
 
 #####################################################################################
 ## IMU Configuration (Partial) ######################################################
@@ -181,6 +172,13 @@ catkin_make
 
 # source your new setup.*sh file:
 source devel/setup.bash
+
+#####################################################################################
+## Update Everything Again ################################################################
+
+sudo apt-get update        # Fetches the list of available updates
+sudo apt-get upgrade       # Strictly upgrades the current packages
+sudo apt-get dist-upgrade  # Installs updates (new ones)
 
 #####################################################################################
 ## Additional Setup Notes ###########################################################
