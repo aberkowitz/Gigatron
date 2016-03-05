@@ -16,6 +16,9 @@
 # $ source ~/.bashrc
 ##
 
+# source ROS Indigo setup script
+source /opt/ros/indigo/setup.bash
+
 ## BASH ALIASES #------------------------------------------------------------------##
 
 # GO PLACES
@@ -134,11 +137,11 @@ alias gm='git diff master' # 2015-09-12
 ## BASH FUNCTIONS #----------------------------------------------------------------##
 
 al() { # add alias
-	echo 'alias '$1"='"${*:2}"' # "$(date +%Y-%m-%d) >> ~/Gigatron/bash/.bash_gigatron;
+	echo 'alias '$1"='"${*:2}"' # "$(date +%Y-%m-%d) >> ~/.bash_aliases;
 	bpu;
 }
 ev() { # add environmental variable
-	echo $1'="'${*:2}'" # '$(date +%Y-%m-%d) >> ~/Gigatron/bash/.bash_gigatron;
+	echo $1'="'${*:2}'" # '$(date +%Y-%m-%d) >> ~/.bash_aliases;
 	bpu;
 }
 ip() { # get IP address by running 'echo $(ip)'
