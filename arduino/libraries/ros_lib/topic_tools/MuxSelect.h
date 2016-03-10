@@ -15,6 +15,11 @@ static const char MUXSELECT[] = "topic_tools/MuxSelect";
     public:
       const char* topic;
 
+    MuxSelectRequest():
+      topic("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -50,6 +55,11 @@ static const char MUXSELECT[] = "topic_tools/MuxSelect";
   {
     public:
       const char* prev_topic;
+
+    MuxSelectResponse():
+      prev_topic("")
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

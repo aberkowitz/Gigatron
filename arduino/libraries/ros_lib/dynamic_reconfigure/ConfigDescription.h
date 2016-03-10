@@ -21,6 +21,14 @@ namespace dynamic_reconfigure
       dynamic_reconfigure::Config min;
       dynamic_reconfigure::Config dflt;
 
+    ConfigDescription():
+      groups_length(0), groups(NULL),
+      max(),
+      min(),
+      dflt()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

@@ -19,6 +19,13 @@ namespace nav_msgs
       nav_msgs::GetMapActionResult action_result;
       nav_msgs::GetMapActionFeedback action_feedback;
 
+    GetMapAction():
+      action_goal(),
+      action_result(),
+      action_feedback()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

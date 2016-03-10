@@ -28,6 +28,17 @@ namespace visualization_msgs
       visualization_msgs::InteractiveMarkerControl st_controls;
       visualization_msgs::InteractiveMarkerControl * controls;
 
+    InteractiveMarker():
+      header(),
+      pose(),
+      name(""),
+      description(""),
+      scale(0),
+      menu_entries_length(0), menu_entries(NULL),
+      controls_length(0), controls(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

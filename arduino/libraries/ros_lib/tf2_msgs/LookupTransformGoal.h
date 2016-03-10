@@ -22,6 +22,17 @@ namespace tf2_msgs
       const char* fixed_frame;
       bool advanced;
 
+    LookupTransformGoal():
+      target_frame(""),
+      source_frame(""),
+      source_time(),
+      timeout(),
+      target_time(),
+      fixed_frame(""),
+      advanced(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

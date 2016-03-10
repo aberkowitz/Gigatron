@@ -26,6 +26,15 @@ namespace rosserial_msgs
       enum { ID_TIME = 10 };
       enum { ID_TX_STOP = 11 };
 
+    TopicInfo():
+      topic_id(0),
+      topic_name(""),
+      message_type(""),
+      md5sum(""),
+      buffer_size(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

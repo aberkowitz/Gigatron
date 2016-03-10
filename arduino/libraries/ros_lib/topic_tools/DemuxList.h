@@ -14,6 +14,10 @@ static const char DEMUXLIST[] = "topic_tools/DemuxList";
   {
     public:
 
+    DemuxListRequest()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -37,6 +41,11 @@ static const char DEMUXLIST[] = "topic_tools/DemuxList";
       uint8_t topics_length;
       char* st_topics;
       char* * topics;
+
+    DemuxListResponse():
+      topics_length(0), topics(NULL)
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

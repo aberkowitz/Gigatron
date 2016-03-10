@@ -15,6 +15,11 @@ static const char REQUESTPARAM[] = "rosserial_msgs/RequestParam";
     public:
       const char* name;
 
+    RequestParamRequest():
+      name("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -58,6 +63,13 @@ static const char REQUESTPARAM[] = "rosserial_msgs/RequestParam";
       uint8_t strings_length;
       char* st_strings;
       char* * strings;
+
+    RequestParamResponse():
+      ints_length(0), ints(NULL),
+      floats_length(0), floats(NULL),
+      strings_length(0), strings(NULL)
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

@@ -14,6 +14,11 @@ namespace actionlib
     public:
       int64_t sum;
 
+    TwoIntsResult():
+      sum(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

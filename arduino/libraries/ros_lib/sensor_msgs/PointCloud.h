@@ -23,6 +23,13 @@ namespace sensor_msgs
       sensor_msgs::ChannelFloat32 st_channels;
       sensor_msgs::ChannelFloat32 * channels;
 
+    PointCloud():
+      header(),
+      points_length(0), points(NULL),
+      channels_length(0), channels(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

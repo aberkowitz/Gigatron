@@ -16,6 +16,11 @@ namespace pcl_msgs
       uint32_t st_vertices;
       uint32_t * vertices;
 
+    Vertices():
+      vertices_length(0), vertices(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

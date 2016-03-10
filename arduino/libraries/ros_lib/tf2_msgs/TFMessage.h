@@ -17,6 +17,11 @@ namespace tf2_msgs
       geometry_msgs::TransformStamped st_transforms;
       geometry_msgs::TransformStamped * transforms;
 
+    TFMessage():
+      transforms_length(0), transforms(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

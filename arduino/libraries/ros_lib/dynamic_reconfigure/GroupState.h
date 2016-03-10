@@ -17,6 +17,14 @@ namespace dynamic_reconfigure
       int32_t id;
       int32_t parent;
 
+    GroupState():
+      name(""),
+      state(0),
+      id(0),
+      parent(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

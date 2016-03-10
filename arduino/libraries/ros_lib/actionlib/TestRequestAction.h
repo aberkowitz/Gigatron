@@ -19,6 +19,13 @@ namespace actionlib
       actionlib::TestRequestActionResult action_result;
       actionlib::TestRequestActionFeedback action_feedback;
 
+    TestRequestAction():
+      action_goal(),
+      action_result(),
+      action_feedback()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

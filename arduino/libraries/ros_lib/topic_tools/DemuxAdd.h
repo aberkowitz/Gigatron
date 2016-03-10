@@ -15,6 +15,11 @@ static const char DEMUXADD[] = "topic_tools/DemuxAdd";
     public:
       const char* topic;
 
+    DemuxAddRequest():
+      topic("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -49,6 +54,10 @@ static const char DEMUXADD[] = "topic_tools/DemuxAdd";
   class DemuxAddResponse : public ros::Msg
   {
     public:
+
+    DemuxAddResponse()
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

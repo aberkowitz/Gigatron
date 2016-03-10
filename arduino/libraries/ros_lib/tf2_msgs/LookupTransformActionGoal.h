@@ -19,6 +19,13 @@ namespace tf2_msgs
       actionlib_msgs::GoalID goal_id;
       tf2_msgs::LookupTransformGoal goal;
 
+    LookupTransformActionGoal():
+      header(),
+      goal_id(),
+      goal()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

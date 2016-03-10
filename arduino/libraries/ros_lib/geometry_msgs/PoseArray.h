@@ -19,6 +19,12 @@ namespace geometry_msgs
       geometry_msgs::Pose st_poses;
       geometry_msgs::Pose * poses;
 
+    PoseArray():
+      header(),
+      poses_length(0), poses(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

@@ -18,6 +18,12 @@ namespace std_msgs
       float st_data;
       float * data;
 
+    Float32MultiArray():
+      layout(),
+      data_length(0), data(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

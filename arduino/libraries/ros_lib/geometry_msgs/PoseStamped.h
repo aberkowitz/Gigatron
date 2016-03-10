@@ -17,6 +17,12 @@ namespace geometry_msgs
       std_msgs::Header header;
       geometry_msgs::Pose pose;
 
+    PoseStamped():
+      header(),
+      pose()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

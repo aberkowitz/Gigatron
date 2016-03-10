@@ -20,6 +20,13 @@ namespace nav_msgs
       int8_t st_data;
       int8_t * data;
 
+    OccupancyGrid():
+      header(),
+      info(),
+      data_length(0), data(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

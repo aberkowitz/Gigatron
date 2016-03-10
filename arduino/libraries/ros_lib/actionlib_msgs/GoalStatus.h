@@ -27,6 +27,13 @@ namespace actionlib_msgs
       enum { RECALLED =  8    };
       enum { LOST =  9    };
 
+    GoalStatus():
+      goal_id(),
+      status(0),
+      text("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

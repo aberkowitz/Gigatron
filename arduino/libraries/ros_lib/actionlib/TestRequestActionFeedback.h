@@ -19,6 +19,13 @@ namespace actionlib
       actionlib_msgs::GoalStatus status;
       actionlib::TestRequestFeedback feedback;
 
+    TestRequestActionFeedback():
+      header(),
+      status(),
+      feedback()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

@@ -14,6 +14,10 @@ static const char MUXLIST[] = "topic_tools/MuxList";
   {
     public:
 
+    MuxListRequest()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -37,6 +41,11 @@ static const char MUXLIST[] = "topic_tools/MuxList";
       uint8_t topics_length;
       char* st_topics;
       char* * topics;
+
+    MuxListResponse():
+      topics_length(0), topics(NULL)
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

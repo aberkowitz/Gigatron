@@ -17,6 +17,12 @@ namespace geographic_msgs
       geographic_msgs::GeoPoint position;
       geometry_msgs::Quaternion orientation;
 
+    GeoPose():
+      position(),
+      orientation()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

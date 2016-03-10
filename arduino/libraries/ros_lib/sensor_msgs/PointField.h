@@ -25,6 +25,14 @@ namespace sensor_msgs
       enum { FLOAT32 =  7 };
       enum { FLOAT64 =  8 };
 
+    PointField():
+      name(""),
+      offset(0),
+      datatype(0),
+      count(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

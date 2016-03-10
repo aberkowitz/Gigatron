@@ -15,6 +15,11 @@ namespace move_base_msgs
     public:
       geometry_msgs::PoseStamped target_pose;
 
+    MoveBaseGoal():
+      target_pose()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

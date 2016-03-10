@@ -31,6 +31,16 @@ namespace geographic_msgs
       geographic_msgs::KeyValue st_props;
       geographic_msgs::KeyValue * props;
 
+    GeographicMap():
+      header(),
+      id(),
+      bounds(),
+      points_length(0), points(NULL),
+      features_length(0), features(NULL),
+      props_length(0), props(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

@@ -14,6 +14,10 @@ static const char FRAMEGRAPH[] = "tf2_msgs/FrameGraph";
   {
     public:
 
+    FrameGraphRequest()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -35,6 +39,11 @@ static const char FRAMEGRAPH[] = "tf2_msgs/FrameGraph";
   {
     public:
       const char* frame_yaml;
+
+    FrameGraphResponse():
+      frame_yaml("")
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

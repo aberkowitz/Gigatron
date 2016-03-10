@@ -19,6 +19,16 @@ namespace rosserial_arduino
       uint16_t adc4;
       uint16_t adc5;
 
+    Adc():
+      adc0(0),
+      adc1(0),
+      adc2(0),
+      adc3(0),
+      adc4(0),
+      adc5(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

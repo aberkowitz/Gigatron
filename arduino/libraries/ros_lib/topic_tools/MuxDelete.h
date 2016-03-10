@@ -15,6 +15,11 @@ static const char MUXDELETE[] = "topic_tools/MuxDelete";
     public:
       const char* topic;
 
+    MuxDeleteRequest():
+      topic("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -49,6 +54,10 @@ static const char MUXDELETE[] = "topic_tools/MuxDelete";
   class MuxDeleteResponse : public ros::Msg
   {
     public:
+
+    MuxDeleteResponse()
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

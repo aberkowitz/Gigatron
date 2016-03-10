@@ -28,6 +28,18 @@ namespace actionlib
       enum { TERMINATE_DROP =  4 };
       enum { TERMINATE_EXCEPTION =  5 };
 
+    TestRequestGoal():
+      terminate_status(0),
+      ignore_cancel(0),
+      result_text(""),
+      the_result(0),
+      is_simple_client(0),
+      delay_accept(),
+      delay_terminate(),
+      pause_status()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

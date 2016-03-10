@@ -17,6 +17,12 @@ namespace sensor_msgs
       float st_values;
       float * values;
 
+    ChannelFloat32():
+      name(""),
+      values_length(0), values(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

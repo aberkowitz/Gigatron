@@ -15,6 +15,11 @@ static const char MUXADD[] = "topic_tools/MuxAdd";
     public:
       const char* topic;
 
+    MuxAddRequest():
+      topic("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -49,6 +54,10 @@ static const char MUXADD[] = "topic_tools/MuxAdd";
   class MuxAddResponse : public ros::Msg
   {
     public:
+
+    MuxAddResponse()
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

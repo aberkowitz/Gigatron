@@ -21,6 +21,15 @@ namespace dynamic_reconfigure
       int32_t parent;
       int32_t id;
 
+    Group():
+      name(""),
+      type(""),
+      parameters_length(0), parameters(NULL),
+      parent(0),
+      id(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

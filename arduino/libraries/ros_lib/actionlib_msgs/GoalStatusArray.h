@@ -19,6 +19,12 @@ namespace actionlib_msgs
       actionlib_msgs::GoalStatus st_status_list;
       actionlib_msgs::GoalStatus * status_list;
 
+    GoalStatusArray():
+      header(),
+      status_list_length(0), status_list(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

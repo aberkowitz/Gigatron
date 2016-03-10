@@ -21,6 +21,14 @@ namespace nav_msgs
       geometry_msgs::Point st_cells;
       geometry_msgs::Point * cells;
 
+    GridCells():
+      header(),
+      cell_width(0),
+      cell_height(0),
+      cells_length(0), cells(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

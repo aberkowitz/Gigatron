@@ -19,6 +19,13 @@ namespace actionlib
       actionlib_msgs::GoalID goal_id;
       actionlib::TwoIntsGoal goal;
 
+    TwoIntsActionGoal():
+      header(),
+      goal_id(),
+      goal()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

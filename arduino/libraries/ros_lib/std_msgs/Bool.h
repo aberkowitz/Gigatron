@@ -14,6 +14,11 @@ namespace std_msgs
     public:
       bool data;
 
+    Bool():
+      data(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

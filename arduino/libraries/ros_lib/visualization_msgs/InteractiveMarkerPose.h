@@ -18,6 +18,13 @@ namespace visualization_msgs
       geometry_msgs::Pose pose;
       const char* name;
 
+    InteractiveMarkerPose():
+      header(),
+      pose(),
+      name("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

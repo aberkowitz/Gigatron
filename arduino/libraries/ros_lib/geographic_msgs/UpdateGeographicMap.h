@@ -16,6 +16,11 @@ static const char UPDATEGEOGRAPHICMAP[] = "geographic_msgs/UpdateGeographicMap";
     public:
       geographic_msgs::GeographicMapChanges updates;
 
+    UpdateGeographicMapRequest():
+      updates()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -40,6 +45,12 @@ static const char UPDATEGEOGRAPHICMAP[] = "geographic_msgs/UpdateGeographicMap";
     public:
       bool success;
       const char* status;
+
+    UpdateGeographicMapResponse():
+      success(0),
+      status("")
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

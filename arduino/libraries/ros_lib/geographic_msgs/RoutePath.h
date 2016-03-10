@@ -24,6 +24,14 @@ namespace geographic_msgs
       geographic_msgs::KeyValue st_props;
       geographic_msgs::KeyValue * props;
 
+    RoutePath():
+      header(),
+      network(),
+      segments_length(0), segments(NULL),
+      props_length(0), props(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

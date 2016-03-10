@@ -21,6 +21,15 @@ namespace visualization_msgs
       enum { ROSRUN = 1 };
       enum { ROSLAUNCH = 2 };
 
+    MenuEntry():
+      id(0),
+      parent_id(0),
+      title(""),
+      command(""),
+      command_type(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

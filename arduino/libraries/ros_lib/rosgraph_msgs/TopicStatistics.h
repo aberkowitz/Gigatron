@@ -29,6 +29,24 @@ namespace rosgraph_msgs
       ros::Duration stamp_age_stddev;
       ros::Duration stamp_age_max;
 
+    TopicStatistics():
+      topic(""),
+      node_pub(""),
+      node_sub(""),
+      window_start(),
+      window_stop(),
+      delivered_msgs(0),
+      dropped_msgs(0),
+      traffic(0),
+      period_mean(),
+      period_stddev(),
+      period_max(),
+      stamp_age_mean(),
+      stamp_age_stddev(),
+      stamp_age_max()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

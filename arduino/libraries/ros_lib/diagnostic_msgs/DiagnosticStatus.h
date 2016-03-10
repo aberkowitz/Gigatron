@@ -25,6 +25,15 @@ namespace diagnostic_msgs
       enum { ERROR = 2 };
       enum { STALE = 3 };
 
+    DiagnosticStatus():
+      level(0),
+      name(""),
+      message(""),
+      hardware_id(""),
+      values_length(0), values(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

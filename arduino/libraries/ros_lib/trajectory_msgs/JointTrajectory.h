@@ -22,6 +22,13 @@ namespace trajectory_msgs
       trajectory_msgs::JointTrajectoryPoint st_points;
       trajectory_msgs::JointTrajectoryPoint * points;
 
+    JointTrajectory():
+      header(),
+      joint_names_length(0), joint_names(NULL),
+      points_length(0), points(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

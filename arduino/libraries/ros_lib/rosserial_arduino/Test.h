@@ -15,6 +15,11 @@ static const char TEST[] = "rosserial_arduino/Test";
     public:
       const char* input;
 
+    TestRequest():
+      input("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -50,6 +55,11 @@ static const char TEST[] = "rosserial_arduino/Test";
   {
     public:
       const char* output;
+
+    TestResponse():
+      output("")
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

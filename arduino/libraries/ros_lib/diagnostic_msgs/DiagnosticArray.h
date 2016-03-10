@@ -19,6 +19,12 @@ namespace diagnostic_msgs
       diagnostic_msgs::DiagnosticStatus st_status;
       diagnostic_msgs::DiagnosticStatus * status;
 
+    DiagnosticArray():
+      header(),
+      status_length(0), status(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

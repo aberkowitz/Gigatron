@@ -17,6 +17,12 @@ namespace tf2_msgs
       geometry_msgs::TransformStamped transform;
       tf2_msgs::TF2Error error;
 
+    LookupTransformResult():
+      transform(),
+      error()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

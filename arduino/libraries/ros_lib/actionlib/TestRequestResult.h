@@ -15,6 +15,12 @@ namespace actionlib
       int32_t the_result;
       bool is_simple_server;
 
+    TestRequestResult():
+      the_result(0),
+      is_simple_server(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

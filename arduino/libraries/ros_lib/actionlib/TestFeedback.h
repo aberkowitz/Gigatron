@@ -14,6 +14,11 @@ namespace actionlib
     public:
       int32_t feedback;
 
+    TestFeedback():
+      feedback(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

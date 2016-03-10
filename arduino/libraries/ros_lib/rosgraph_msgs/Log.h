@@ -29,6 +29,18 @@ namespace rosgraph_msgs
       enum { ERROR = 8  };
       enum { FATAL = 16  };
 
+    Log():
+      header(),
+      level(0),
+      name(""),
+      msg(""),
+      file(""),
+      function(""),
+      line(0),
+      topics_length(0), topics(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

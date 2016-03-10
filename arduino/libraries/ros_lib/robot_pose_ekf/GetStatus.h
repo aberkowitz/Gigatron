@@ -14,6 +14,10 @@ static const char GETSTATUS[] = "robot_pose_ekf/GetStatus";
   {
     public:
 
+    GetStatusRequest()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -35,6 +39,11 @@ static const char GETSTATUS[] = "robot_pose_ekf/GetStatus";
   {
     public:
       const char* status;
+
+    GetStatusResponse():
+      status("")
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

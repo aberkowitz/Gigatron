@@ -19,6 +19,13 @@ namespace move_base_msgs
       move_base_msgs::MoveBaseActionResult action_result;
       move_base_msgs::MoveBaseActionFeedback action_feedback;
 
+    MoveBaseAction():
+      action_goal(),
+      action_result(),
+      action_feedback()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

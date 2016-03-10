@@ -14,6 +14,10 @@ static const char NODELETLIST[] = "nodelet/NodeletList";
   {
     public:
 
+    NodeletListRequest()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -37,6 +41,11 @@ static const char NODELETLIST[] = "nodelet/NodeletList";
       uint8_t nodelets_length;
       char* st_nodelets;
       char* * nodelets;
+
+    NodeletListResponse():
+      nodelets_length(0), nodelets(NULL)
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

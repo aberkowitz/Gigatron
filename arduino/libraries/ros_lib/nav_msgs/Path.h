@@ -19,6 +19,12 @@ namespace nav_msgs
       geometry_msgs::PoseStamped st_poses;
       geometry_msgs::PoseStamped * poses;
 
+    Path():
+      header(),
+      poses_length(0), poses(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

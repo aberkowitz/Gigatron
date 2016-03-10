@@ -17,6 +17,12 @@ namespace geometry_msgs
       std_msgs::Header header;
       geometry_msgs::Inertia inertia;
 
+    InertiaStamped():
+      header(),
+      inertia()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

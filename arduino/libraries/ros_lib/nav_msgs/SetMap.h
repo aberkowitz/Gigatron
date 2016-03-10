@@ -18,6 +18,12 @@ static const char SETMAP[] = "nav_msgs/SetMap";
       nav_msgs::OccupancyGrid map;
       geometry_msgs::PoseWithCovarianceStamped initial_pose;
 
+    SetMapRequest():
+      map(),
+      initial_pose()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -43,6 +49,11 @@ static const char SETMAP[] = "nav_msgs/SetMap";
   {
     public:
       bool success;
+
+    SetMapResponse():
+      success(0)
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

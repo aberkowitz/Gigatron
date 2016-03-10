@@ -17,6 +17,13 @@ namespace std_msgs
       ros::Time stamp;
       const char* frame_id;
 
+    Header():
+      seq(0),
+      stamp(),
+      frame_id("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

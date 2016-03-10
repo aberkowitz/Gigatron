@@ -17,6 +17,12 @@ namespace geometry_msgs
       std_msgs::Header header;
       geometry_msgs::AccelWithCovariance accel;
 
+    AccelWithCovarianceStamped():
+      header(),
+      accel()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

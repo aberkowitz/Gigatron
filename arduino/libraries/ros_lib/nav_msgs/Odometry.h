@@ -20,6 +20,14 @@ namespace nav_msgs
       geometry_msgs::PoseWithCovariance pose;
       geometry_msgs::TwistWithCovariance twist;
 
+    Odometry():
+      header(),
+      child_frame_id(""),
+      pose(),
+      twist()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

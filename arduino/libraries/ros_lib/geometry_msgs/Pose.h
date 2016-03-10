@@ -17,6 +17,12 @@ namespace geometry_msgs
       geometry_msgs::Point position;
       geometry_msgs::Quaternion orientation;
 
+    Pose():
+      position(),
+      orientation()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

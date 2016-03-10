@@ -16,6 +16,11 @@ namespace sensor_msgs
       float st_echoes;
       float * echoes;
 
+    LaserEcho():
+      echoes_length(0), echoes(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

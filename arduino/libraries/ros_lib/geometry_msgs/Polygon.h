@@ -17,6 +17,11 @@ namespace geometry_msgs
       geometry_msgs::Point32 st_points;
       geometry_msgs::Point32 * points;
 
+    Polygon():
+      points_length(0), points(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
