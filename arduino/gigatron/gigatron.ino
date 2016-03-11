@@ -1,3 +1,5 @@
+
+
 /**
  * gigatron.ino
  * Gigatron motor control Arduino code.
@@ -23,6 +25,7 @@
 #include <geometry_msgs/Vector3.h> 
 #include <std_msgs/Float32.h> //$ for steering odometry stuff and mode
 #include <std_msgs/UInt16.h> //$ for mode switching
+
 
 #define PI 3.1415926535897932384626433832795
  
@@ -69,6 +72,8 @@ geometry_msgs::Vector3 odomsg;  //$ odometry message
 std_msgs::Float32 angmsg;       //$ measured steering angle message
 geometry_msgs::Vector3 commsg;  //$ command message
 std_msgs::Float32 angcommsg;    //$ command message
+
+
 
 
 void CmdCallback(const geometry_msgs::Vector3& cmd) {
@@ -154,13 +159,13 @@ void setup() {
 
   //$ set up publishers
   ros::Publisher pub("odo_val", &odomsg);
-  nh.advertise(pub);
+  // nh.advertise(pub);
   ros::Publisher compub("command", &commsg);
-  nh.advertise(compub);
+  // nh.advertise(compub);
   ros::Publisher angpub("ang_val", &angmsg);
-  nh.advertise(angpub);
+  // nh.advertise(angpub);
   ros::Publisher angcompub("ang_command", &angcommsg);
-  nh.advertise(angcompub);
+  // nh.advertise(angcompub);
 
   /* Context(Commander *commander, DCServo *servo,
           SpeedSensor *left, SpeedSensor *right,

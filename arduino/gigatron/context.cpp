@@ -1,3 +1,6 @@
+#include <Servo.h>
+
+
 /**
  * context.cpp
  * Gigatron motor control Arduino code.
@@ -11,7 +14,6 @@
  **/
 
 #include <Arduino.h>
-#include <Servo.h>
 #include "isr.h"
 #include "classes.h"
 #include "commander.h"
@@ -103,15 +105,43 @@ void Context::ConfigureLoop(int sInterval, int pInterval) {
 
 void Context::Start() {
 
+gigatron::RadioInput *radio_msg;  
+gigatron::Steering *steer_msg;  
+gigatron::Motors *mot_msg;  
+
+    //$ set up publishers
+  ros::Publisher radio_pub("arduino/radio", radio_msg);
+  _nh->advertise(radio_pub);
+  ros::Publisher mot_pub("arduino/motors", mot_msg);
+  _nh->advertise(mot_pub);
+  ros::Publisher steer_pub("arduino/steering", steer_msg);
+  _nh->advertise(steer_pub);
+
+  radio_msg->speed_left = -1;
+  radio_msg->speed_right = -1;
+  radio_msg->dir_left = -1;
+  radio_msg->dir_right = -1;
+  radio_msg->angle = -1;
+  radio_msg->kill = -1;
+
+  steer_msg->angle = -1;
+  steer_msg->angle_command = -1;
+
+  mot_msg->rpm_left = -1;
+  mot_msg->rpm_right = -1;
+  mot_msg->usec_left = -1;
+  mot_msg->usec_right = -1;
+
+
   //$ clear messages
-  _odomsg->x = -1;
-  _odomsg->y = 0;
-  _odomsg->z = 0;
-  _commsg->x = -1;
-  _commsg->y = 0;
-  _commsg->z = 0;
-  _angmsg->data = 0;
-  _angcommsg->data = 128;
+  // _odomsg->x = -1;
+  // _odomsg->y = 0;
+  // _odomsg->z = 0;
+  // _commsg->x = -1;
+  // _commsg->y = 0;
+  // _commsg->z = 0;
+  // _angmsg->data = 0;
+  // _angcommsg->data = 128;
   
   _last_st = _last_pt = millis();
 
@@ -144,9 +174,6 @@ void Context::Start() {
     }
 
     //dp(_jcommander->_autonomous);
-
-    if (d_st > _sInterval) {  //$ speed (drive motor) loop
-      //$ left and right speed commands
       unsigned int lSpC;
       unsigned int rSpC;
       //left and right microsecond write values for ROBOCLAW
@@ -154,6 +181,10 @@ void Context::Start() {
       unsigned int ruSec;
       int lDir;
       int rDir;
+
+    if (d_st > _sInterval) {  //$ speed (drive motor) loop
+      //$ left and right speed commands
+
 
       //$ get values from RC commander or Jetson commander
       if (_jcommander->_autonomous > 1) { //$ fully autonomous mode
@@ -231,20 +262,32 @@ void Context::Start() {
 
       //$ write PWM commands to command message
       //note that max is now 250, not 255
-      _commsg->y = lSpC;
-      _commsg->z = rSpC;
+      // _commsg->y = lSpC;
+      // _commsg->z = rSpC;
 
       double leftWheelRPM = (double) _left->GetSpeed();
       double rightWheelRPM = (double) _right->GetSpeed();
       
       //$ write wheel velocities
-      _odomsg->y = leftWheelRPM * RPM_TO_M_S;
-      _odomsg->z = rightWheelRPM * RPM_TO_M_S;
+      // _odomsg->y = leftWheelRPM * RPM_TO_M_S;
+      // _odomsg->z = rightWheelRPM * RPM_TO_M_S;
 
-      //$ publish messages
-      _pub->publish(_odomsg);
-      _compub->publish(_commsg);
+      // //$ publish messages
+      // _pub->publish(_odomsg);
+      // _compub->publish(_commsg);
+
+
+  mot_msg->rpm_left = leftWheelRPM * RPM_TO_M_S;
+  mot_msg->rpm_right = rightWheelRPM * RPM_TO_M_S;
+  mot_msg->usec_left = ruSec;
+  mot_msg->usec_right = luSec;
+
+  mot_pub.publish(mot_msg);
+
     }
+
+
+
     if (d_pt > _pInterval) { //$ position (steering servo) loop
       unsigned char pC;
       if (_jcommander->_autonomous == 0) { //$ RC mode
@@ -272,12 +315,32 @@ void Context::Start() {
       double steeringAngle = STEERING_ANGLE_RANGE * (servoPWM / STEERING_PWM_RANGE) - ABS_MAX_STEERING_ANGLE;
 
       //$ write steering angle and servo PWM command to message
-      _angmsg->data = steeringAngle;
-      _angcommsg->data = pC;
+      // _angmsg->data = steeringAngle;
+      // _angcommsg->data = pC;
 
-      //$ publish messages
-      _angpub->publish(_angmsg);
-      _angcompub->publish(_angcommsg);
+      // //$ publish messages
+      // _angpub->publish(_angmsg);
+      // _angcompub->publish(_angcommsg);
+
+
+      /*$ NEW MESSAGES FOR DEBUGGING
+       */
+
+         steer_msg->angle = steeringAngle;
+  steer_msg->angle_command = pC;
+
+  steer_pub.publish(steer_msg);
+
+
+
+      radio_msg->speed_left = _commander->GetLeftSpeedCmd();
+  radio_msg->speed_right = _commander->GetRightSpeedCmd();
+  radio_msg->dir_left = _commander->GetLeftDirectionCmd();
+  radio_msg->dir_right = _commander->GetRightDirectionCmd();
+  radio_msg->angle = _commander->GetPositionCmd();
+  radio_msg->kill = _commander->GetKillCmd();
+
+  radio_pub.publish(radio_msg);
 
     }
   }

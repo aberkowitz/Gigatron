@@ -21,6 +21,11 @@
 #include <geometry_msgs/Vector3.h>
 #include <std_msgs/Float32.h>
 
+#include <gigatron/RadioInput.h>
+#include <gigatron/Steering.h>
+#include <gigatron/Motors.h>
+
+
 class Context {
 public:
   Context(Commander *commander, DCServo *servo,
