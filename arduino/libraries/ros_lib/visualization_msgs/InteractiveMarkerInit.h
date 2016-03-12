@@ -19,6 +19,13 @@ namespace visualization_msgs
       visualization_msgs::InteractiveMarker st_markers;
       visualization_msgs::InteractiveMarker * markers;
 
+    InteractiveMarkerInit():
+      server_id(""),
+      seq_num(0),
+      markers_length(0), markers(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

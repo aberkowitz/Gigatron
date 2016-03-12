@@ -15,6 +15,12 @@ namespace base_local_planner
       int64_t x;
       int64_t y;
 
+    Position2DInt():
+      x(0),
+      y(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

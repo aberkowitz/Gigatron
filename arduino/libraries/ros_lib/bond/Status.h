@@ -20,6 +20,16 @@ namespace bond
       float heartbeat_timeout;
       float heartbeat_period;
 
+    Status():
+      header(),
+      id(""),
+      instance_id(""),
+      active(0),
+      heartbeat_timeout(0),
+      heartbeat_period(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

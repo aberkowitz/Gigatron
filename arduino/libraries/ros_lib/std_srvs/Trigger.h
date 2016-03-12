@@ -14,6 +14,10 @@ static const char TRIGGER[] = "std_srvs/Trigger";
   {
     public:
 
+    TriggerRequest()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -36,6 +40,12 @@ static const char TRIGGER[] = "std_srvs/Trigger";
     public:
       bool success;
       const char* message;
+
+    TriggerResponse():
+      success(0),
+      message("")
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

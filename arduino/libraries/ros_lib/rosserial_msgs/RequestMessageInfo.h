@@ -15,6 +15,11 @@ static const char REQUESTMESSAGEINFO[] = "rosserial_msgs/RequestMessageInfo";
     public:
       const char* type;
 
+    RequestMessageInfoRequest():
+      type("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -51,6 +56,12 @@ static const char REQUESTMESSAGEINFO[] = "rosserial_msgs/RequestMessageInfo";
     public:
       const char* md5;
       const char* definition;
+
+    RequestMessageInfoResponse():
+      md5(""),
+      definition("")
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

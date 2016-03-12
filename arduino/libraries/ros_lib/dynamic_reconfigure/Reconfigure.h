@@ -16,6 +16,11 @@ static const char RECONFIGURE[] = "dynamic_reconfigure/Reconfigure";
     public:
       dynamic_reconfigure::Config config;
 
+    ReconfigureRequest():
+      config()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -39,6 +44,11 @@ static const char RECONFIGURE[] = "dynamic_reconfigure/Reconfigure";
   {
     public:
       dynamic_reconfigure::Config config;
+
+    ReconfigureResponse():
+      config()
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

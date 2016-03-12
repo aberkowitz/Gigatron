@@ -16,6 +16,11 @@ static const char GETDISTANCETOOBSTACLE[] = "hector_nav_msgs/GetDistanceToObstac
     public:
       geometry_msgs::PointStamped point;
 
+    GetDistanceToObstacleRequest():
+      point()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -40,6 +45,12 @@ static const char GETDISTANCETOOBSTACLE[] = "hector_nav_msgs/GetDistanceToObstac
     public:
       float distance;
       geometry_msgs::PointStamped end_point;
+
+    GetDistanceToObstacleResponse():
+      distance(0),
+      end_point()
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

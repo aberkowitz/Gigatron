@@ -28,6 +28,21 @@ namespace sensor_msgs
       uint32_t binning_y;
       sensor_msgs::RegionOfInterest roi;
 
+    CameraInfo():
+      header(),
+      height(0),
+      width(0),
+      distortion_model(""),
+      D_length(0), D(NULL),
+      K(),
+      R(),
+      P(),
+      binning_x(0),
+      binning_y(0),
+      roi()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

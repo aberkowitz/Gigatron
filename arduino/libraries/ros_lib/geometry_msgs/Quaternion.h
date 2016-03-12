@@ -17,6 +17,14 @@ namespace geometry_msgs
       float z;
       float w;
 
+    Quaternion():
+      x(0),
+      y(0),
+      z(0),
+      w(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

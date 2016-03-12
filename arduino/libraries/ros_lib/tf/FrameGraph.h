@@ -14,6 +14,10 @@ static const char FRAMEGRAPH[] = "tf/FrameGraph";
   {
     public:
 
+    FrameGraphRequest()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -35,6 +39,11 @@ static const char FRAMEGRAPH[] = "tf/FrameGraph";
   {
     public:
       const char* dot_graph;
+
+    FrameGraphResponse():
+      dot_graph("")
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

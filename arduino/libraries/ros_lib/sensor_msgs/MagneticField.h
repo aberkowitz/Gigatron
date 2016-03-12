@@ -18,6 +18,13 @@ namespace sensor_msgs
       geometry_msgs::Vector3 magnetic_field;
       float magnetic_field_covariance[9];
 
+    MagneticField():
+      header(),
+      magnetic_field(),
+      magnetic_field_covariance()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

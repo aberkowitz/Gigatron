@@ -19,6 +19,13 @@ static const char GETROUTEPLAN[] = "geographic_msgs/GetRoutePlan";
       uuid_msgs::UniqueID start;
       uuid_msgs::UniqueID goal;
 
+    GetRoutePlanRequest():
+      network(),
+      start(),
+      goal()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -48,6 +55,13 @@ static const char GETROUTEPLAN[] = "geographic_msgs/GetRoutePlan";
       bool success;
       const char* status;
       geographic_msgs::RoutePath plan;
+
+    GetRoutePlanResponse():
+      success(0),
+      status(""),
+      plan()
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

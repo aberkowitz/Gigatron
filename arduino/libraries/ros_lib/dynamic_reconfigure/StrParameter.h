@@ -15,6 +15,12 @@ namespace dynamic_reconfigure
       const char* name;
       const char* value;
 
+    StrParameter():
+      name(""),
+      value("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

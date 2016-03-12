@@ -15,6 +15,10 @@ static const char SELFTEST[] = "diagnostic_msgs/SelfTest";
   {
     public:
 
+    SelfTestRequest()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -40,6 +44,13 @@ static const char SELFTEST[] = "diagnostic_msgs/SelfTest";
       uint8_t status_length;
       diagnostic_msgs::DiagnosticStatus st_status;
       diagnostic_msgs::DiagnosticStatus * status;
+
+    SelfTestResponse():
+      id(""),
+      passed(0),
+      status_length(0), status(NULL)
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

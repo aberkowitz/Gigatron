@@ -17,6 +17,12 @@ static const char GETSEARCHPOSITION[] = "hector_nav_msgs/GetSearchPosition";
       geometry_msgs::PoseStamped ooi_pose;
       float distance;
 
+    GetSearchPositionRequest():
+      ooi_pose(),
+      distance(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -61,6 +67,11 @@ static const char GETSEARCHPOSITION[] = "hector_nav_msgs/GetSearchPosition";
   {
     public:
       geometry_msgs::PoseStamped search_pose;
+
+    GetSearchPositionResponse():
+      search_pose()
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

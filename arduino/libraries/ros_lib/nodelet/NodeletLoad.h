@@ -26,6 +26,16 @@ static const char NODELETLOAD[] = "nodelet/NodeletLoad";
       char* * my_argv;
       const char* bond_id;
 
+    NodeletLoadRequest():
+      name(""),
+      type(""),
+      remap_source_args_length(0), remap_source_args(NULL),
+      remap_target_args_length(0), remap_target_args(NULL),
+      my_argv_length(0), my_argv(NULL),
+      bond_id("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -173,6 +183,11 @@ static const char NODELETLOAD[] = "nodelet/NodeletLoad";
   {
     public:
       bool success;
+
+    NodeletLoadResponse():
+      success(0)
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

@@ -17,6 +17,12 @@ namespace geometry_msgs
       std_msgs::Header header;
       geometry_msgs::Vector3 vector;
 
+    Vector3Stamped():
+      header(),
+      vector()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

@@ -15,6 +15,11 @@ static const char REQUESTSERVICEINFO[] = "rosserial_msgs/RequestServiceInfo";
     public:
       const char* service;
 
+    RequestServiceInfoRequest():
+      service("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -52,6 +57,13 @@ static const char REQUESTSERVICEINFO[] = "rosserial_msgs/RequestServiceInfo";
       const char* service_md5;
       const char* request_md5;
       const char* response_md5;
+
+    RequestServiceInfoResponse():
+      service_md5(""),
+      request_md5(""),
+      response_md5("")
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

@@ -19,6 +19,13 @@ namespace tf2_msgs
       actionlib_msgs::GoalStatus status;
       tf2_msgs::LookupTransformResult result;
 
+    LookupTransformActionResult():
+      header(),
+      status(),
+      result()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

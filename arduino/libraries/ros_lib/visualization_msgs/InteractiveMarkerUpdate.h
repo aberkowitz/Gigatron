@@ -29,6 +29,16 @@ namespace visualization_msgs
       enum { KEEP_ALIVE =  0 };
       enum { UPDATE =  1 };
 
+    InteractiveMarkerUpdate():
+      server_id(""),
+      seq_num(0),
+      type(0),
+      markers_length(0), markers(NULL),
+      poses_length(0), poses(NULL),
+      erases_length(0), erases(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

@@ -17,6 +17,14 @@ namespace std_msgs
       float b;
       float a;
 
+    ColorRGBA():
+      r(0),
+      g(0),
+      b(0),
+      a(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

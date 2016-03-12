@@ -23,6 +23,12 @@ namespace sensor_msgs
       enum { SERVICE_COMPASS =  4       };
       enum { SERVICE_GALILEO =  8 };
 
+    NavSatStatus():
+      status(0),
+      service(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

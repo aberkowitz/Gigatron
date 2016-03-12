@@ -16,6 +16,13 @@ namespace std_msgs
       uint32_t size;
       uint32_t stride;
 
+    MultiArrayDimension():
+      label(""),
+      size(0),
+      stride(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

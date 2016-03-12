@@ -16,6 +16,13 @@ namespace geographic_msgs
       float longitude;
       float altitude;
 
+    GeoPoint():
+      latitude(0),
+      longitude(0),
+      altitude(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

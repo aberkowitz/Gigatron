@@ -26,6 +26,17 @@ namespace sensor_msgs
       enum { COVARIANCE_TYPE_DIAGONAL_KNOWN =  2 };
       enum { COVARIANCE_TYPE_KNOWN =  3 };
 
+    NavSatFix():
+      header(),
+      status(),
+      latitude(0),
+      longitude(0),
+      altitude(0),
+      position_covariance(),
+      position_covariance_type(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

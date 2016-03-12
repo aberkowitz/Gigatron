@@ -19,6 +19,13 @@ namespace move_base_msgs
       actionlib_msgs::GoalID goal_id;
       move_base_msgs::MoveBaseGoal goal;
 
+    MoveBaseActionGoal():
+      header(),
+      goal_id(),
+      goal()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

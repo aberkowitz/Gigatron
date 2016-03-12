@@ -19,6 +19,13 @@ namespace sensor_msgs
       enum { TYPE_RUMBLE =  1 };
       enum { TYPE_BUZZER =  2 };
 
+    JoyFeedback():
+      type(0),
+      id(0),
+      intensity(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

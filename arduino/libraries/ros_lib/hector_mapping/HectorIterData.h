@@ -18,6 +18,15 @@ namespace hector_mapping
       float conditionNum2d;
       float determinant2d;
 
+    HectorIterData():
+      hessian(),
+      conditionNum(0),
+      determinant(0),
+      conditionNum2d(0),
+      determinant2d(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

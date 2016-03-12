@@ -19,6 +19,13 @@ namespace nav_msgs
       actionlib_msgs::GoalStatus status;
       nav_msgs::GetMapFeedback feedback;
 
+    GetMapActionFeedback():
+      header(),
+      status(),
+      feedback()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

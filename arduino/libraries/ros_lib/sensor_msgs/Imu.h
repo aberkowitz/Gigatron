@@ -23,6 +23,17 @@ namespace sensor_msgs
       geometry_msgs::Vector3 linear_acceleration;
       float linear_acceleration_covariance[9];
 
+    Imu():
+      header(),
+      orientation(),
+      orientation_covariance(),
+      angular_velocity(),
+      angular_velocity_covariance(),
+      linear_acceleration(),
+      linear_acceleration_covariance()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

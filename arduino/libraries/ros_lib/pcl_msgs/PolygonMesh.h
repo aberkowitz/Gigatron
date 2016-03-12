@@ -21,6 +21,13 @@ namespace pcl_msgs
       pcl_msgs::Vertices st_polygons;
       pcl_msgs::Vertices * polygons;
 
+    PolygonMesh():
+      header(),
+      cloud(),
+      polygons_length(0), polygons(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

@@ -48,6 +48,39 @@ namespace gps_common
       enum { COVARIANCE_TYPE_DIAGONAL_KNOWN =  2 };
       enum { COVARIANCE_TYPE_KNOWN =  3 };
 
+    GPSFix():
+      header(),
+      status(),
+      latitude(0),
+      longitude(0),
+      altitude(0),
+      track(0),
+      speed(0),
+      climb(0),
+      pitch(0),
+      roll(0),
+      dip(0),
+      time(0),
+      gdop(0),
+      pdop(0),
+      hdop(0),
+      vdop(0),
+      tdop(0),
+      err(0),
+      err_horz(0),
+      err_vert(0),
+      err_track(0),
+      err_speed(0),
+      err_climb(0),
+      err_time(0),
+      err_pitch(0),
+      err_roll(0),
+      err_dip(0),
+      position_covariance(),
+      position_covariance_type(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

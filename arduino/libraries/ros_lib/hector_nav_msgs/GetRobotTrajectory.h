@@ -15,6 +15,10 @@ static const char GETROBOTTRAJECTORY[] = "hector_nav_msgs/GetRobotTrajectory";
   {
     public:
 
+    GetRobotTrajectoryRequest()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -36,6 +40,11 @@ static const char GETROBOTTRAJECTORY[] = "hector_nav_msgs/GetRobotTrajectory";
   {
     public:
       nav_msgs::Path trajectory;
+
+    GetRobotTrajectoryResponse():
+      trajectory()
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

@@ -16,6 +16,12 @@ namespace geometry_msgs
       geometry_msgs::Vector3 linear;
       geometry_msgs::Vector3 angular;
 
+    Twist():
+      linear(),
+      angular()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

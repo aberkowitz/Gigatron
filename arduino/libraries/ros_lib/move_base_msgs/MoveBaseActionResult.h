@@ -19,6 +19,13 @@ namespace move_base_msgs
       actionlib_msgs::GoalStatus status;
       move_base_msgs::MoveBaseResult result;
 
+    MoveBaseActionResult():
+      header(),
+      status(),
+      result()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

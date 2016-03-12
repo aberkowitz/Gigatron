@@ -16,6 +16,11 @@ static const char SETPOSE[] = "robot_localization/SetPose";
     public:
       geometry_msgs::PoseWithCovarianceStamped pose;
 
+    SetPoseRequest():
+      pose()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -38,6 +43,10 @@ static const char SETPOSE[] = "robot_localization/SetPose";
   class SetPoseResponse : public ros::Msg
   {
     public:
+
+    SetPoseResponse()
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

@@ -16,6 +16,12 @@ namespace geometry_msgs
       geometry_msgs::Pose pose;
       float covariance[36];
 
+    PoseWithCovariance():
+      pose(),
+      covariance()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

@@ -17,6 +17,13 @@ namespace sensor_msgs
       float illuminance;
       float variance;
 
+    Illuminance():
+      header(),
+      illuminance(0),
+      variance(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

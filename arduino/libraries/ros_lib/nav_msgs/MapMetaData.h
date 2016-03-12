@@ -20,6 +20,15 @@ namespace nav_msgs
       uint32_t height;
       geometry_msgs::Pose origin;
 
+    MapMetaData():
+      map_load_time(),
+      resolution(0),
+      width(0),
+      height(0),
+      origin()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

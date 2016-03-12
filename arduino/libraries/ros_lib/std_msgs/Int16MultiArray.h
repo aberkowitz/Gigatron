@@ -18,6 +18,12 @@ namespace std_msgs
       int16_t st_data;
       int16_t * data;
 
+    Int16MultiArray():
+      layout(),
+      data_length(0), data(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

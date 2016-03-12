@@ -38,6 +38,18 @@ namespace visualization_msgs
       enum { ROTATE_3D =  8 };
       enum { MOVE_ROTATE_3D =  9 };
 
+    InteractiveMarkerControl():
+      name(""),
+      orientation(),
+      orientation_mode(0),
+      interaction_mode(0),
+      always_visible(0),
+      markers_length(0), markers(NULL),
+      independent_marker_orientation(0),
+      description("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

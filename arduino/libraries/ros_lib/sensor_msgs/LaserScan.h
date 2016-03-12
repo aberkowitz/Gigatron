@@ -28,6 +28,20 @@ namespace sensor_msgs
       float st_intensities;
       float * intensities;
 
+    LaserScan():
+      header(),
+      angle_min(0),
+      angle_max(0),
+      angle_increment(0),
+      time_increment(0),
+      scan_time(0),
+      range_min(0),
+      range_max(0),
+      ranges_length(0), ranges(NULL),
+      intensities_length(0), intensities(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

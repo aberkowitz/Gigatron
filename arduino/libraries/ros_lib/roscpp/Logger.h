@@ -15,6 +15,12 @@ namespace roscpp
       const char* name;
       const char* level;
 
+    Logger():
+      name(""),
+      level("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

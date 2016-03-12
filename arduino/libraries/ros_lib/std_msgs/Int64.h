@@ -14,6 +14,11 @@ namespace std_msgs
     public:
       int64_t data;
 
+    Int64():
+      data(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

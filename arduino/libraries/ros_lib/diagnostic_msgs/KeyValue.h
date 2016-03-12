@@ -15,6 +15,12 @@ namespace diagnostic_msgs
       const char* key;
       const char* value;
 
+    KeyValue():
+      key(""),
+      value("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

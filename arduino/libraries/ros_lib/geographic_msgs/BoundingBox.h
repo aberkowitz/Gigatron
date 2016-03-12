@@ -16,6 +16,12 @@ namespace geographic_msgs
       geographic_msgs::GeoPoint min_pt;
       geographic_msgs::GeoPoint max_pt;
 
+    BoundingBox():
+      min_pt(),
+      max_pt()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

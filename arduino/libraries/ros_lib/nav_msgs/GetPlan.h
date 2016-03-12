@@ -19,6 +19,13 @@ static const char GETPLAN[] = "nav_msgs/GetPlan";
       geometry_msgs::PoseStamped goal;
       float tolerance;
 
+    GetPlanRequest():
+      start(),
+      goal(),
+      tolerance(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -65,6 +72,11 @@ static const char GETPLAN[] = "nav_msgs/GetPlan";
   {
     public:
       nav_msgs::Path plan;
+
+    GetPlanResponse():
+      plan()
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

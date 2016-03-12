@@ -18,6 +18,12 @@ namespace pcl_msgs
       float st_values;
       float * values;
 
+    ModelCoefficients():
+      header(),
+      values_length(0), values(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

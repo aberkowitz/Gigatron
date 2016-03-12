@@ -16,6 +16,13 @@ namespace geometry_msgs
       float y;
       float z;
 
+    Point32():
+      x(0),
+      y(0),
+      z(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

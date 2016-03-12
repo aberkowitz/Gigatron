@@ -15,6 +15,11 @@ namespace std_msgs
     public:
       ros::Duration data;
 
+    Duration():
+      data()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

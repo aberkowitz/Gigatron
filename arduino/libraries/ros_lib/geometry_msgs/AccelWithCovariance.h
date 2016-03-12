@@ -16,6 +16,12 @@ namespace geometry_msgs
       geometry_msgs::Accel accel;
       float covariance[36];
 
+    AccelWithCovariance():
+      accel(),
+      covariance()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

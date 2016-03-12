@@ -17,6 +17,12 @@ namespace geometry_msgs
       geometry_msgs::Vector3 translation;
       geometry_msgs::Quaternion rotation;
 
+    Transform():
+      translation(),
+      rotation()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

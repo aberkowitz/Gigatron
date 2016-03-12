@@ -15,6 +15,11 @@ static const char NODELETUNLOAD[] = "nodelet/NodeletUnload";
     public:
       const char* name;
 
+    NodeletUnloadRequest():
+      name("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -50,6 +55,11 @@ static const char NODELETUNLOAD[] = "nodelet/NodeletUnload";
   {
     public:
       bool success;
+
+    NodeletUnloadResponse():
+      success(0)
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

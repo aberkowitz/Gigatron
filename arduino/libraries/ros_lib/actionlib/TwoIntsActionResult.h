@@ -19,6 +19,13 @@ namespace actionlib
       actionlib_msgs::GoalStatus status;
       actionlib::TwoIntsResult result;
 
+    TwoIntsActionResult():
+      header(),
+      status(),
+      result()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

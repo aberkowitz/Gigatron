@@ -16,6 +16,13 @@ namespace geometry_msgs
       float y;
       float theta;
 
+    Pose2D():
+      x(0),
+      y(0),
+      theta(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

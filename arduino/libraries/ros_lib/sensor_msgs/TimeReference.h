@@ -18,6 +18,13 @@ namespace sensor_msgs
       ros::Time time_ref;
       const char* source;
 
+    TimeReference():
+      header(),
+      time_ref(),
+      source("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

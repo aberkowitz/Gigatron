@@ -18,6 +18,15 @@ namespace dynamic_reconfigure
       const char* description;
       const char* edit_method;
 
+    ParamDescription():
+      name(""),
+      type(""),
+      level(0),
+      description(""),
+      edit_method("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

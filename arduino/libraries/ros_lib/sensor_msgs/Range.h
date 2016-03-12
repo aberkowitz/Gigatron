@@ -22,6 +22,16 @@ namespace sensor_msgs
       enum { ULTRASOUND = 0 };
       enum { INFRARED = 1 };
 
+    Range():
+      header(),
+      radiation_type(0),
+      field_of_view(0),
+      min_range(0),
+      max_range(0),
+      range(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

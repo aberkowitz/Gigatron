@@ -15,6 +15,12 @@ namespace actionlib
       int64_t a;
       int64_t b;
 
+    TwoIntsGoal():
+      a(0),
+      b(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

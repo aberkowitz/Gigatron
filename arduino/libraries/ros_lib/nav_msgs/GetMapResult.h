@@ -15,6 +15,11 @@ namespace nav_msgs
     public:
       nav_msgs::OccupancyGrid map;
 
+    GetMapResult():
+      map()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

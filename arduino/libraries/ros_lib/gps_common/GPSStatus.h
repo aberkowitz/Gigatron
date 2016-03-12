@@ -50,6 +50,22 @@ namespace gps_common
       enum { SOURCE_GYRO = 32  };
       enum { SOURCE_ACCEL = 64  };
 
+    GPSStatus():
+      header(),
+      satellites_used(0),
+      satellite_used_prn_length(0), satellite_used_prn(NULL),
+      satellites_visible(0),
+      satellite_visible_prn_length(0), satellite_visible_prn(NULL),
+      satellite_visible_z_length(0), satellite_visible_z(NULL),
+      satellite_visible_azimuth_length(0), satellite_visible_azimuth(NULL),
+      satellite_visible_snr_length(0), satellite_visible_snr(NULL),
+      status(0),
+      motion_source(0),
+      orientation_source(0),
+      position_source(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

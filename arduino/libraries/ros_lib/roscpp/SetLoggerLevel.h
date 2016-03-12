@@ -16,6 +16,12 @@ static const char SETLOGGERLEVEL[] = "roscpp/SetLoggerLevel";
       const char* logger;
       const char* level;
 
+    SetLoggerLevelRequest():
+      logger(""),
+      level("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -64,6 +70,10 @@ static const char SETLOGGERLEVEL[] = "roscpp/SetLoggerLevel";
   class SetLoggerLevelResponse : public ros::Msg
   {
     public:
+
+    SetLoggerLevelResponse()
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

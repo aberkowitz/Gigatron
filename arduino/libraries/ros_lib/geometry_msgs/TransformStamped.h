@@ -18,6 +18,13 @@ namespace geometry_msgs
       const char* child_frame_id;
       geometry_msgs::Transform transform;
 
+    TransformStamped():
+      header(),
+      child_frame_id(""),
+      transform()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

@@ -18,6 +18,15 @@ namespace sensor_msgs
       uint32_t width;
       bool do_rectify;
 
+    RegionOfInterest():
+      x_offset(0),
+      y_offset(0),
+      height(0),
+      width(0),
+      do_rectify(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

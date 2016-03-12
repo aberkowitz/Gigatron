@@ -17,6 +17,12 @@ static const char MAKENAVPLAN[] = "navfn/MakeNavPlan";
       geometry_msgs::PoseStamped start;
       geometry_msgs::PoseStamped goal;
 
+    MakeNavPlanRequest():
+      start(),
+      goal()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -46,6 +52,13 @@ static const char MAKENAVPLAN[] = "navfn/MakeNavPlan";
       uint8_t path_length;
       geometry_msgs::PoseStamped st_path;
       geometry_msgs::PoseStamped * path;
+
+    MakeNavPlanResponse():
+      plan_found(0),
+      error_message(""),
+      path_length(0), path(NULL)
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

@@ -22,6 +22,12 @@ namespace tf2_msgs
       enum { TIMEOUT_ERROR =  5 };
       enum { TRANSFORM_ERROR =  6 };
 
+    TF2Error():
+      error(0),
+      error_string("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

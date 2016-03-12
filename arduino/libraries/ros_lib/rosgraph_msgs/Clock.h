@@ -15,6 +15,11 @@ namespace rosgraph_msgs
     public:
       ros::Time clock;
 
+    Clock():
+      clock()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

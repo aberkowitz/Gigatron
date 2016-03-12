@@ -19,6 +19,13 @@ namespace actionlib
       actionlib::TwoIntsActionResult action_result;
       actionlib::TwoIntsActionFeedback action_feedback;
 
+    TwoIntsAction():
+      action_goal(),
+      action_result(),
+      action_feedback()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

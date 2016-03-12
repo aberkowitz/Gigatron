@@ -26,6 +26,14 @@ namespace trajectory_msgs
       geometry_msgs::Twist * accelerations;
       ros::Duration time_from_start;
 
+    MultiDOFJointTrajectoryPoint():
+      transforms_length(0), transforms(NULL),
+      velocities_length(0), velocities(NULL),
+      accelerations_length(0), accelerations(NULL),
+      time_from_start()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

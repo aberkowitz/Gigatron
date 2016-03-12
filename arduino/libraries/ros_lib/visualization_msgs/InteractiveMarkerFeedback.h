@@ -31,6 +31,19 @@ namespace visualization_msgs
       enum { MOUSE_DOWN =  4 };
       enum { MOUSE_UP =  5 };
 
+    InteractiveMarkerFeedback():
+      header(),
+      client_id(""),
+      marker_name(""),
+      control_name(""),
+      event_type(0),
+      pose(),
+      menu_entry_id(0),
+      mouse_point(),
+      mouse_point_valid(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

@@ -28,6 +28,19 @@ namespace sensor_msgs
       uint8_t * data;
       bool is_dense;
 
+    PointCloud2():
+      header(),
+      height(0),
+      width(0),
+      fields_length(0), fields(NULL),
+      is_bigendian(0),
+      point_step(0),
+      row_step(0),
+      data_length(0), data(NULL),
+      is_dense(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

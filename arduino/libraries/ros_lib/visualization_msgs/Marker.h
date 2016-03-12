@@ -53,6 +53,25 @@ namespace visualization_msgs
       enum { MODIFY = 0 };
       enum { DELETE = 2 };
 
+    Marker():
+      header(),
+      ns(""),
+      id(0),
+      type(0),
+      action(0),
+      pose(),
+      scale(),
+      color(),
+      lifetime(),
+      frame_locked(0),
+      points_length(0), points(NULL),
+      colors_length(0), colors(NULL),
+      text(""),
+      mesh_resource(""),
+      mesh_use_embedded_materials(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

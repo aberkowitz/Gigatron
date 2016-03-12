@@ -27,6 +27,15 @@ namespace sensor_msgs
       float st_effort;
       float * effort;
 
+    JointState():
+      header(),
+      name_length(0), name(NULL),
+      position_length(0), position(NULL),
+      velocity_length(0), velocity(NULL),
+      effort_length(0), effort(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

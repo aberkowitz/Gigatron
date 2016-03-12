@@ -14,6 +14,11 @@ namespace uuid_msgs
     public:
       uint8_t uuid[16];
 
+    UniqueID():
+      uuid()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

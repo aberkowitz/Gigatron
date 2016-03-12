@@ -17,6 +17,11 @@ static const char GETNORMAL[] = "hector_nav_msgs/GetNormal";
     public:
       geometry_msgs::PointStamped point;
 
+    GetNormalRequest():
+      point()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -40,22 +45,16 @@ static const char GETNORMAL[] = "hector_nav_msgs/GetNormal";
   {
     public:
       geometry_msgs::Vector3 normal;
-      float yaw;
+
+    GetNormalResponse():
+      normal()
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
       offset += this->normal.serialize(outbuffer + offset);
-      union {
-        float real;
-        uint32_t base;
-      } u_yaw;
-      u_yaw.real = this->yaw;
-      *(outbuffer + offset + 0) = (u_yaw.base >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (u_yaw.base >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (u_yaw.base >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (u_yaw.base >> (8 * 3)) & 0xFF;
-      offset += sizeof(this->yaw);
       return offset;
     }
 
@@ -63,22 +62,11 @@ static const char GETNORMAL[] = "hector_nav_msgs/GetNormal";
     {
       int offset = 0;
       offset += this->normal.deserialize(inbuffer + offset);
-      union {
-        float real;
-        uint32_t base;
-      } u_yaw;
-      u_yaw.base = 0;
-      u_yaw.base |= ((uint32_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      u_yaw.base |= ((uint32_t) (*(inbuffer + offset + 1))) << (8 * 1);
-      u_yaw.base |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
-      u_yaw.base |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
-      this->yaw = u_yaw.real;
-      offset += sizeof(this->yaw);
      return offset;
     }
 
     const char * getType(){ return GETNORMAL; };
-    const char * getMD5(){ return "8ea5d051594753307ebd995c02db60a3"; };
+    const char * getMD5(){ return "9a5880458dbcd28bf7ed1889c8ac7f8e"; };
 
   };
 

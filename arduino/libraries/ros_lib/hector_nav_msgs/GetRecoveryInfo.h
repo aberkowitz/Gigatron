@@ -19,6 +19,12 @@ static const char GETRECOVERYINFO[] = "hector_nav_msgs/GetRecoveryInfo";
       ros::Time request_time;
       float request_radius;
 
+    GetRecoveryInfoRequest():
+      request_time(),
+      request_radius(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -64,6 +70,13 @@ static const char GETRECOVERYINFO[] = "hector_nav_msgs/GetRecoveryInfo";
       nav_msgs::Path trajectory_radius_entry_pose_to_req_pose;
       geometry_msgs::PoseStamped radius_entry_pose;
       geometry_msgs::PoseStamped req_pose;
+
+    GetRecoveryInfoResponse():
+      trajectory_radius_entry_pose_to_req_pose(),
+      radius_entry_pose(),
+      req_pose()
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

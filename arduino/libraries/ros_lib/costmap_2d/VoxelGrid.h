@@ -25,6 +25,17 @@ namespace costmap_2d
       uint32_t size_y;
       uint32_t size_z;
 
+    VoxelGrid():
+      header(),
+      data_length(0), data(NULL),
+      origin(),
+      resolutions(),
+      size_x(0),
+      size_y(0),
+      size_z(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

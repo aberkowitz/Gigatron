@@ -30,6 +30,15 @@ namespace sensor_msgs
       geometry_msgs::Wrench st_wrench;
       geometry_msgs::Wrench * wrench;
 
+    MultiDOFJointState():
+      header(),
+      joint_names_length(0), joint_names(NULL),
+      transforms_length(0), transforms(NULL),
+      twist_length(0), twist(NULL),
+      wrench_length(0), wrench(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

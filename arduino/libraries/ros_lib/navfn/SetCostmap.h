@@ -19,6 +19,13 @@ static const char SETCOSTMAP[] = "navfn/SetCostmap";
       uint16_t height;
       uint16_t width;
 
+    SetCostmapRequest():
+      costs_length(0), costs(NULL),
+      height(0),
+      width(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -69,6 +76,10 @@ static const char SETCOSTMAP[] = "navfn/SetCostmap";
   class SetCostmapResponse : public ros::Msg
   {
     public:
+
+    SetCostmapResponse()
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

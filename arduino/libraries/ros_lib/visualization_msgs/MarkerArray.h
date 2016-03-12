@@ -17,6 +17,11 @@ namespace visualization_msgs
       visualization_msgs::Marker st_markers;
       visualization_msgs::Marker * markers;
 
+    MarkerArray():
+      markers_length(0), markers(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

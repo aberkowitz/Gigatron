@@ -16,6 +16,12 @@ namespace geometry_msgs
       geometry_msgs::Vector3 force;
       geometry_msgs::Vector3 torque;
 
+    Wrench():
+      force(),
+      torque()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

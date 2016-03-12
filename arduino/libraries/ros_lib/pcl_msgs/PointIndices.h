@@ -18,6 +18,12 @@ namespace pcl_msgs
       int32_t st_indices;
       int32_t * indices;
 
+    PointIndices():
+      header(),
+      indices_length(0), indices(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

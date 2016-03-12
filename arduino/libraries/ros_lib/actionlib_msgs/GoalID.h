@@ -16,6 +16,12 @@ namespace actionlib_msgs
       ros::Time stamp;
       const char* id;
 
+    GoalID():
+      stamp(),
+      id("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

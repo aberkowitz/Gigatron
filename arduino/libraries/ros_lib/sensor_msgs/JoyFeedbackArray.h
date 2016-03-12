@@ -17,6 +17,11 @@ namespace sensor_msgs
       sensor_msgs::JoyFeedback st_array;
       sensor_msgs::JoyFeedback * array;
 
+    JoyFeedbackArray():
+      array_length(0), array(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

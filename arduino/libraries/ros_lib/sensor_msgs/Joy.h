@@ -21,6 +21,13 @@ namespace sensor_msgs
       int32_t st_buttons;
       int32_t * buttons;
 
+    Joy():
+      header(),
+      axes_length(0), axes(NULL),
+      buttons_length(0), buttons(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

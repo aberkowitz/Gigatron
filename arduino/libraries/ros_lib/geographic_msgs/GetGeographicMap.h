@@ -18,6 +18,12 @@ static const char GETGEOGRAPHICMAP[] = "geographic_msgs/GetGeographicMap";
       const char* url;
       geographic_msgs::BoundingBox bounds;
 
+    GetGeographicMapRequest():
+      url(""),
+      bounds()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -57,6 +63,13 @@ static const char GETGEOGRAPHICMAP[] = "geographic_msgs/GetGeographicMap";
       bool success;
       const char* status;
       geographic_msgs::GeographicMap map;
+
+    GetGeographicMapResponse():
+      success(0),
+      status(""),
+      map()
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

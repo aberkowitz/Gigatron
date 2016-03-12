@@ -15,6 +15,11 @@ static const char DEMUXSELECT[] = "topic_tools/DemuxSelect";
     public:
       const char* topic;
 
+    DemuxSelectRequest():
+      topic("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -50,6 +55,11 @@ static const char DEMUXSELECT[] = "topic_tools/DemuxSelect";
   {
     public:
       const char* prev_topic;
+
+    DemuxSelectResponse():
+      prev_topic("")
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

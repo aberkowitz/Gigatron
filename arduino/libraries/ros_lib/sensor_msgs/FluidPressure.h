@@ -17,6 +17,13 @@ namespace sensor_msgs
       float fluid_pressure;
       float variance;
 
+    FluidPressure():
+      header(),
+      fluid_pressure(0),
+      variance(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

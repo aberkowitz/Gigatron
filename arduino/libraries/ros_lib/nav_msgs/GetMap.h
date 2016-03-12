@@ -15,6 +15,10 @@ static const char GETMAP[] = "nav_msgs/GetMap";
   {
     public:
 
+    GetMapRequest()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -36,6 +40,11 @@ static const char GETMAP[] = "nav_msgs/GetMap";
   {
     public:
       nav_msgs::OccupancyGrid map;
+
+    GetMapResponse():
+      map()
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

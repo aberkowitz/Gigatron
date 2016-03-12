@@ -15,6 +15,10 @@ static const char GETLOGGERS[] = "roscpp/GetLoggers";
   {
     public:
 
+    GetLoggersRequest()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -38,6 +42,11 @@ static const char GETLOGGERS[] = "roscpp/GetLoggers";
       uint8_t loggers_length;
       roscpp::Logger st_loggers;
       roscpp::Logger * loggers;
+
+    GetLoggersResponse():
+      loggers_length(0), loggers(NULL)
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

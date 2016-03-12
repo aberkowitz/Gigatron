@@ -33,6 +33,15 @@ namespace dynamic_reconfigure
       dynamic_reconfigure::GroupState st_groups;
       dynamic_reconfigure::GroupState * groups;
 
+    Config():
+      bools_length(0), bools(NULL),
+      ints_length(0), ints(NULL),
+      strs_length(0), strs(NULL),
+      doubles_length(0), doubles(NULL),
+      groups_length(0), groups(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

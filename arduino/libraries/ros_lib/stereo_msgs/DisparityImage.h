@@ -24,6 +24,18 @@ namespace stereo_msgs
       float max_disparity;
       float delta_d;
 
+    DisparityImage():
+      header(),
+      image(),
+      f(0),
+      T(0),
+      valid_window(),
+      min_disparity(0),
+      max_disparity(0),
+      delta_d(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

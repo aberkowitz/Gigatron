@@ -22,6 +22,18 @@ namespace geometry_msgs
       float iyz;
       float izz;
 
+    Inertia():
+      m(0),
+      com(),
+      ixx(0),
+      ixy(0),
+      ixz(0),
+      iyy(0),
+      iyz(0),
+      izz(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

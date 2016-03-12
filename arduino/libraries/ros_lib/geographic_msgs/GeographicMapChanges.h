@@ -21,6 +21,13 @@ namespace geographic_msgs
       uuid_msgs::UniqueID st_deletes;
       uuid_msgs::UniqueID * deletes;
 
+    GeographicMapChanges():
+      header(),
+      diffs(),
+      deletes_length(0), deletes(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

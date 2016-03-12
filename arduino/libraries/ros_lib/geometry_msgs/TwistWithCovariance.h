@@ -16,6 +16,12 @@ namespace geometry_msgs
       geometry_msgs::Twist twist;
       float covariance[36];
 
+    TwistWithCovariance():
+      twist(),
+      covariance()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

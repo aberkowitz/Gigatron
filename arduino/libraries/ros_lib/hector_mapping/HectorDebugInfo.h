@@ -17,6 +17,11 @@ namespace hector_mapping
       hector_mapping::HectorIterData st_iterData;
       hector_mapping::HectorIterData * iterData;
 
+    HectorDebugInfo():
+      iterData_length(0), iterData(NULL)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

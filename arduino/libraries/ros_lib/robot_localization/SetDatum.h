@@ -16,6 +16,11 @@ static const char SETDATUM[] = "robot_localization/SetDatum";
     public:
       geographic_msgs::GeoPose geo_pose;
 
+    SetDatumRequest():
+      geo_pose()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
@@ -38,6 +43,10 @@ static const char SETDATUM[] = "robot_localization/SetDatum";
   class SetDatumResponse : public ros::Msg
   {
     public:
+
+    SetDatumResponse()
+    {
+    }
 
     virtual int serialize(unsigned char *outbuffer) const
     {

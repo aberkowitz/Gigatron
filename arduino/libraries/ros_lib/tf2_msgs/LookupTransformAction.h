@@ -19,6 +19,13 @@ namespace tf2_msgs
       tf2_msgs::LookupTransformActionResult action_result;
       tf2_msgs::LookupTransformActionFeedback action_feedback;
 
+    LookupTransformAction():
+      action_goal(),
+      action_result(),
+      action_feedback()
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

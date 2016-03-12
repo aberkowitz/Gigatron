@@ -17,6 +17,13 @@ namespace sensor_msgs
       float relative_humidity;
       float variance;
 
+    RelativeHumidity():
+      header(),
+      relative_humidity(0),
+      variance(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

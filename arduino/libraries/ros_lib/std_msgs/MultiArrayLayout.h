@@ -18,6 +18,12 @@ namespace std_msgs
       std_msgs::MultiArrayDimension * dim;
       uint32_t data_offset;
 
+    MultiArrayLayout():
+      dim_length(0), dim(NULL),
+      data_offset(0)
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;

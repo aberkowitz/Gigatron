@@ -20,6 +20,12 @@ namespace rosserial_msgs
       enum { ERROR = 3 };
       enum { FATAL = 4 };
 
+    Log():
+      level(0),
+      msg("")
+    {
+    }
+
     virtual int serialize(unsigned char *outbuffer) const
     {
       int offset = 0;
