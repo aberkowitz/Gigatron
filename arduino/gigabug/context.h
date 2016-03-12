@@ -36,14 +36,13 @@ public:
           PIDController *pos,
           ros::NodeHandle *nh,
           JetsonCommander *jcommander,
-          geometry_msgs::Vector3 *odomsg,
-          ros::Publisher *pub,
-          geometry_msgs::Vector3 *commsg,
-          ros::Publisher *compub,
-          std_msgs::Float32 *angmsg,
-          ros::Publisher *angpub,
-          std_msgs::Float32 *angcommsg,
-          ros::Publisher *angcompub);
+          gigatron::RadioInput *radio_msg,
+          ros::Publisher *radio_pub,
+          gigatron::Steering *steer_msg,
+          ros::Publisher *steer_pub,
+          gigatron::Motors *mot_msg,
+          ros::Publisher *mot_pub
+          );
   void ConfigureLoop(int sInterval, int pInterval);
   void Start();
 
@@ -61,18 +60,14 @@ private:
   ros::NodeHandle *_nh;
   JetsonCommander *_jcommander;
 
-  geometry_msgs::Vector3 *_odomsg;
-  ros::Publisher *_pub;
+  gigatron::RadioInput *_radio_msg;
+  ros::Publisher *_radio_pub;
 
-  geometry_msgs::Vector3 *_commsg;
-  ros::Publisher *_compub;
+  gigatron::Steering *_steer_msg;
+  ros::Publisher *_steer_pub;
 
-  std_msgs::Float32 *_angmsg;
-  ros::Publisher *_angpub;
-
-  std_msgs::Float32 *_angcommsg;
-  ros::Publisher *_angcompub;
-
+  gigatron::Motors *_mot_msg;
+  ros::Publisher *_mot_pub;
 };
 
 #endif

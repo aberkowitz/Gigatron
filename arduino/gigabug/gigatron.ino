@@ -26,6 +26,9 @@
 #include <std_msgs/Float32.h> //$ for steering odometry stuff and mode
 #include <std_msgs/UInt16.h> //$ for mode switching
 
+#include <gigatron/RadioInput.h>
+#include <gigatron/Steering.h>
+#include <gigatron/Motors.h>
 
 #define PI 3.1415926535897932384626433832795
  
@@ -68,12 +71,9 @@ PIDController rSp(2, 1, 1, 255, 0);
 
 PIDController pPos(150, 0, 15, 255, -255); //250, 1, 50
 
-geometry_msgs::Vector3 odomsg;  //$ odometry message
-std_msgs::Float32 angmsg;       //$ measured steering angle message
-geometry_msgs::Vector3 commsg;  //$ command message
-std_msgs::Float32 angcommsg;    //$ command message
-
-
+gigatron::RadioInput radio_msg;
+gigatron::Steering steer_msg;
+gigatron::Motors mot_msg;
 
 
 void CmdCallback(const geometry_msgs::Vector3& cmd) {
@@ -158,15 +158,13 @@ void setup() {
   nh.subscribe(gainsub);
 
   //$ set up publishers
-  ros::Publisher pub("odo_val", &odomsg);
-  // nh.advertise(pub);
-  ros::Publisher compub("command", &commsg);
-  // nh.advertise(compub);
-  ros::Publisher angpub("ang_val", &angmsg);
-  // nh.advertise(angpub);
-  ros::Publisher angcompub("ang_command", &angcommsg);
-  // nh.advertise(angcompub);
-
+  ros::Publisher radio_pub("arduino/radio", &radio_msg);
+  nh.advertise(radio_pub);
+  ros::Publisher mot_pub("arduino/motors", &mot_msg);
+  nh.advertise(mot_pub);
+  ros::Publisher steer_pub("arduino/steering", &steer_msg);
+  nh.advertise(steer_pub);
+\
   /* Context(Commander *commander, DCServo *servo,
           SpeedSensor *left, SpeedSensor *right,
           int lPwm, int rPwm,
@@ -182,7 +180,7 @@ void setup() {
           ros::Publisher *angpub,
           std_msgs::Float32 *angcommsg,
           ros::Publisher *angcompub) */
-  Context context(&rc, &servo, &left, &right, lPwm, rPwm, lRev, rRev, &lSp, &rSp, &pPos, &nh, &jc, &odomsg, &pub, &commsg, &compub, &angmsg, &angpub, &angcommsg, &angcompub);
+  Context context(&rc, &servo, &left, &right, lPwm, rPwm, lRev, rRev, &lSp, &rSp, &pPos, &nh, &jc, &radio_msg, &radio_pub, &steer_msg, &steer_pub, &mot_msg, &mot_pub);
 
   // Context::ConfigureLoop(int sInterval, int pInterval);
   context.ConfigureLoop(S_LOOP_INTERVAL, LOOP_INTERVAL);

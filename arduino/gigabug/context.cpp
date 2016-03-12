@@ -38,21 +38,20 @@ Servo leftMotor;
 Servo rightMotor;
 
 Context::Context(Commander *commander, DCServo *servo,
-          SpeedSensor *left, SpeedSensor *right,
-          int lPwm, int rPwm,
-          int lRev, int rRev,
-          PIDController *lSp, PIDController *rSp,
-          PIDController *pos,
-          ros::NodeHandle *nh,
-          JetsonCommander *jcommander,
-          geometry_msgs::Vector3 *odomsg,
-          ros::Publisher *pub,
-          geometry_msgs::Vector3 *commsg,
-          ros::Publisher *compub,
-          std_msgs::Float32 *angmsg,
-          ros::Publisher *angpub,
-          std_msgs::Float32 *angcommsg,
-          ros::Publisher *angcompub) {
+  SpeedSensor *left, SpeedSensor *right,
+  int lPwm, int rPwm,
+  int lRev, int rRev,
+  PIDController *lSp, PIDController *rSp,
+  PIDController *pos,
+  ros::NodeHandle *nh,
+  JetsonCommander *jcommander,
+  gigatron::RadioInput *radio_msg,
+  ros::Publisher *radio_pub,
+  gigatron::Steering *steer_msg,
+  ros::Publisher *steer_pub,
+  gigatron::Motors *mot_msg,
+  ros::Publisher *mot_pub
+  ) {
   _commander = commander;
   _servo = servo;
   _left = left;
@@ -71,14 +70,12 @@ Context::Context(Commander *commander, DCServo *servo,
   
   
   //$ ROS publishers and messages
-  _odomsg = odomsg; 
-  _pub = pub;
-  _commsg = commsg; 
-  _compub = compub;
-  _angmsg = angmsg; 
-  _angpub = angpub;
-  _angcommsg = angcommsg; 
-  _angcompub = angcompub;
+  _radio_msg = radio_msg; 
+  _radio_pub = radio_pub;
+  _steer_msg = steer_msg; 
+  _steer_pub = steer_pub;
+  _mot_msg = mot_msg; 
+  _mot_pub = mot_pub;
   
   pinMode(_lPwm, OUTPUT);
   pinMode(_rPwm, OUTPUT);
@@ -97,58 +94,36 @@ Context::Context(Commander *commander, DCServo *servo,
   @param  sInterval  [ms] speed loop interval 
   @param  pInterval  [ms] position loop interval 
   */
-void Context::ConfigureLoop(int sInterval, int pInterval) {
-  _sInterval = sInterval;
-  _pInterval = pInterval;
-}
+  void Context::ConfigureLoop(int sInterval, int pInterval) {
+    _sInterval = sInterval;
+    _pInterval = pInterval;
+  }
 
 
-void Context::Start() {
+  void Context::Start() {
 
-gigatron::RadioInput *radio_msg;  
-gigatron::Steering *steer_msg;  
-gigatron::Motors *mot_msg;  
+    //$ clear messages
+    _radio_msg->speed_left = -1;
+    _radio_msg->speed_right = -1;
+    _radio_msg->dir_left = -1;
+    _radio_msg->dir_right = -1;
+    _radio_msg->angle = -1;
+    _radio_msg->kill = -1;
 
-    //$ set up publishers
-  ros::Publisher radio_pub("arduino/radio", radio_msg);
-  _nh->advertise(radio_pub);
-  ros::Publisher mot_pub("arduino/motors", mot_msg);
-  _nh->advertise(mot_pub);
-  ros::Publisher steer_pub("arduino/steering", steer_msg);
-  _nh->advertise(steer_pub);
+    _steer_msg->angle = -1;
+    _steer_msg->angle_command = -1;
 
-  radio_msg->speed_left = -1;
-  radio_msg->speed_right = -1;
-  radio_msg->dir_left = -1;
-  radio_msg->dir_right = -1;
-  radio_msg->angle = -1;
-  radio_msg->kill = -1;
+    _mot_msg->rpm_left = -1;
+    _mot_msg->rpm_right = -1;
+    _mot_msg->usec_left = -1;
+    _mot_msg->usec_right = -1;
 
-  steer_msg->angle = -1;
-  steer_msg->angle_command = -1;
-
-  mot_msg->rpm_left = -1;
-  mot_msg->rpm_right = -1;
-  mot_msg->usec_left = -1;
-  mot_msg->usec_right = -1;
-
-
-  //$ clear messages
-  // _odomsg->x = -1;
-  // _odomsg->y = 0;
-  // _odomsg->z = 0;
-  // _commsg->x = -1;
-  // _commsg->y = 0;
-  // _commsg->z = 0;
-  // _angmsg->data = 0;
-  // _angcommsg->data = 128;
-  
-  _last_st = _last_pt = millis();
+    _last_st = _last_pt = millis();
 
   //unsigned int oldMode = _jcommander->_autonomous;
-  unsigned int oldMode = 2;
+    unsigned int oldMode = 2;
 
-  for (;;) {
+    for (;;) {
     _nh->spinOnce(); //$ spin node handle
     
     unsigned long t = millis();
@@ -174,13 +149,13 @@ gigatron::Motors *mot_msg;
     }
 
     //dp(_jcommander->_autonomous);
-      unsigned int lSpC;
-      unsigned int rSpC;
+    unsigned int lSpC;
+    unsigned int rSpC;
       //left and right microsecond write values for ROBOCLAW
-      unsigned int luSec;
-      unsigned int ruSec;
-      int lDir;
-      int rDir;
+    unsigned int luSec;
+    unsigned int ruSec;
+    int lDir;
+    int rDir;
 
     if (d_st > _sInterval) {  //$ speed (drive motor) loop
       //$ left and right speed commands
@@ -260,29 +235,20 @@ gigatron::Motors *mot_msg;
 
       _last_st = t;
 
-      //$ write PWM commands to command message
-      //note that max is now 250, not 255
-      // _commsg->y = lSpC;
-      // _commsg->z = rSpC;
-
       double leftWheelRPM = (double) _left->GetSpeed();
       double rightWheelRPM = (double) _right->GetSpeed();
       
       //$ write wheel velocities
-      // _odomsg->y = leftWheelRPM * RPM_TO_M_S;
-      // _odomsg->z = rightWheelRPM * RPM_TO_M_S;
+      __radio_msg->y = leftWheelRPM * RPM_TO_M_S;
+      __radio_msg->z = rightWheelRPM * RPM_TO_M_S;
 
-      // //$ publish messages
-      // _pub->publish(_odomsg);
-      // _compub->publish(_commsg);
+      _mot_msg->rpm_left = leftWheelRPM * RPM_TO_M_S;
+      _mot_msg->rpm_right = rightWheelRPM * RPM_TO_M_S;
+      _mot_msg->usec_left = ruSec;
+      _mot_msg->usec_right = luSec;
 
-
-  mot_msg->rpm_left = leftWheelRPM * RPM_TO_M_S;
-  mot_msg->rpm_right = rightWheelRPM * RPM_TO_M_S;
-  mot_msg->usec_left = ruSec;
-  mot_msg->usec_right = luSec;
-
-  mot_pub.publish(mot_msg);
+      //$ publish message
+      _mot_pub->publish(_mot_msg);
 
     }
 
@@ -299,7 +265,6 @@ gigatron::Motors *mot_msg;
       unsigned char pS = _servo->GetPosLinearized();
 
       
-      
       //dp(pC);
       //dp(pS);
       int vel = _pos->Update(pC, pS); //$ update PID controller
@@ -315,32 +280,20 @@ gigatron::Motors *mot_msg;
       double steeringAngle = STEERING_ANGLE_RANGE * (servoPWM / STEERING_PWM_RANGE) - ABS_MAX_STEERING_ANGLE;
 
       //$ write steering angle and servo PWM command to message
-      // _angmsg->data = steeringAngle;
-      // _angcommsg->data = pC;
+      _steer_msg->angle = steeringAngle;
+      _steer_msg->angle_command = pC;
+      
+      //$ publish message
+      _steer_pub->publish(_steer_msg);
 
-      // //$ publish messages
-      // _angpub->publish(_angmsg);
-      // _angcompub->publish(_angcommsg);
+      _radio_msg->speed_left = _commander->GetLeftSpeedCmd();
+      _radio_msg->speed_right = _commander->GetRightSpeedCmd();
+      _radio_msg->dir_left = _commander->GetLeftDirectionCmd();
+      _radio_msg->dir_right = _commander->GetRightDirectionCmd();
+      _radio_msg->angle = _commander->GetPositionCmd();
+      _radio_msg->kill = _commander->GetKillCmd();
 
-
-      /*$ NEW MESSAGES FOR DEBUGGING
-       */
-
-         steer_msg->angle = steeringAngle;
-  steer_msg->angle_command = pC;
-
-  steer_pub.publish(steer_msg);
-
-
-
-      radio_msg->speed_left = _commander->GetLeftSpeedCmd();
-  radio_msg->speed_right = _commander->GetRightSpeedCmd();
-  radio_msg->dir_left = _commander->GetLeftDirectionCmd();
-  radio_msg->dir_right = _commander->GetRightDirectionCmd();
-  radio_msg->angle = _commander->GetPositionCmd();
-  radio_msg->kill = _commander->GetKillCmd();
-
-  radio_pub.publish(radio_msg);
+      _radio_pub->publish(_radio_msg);
 
     }
   }
