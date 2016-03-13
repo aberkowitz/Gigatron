@@ -1,6 +1,3 @@
-#include <Servo.h>
-
-
 /**
  * context.cpp
  * Gigatron motor control Arduino code.
@@ -14,6 +11,7 @@
  **/
 
 #include <Arduino.h>
+#include "Servo.h"
 #include "isr.h"
 #include "classes.h"
 #include "commander.h"
@@ -239,9 +237,6 @@ Context::Context(Commander *commander, DCServo *servo,
       double rightWheelRPM = (double) _right->GetSpeed();
       
       //$ write wheel velocities
-      __radio_msg->y = leftWheelRPM * RPM_TO_M_S;
-      __radio_msg->z = rightWheelRPM * RPM_TO_M_S;
-
       _mot_msg->rpm_left = leftWheelRPM * RPM_TO_M_S;
       _mot_msg->rpm_right = rightWheelRPM * RPM_TO_M_S;
       _mot_msg->usec_left = ruSec;
