@@ -36,9 +36,9 @@
 #define S_LOOP_INTERVAL 85
 
 //$ steering pot calibration
-int minADU = 474; //462, all right
-int midADU = 566; //$ value at zero steering angle
-int maxADU = 624; //638, all left
+int minADU = 463; //462, all right
+int midADU = 537; //$ value at zero steering angle
+int maxADU = 587; //638, all left
 
 //$ pin numbers
 int lPwm = 9;
@@ -124,7 +124,8 @@ void GainsCallback(const geometry_msgs::Vector3& gain) {
 }
 
 void setup() {
-  Serial.begin(38400);
+  Serial.begin(9600);
+  nh.getHardware()->setBaud(9600);
 
   // RCDecoder(int interrupt, int minV, int maxV);
   RCDecoder pos(0, 984, 1996); 

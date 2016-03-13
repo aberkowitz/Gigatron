@@ -1,6 +1,13 @@
-# Gigatron Motor Control Arduino Code
+# Gigatron Motor Control Debugging Arduino Code
 
-### `gigatron.ino`
+## ROS Debugging
+
+![ROS Debugging Topics](LOOKATME.png)
+
+
+## Arduino Sketch Components
+
+### `gigabug.ino`
 The main Arduino sketch file. 
 * ROS publishers and subscribers are set up here
 * callbacks for ROS messages are defined here

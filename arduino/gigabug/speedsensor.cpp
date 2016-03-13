@@ -42,7 +42,7 @@ SpeedSensor::SpeedSensor(int interrupt, int poles, int interval) {
   _speed_2 = _speed_3 = 0;
 }
 
-
+//$ TODO: this is unsigned, need to fix!
 unsigned int SpeedSensor::GetSpeed() {
   long sp;
   if (_interrupt == 4) {// If we are the left sensor

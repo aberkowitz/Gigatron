@@ -101,20 +101,20 @@ Context::Context(Commander *commander, DCServo *servo,
   void Context::Start() {
 
     //$ clear messages
-    _radio_msg->speed_left = -1;
-    _radio_msg->speed_right = -1;
-    _radio_msg->dir_left = -1;
-    _radio_msg->dir_right = -1;
-    _radio_msg->angle = -1;
-    _radio_msg->kill = -1;
+    _radio_msg->speed_left = 0;
+    _radio_msg->speed_right = 0;
+    _radio_msg->dir_left = 0;
+    _radio_msg->dir_right = 0;
+    _radio_msg->angle = 128;
+    _radio_msg->kill = 0;
 
-    _steer_msg->angle = -1;
-    _steer_msg->angle_command = -1;
+    _steer_msg->angle = 128;
+    _steer_msg->angle_command = 128;
 
-    _mot_msg->rpm_left = -1;
-    _mot_msg->rpm_right = -1;
-    _mot_msg->usec_left = -1;
-    _mot_msg->usec_right = -1;
+    _mot_msg->rpm_left = 0;
+    _mot_msg->rpm_right = 0;
+    _mot_msg->usec_left = 1500;
+    _mot_msg->usec_right = 1500;
 
     _last_st = _last_pt = millis();
 
@@ -233,12 +233,16 @@ Context::Context(Commander *commander, DCServo *servo,
 
       _last_st = t;
 
-      double leftWheelRPM = (double) _left->GetSpeed();
-      double rightWheelRPM = (double) _right->GetSpeed();
+      // double leftWheelRPM = (double) _left->GetSpeed();
+      // double rightWheelRPM = (double) _right->GetSpeed();
+      
+      // //$ write wheel velocities
+      // _mot_msg->rpm_left = leftWheelRPM; * RPM_TO_M_S;
+      // _mot_msg->rpm_right = rightWheelRPM * RPM_TO_M_S;
       
       //$ write wheel velocities
-      _mot_msg->rpm_left = leftWheelRPM * RPM_TO_M_S;
-      _mot_msg->rpm_right = rightWheelRPM * RPM_TO_M_S;
+      _mot_msg->rpm_left = _left->GetSpeed();
+      _mot_msg->rpm_right = _right->GetSpeed();
       _mot_msg->usec_left = ruSec;
       _mot_msg->usec_right = luSec;
 
@@ -275,7 +279,7 @@ Context::Context(Commander *commander, DCServo *servo,
       double steeringAngle = STEERING_ANGLE_RANGE * (servoPWM / STEERING_PWM_RANGE) - ABS_MAX_STEERING_ANGLE;
 
       //$ write steering angle and servo PWM command to message
-      _steer_msg->angle = steeringAngle;
+      _steer_msg->angle = pS;
       _steer_msg->angle_command = pC;
       
       //$ publish message
