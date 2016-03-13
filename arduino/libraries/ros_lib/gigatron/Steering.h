@@ -14,8 +14,8 @@ namespace gigatron
   {
     public:
       std_msgs::Header header;
-      int8_t angle_command;
-      int8_t angle;
+      uint8_t angle_command;
+      uint8_t angle;
 
     Steering():
       header(),
@@ -28,19 +28,9 @@ namespace gigatron
     {
       int offset = 0;
       offset += this->header.serialize(outbuffer + offset);
-      union {
-        int8_t real;
-        uint8_t base;
-      } u_angle_command;
-      u_angle_command.real = this->angle_command;
-      *(outbuffer + offset + 0) = (u_angle_command.base >> (8 * 0)) & 0xFF;
+      *(outbuffer + offset + 0) = (this->angle_command >> (8 * 0)) & 0xFF;
       offset += sizeof(this->angle_command);
-      union {
-        int8_t real;
-        uint8_t base;
-      } u_angle;
-      u_angle.real = this->angle;
-      *(outbuffer + offset + 0) = (u_angle.base >> (8 * 0)) & 0xFF;
+      *(outbuffer + offset + 0) = (this->angle >> (8 * 0)) & 0xFF;
       offset += sizeof(this->angle);
       return offset;
     }
@@ -49,27 +39,15 @@ namespace gigatron
     {
       int offset = 0;
       offset += this->header.deserialize(inbuffer + offset);
-      union {
-        int8_t real;
-        uint8_t base;
-      } u_angle_command;
-      u_angle_command.base = 0;
-      u_angle_command.base |= ((uint8_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      this->angle_command = u_angle_command.real;
+      this->angle_command =  ((uint8_t) (*(inbuffer + offset)));
       offset += sizeof(this->angle_command);
-      union {
-        int8_t real;
-        uint8_t base;
-      } u_angle;
-      u_angle.base = 0;
-      u_angle.base |= ((uint8_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      this->angle = u_angle.real;
+      this->angle =  ((uint8_t) (*(inbuffer + offset)));
       offset += sizeof(this->angle);
      return offset;
     }
 
     const char * getType(){ return "gigatron/Steering"; };
-    const char * getMD5(){ return "4661b988cad4d0e85a91927fc797b01f"; };
+    const char * getMD5(){ return "d462d94c1b7e973a58a35ad5ef9c54b0"; };
 
   };
 
