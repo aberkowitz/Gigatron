@@ -21,7 +21,7 @@
 #include <geometry_msgs/Vector3.h>
 #include <std_msgs/Float32.h>
 
-#include <gigatron/RadioInput.h>
+#include <gigatron/Radio.h>
 #include <gigatron/Steering.h>
 #include <gigatron/Motors.h>
 
@@ -36,7 +36,7 @@ public:
           PIDController *pos,
           ros::NodeHandle *nh,
           JetsonCommander *jcommander,
-          gigatron::RadioInput *radio_msg,
+          gigatron::Radio *radio_msg,
           ros::Publisher *radio_pub,
           gigatron::Steering *steer_msg,
           ros::Publisher *steer_pub,
@@ -60,7 +60,7 @@ private:
   ros::NodeHandle *_nh;
   JetsonCommander *_jcommander;
 
-  gigatron::RadioInput *_radio_msg;
+  gigatron::Radio *_radio_msg;
   ros::Publisher *_radio_pub;
 
   gigatron::Steering *_steer_msg;

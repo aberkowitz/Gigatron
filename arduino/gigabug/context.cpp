@@ -43,7 +43,7 @@ Context::Context(Commander *commander, DCServo *servo,
   PIDController *pos,
   ros::NodeHandle *nh,
   JetsonCommander *jcommander,
-  gigatron::RadioInput *radio_msg,
+  gigatron::Radio *radio_msg,
   ros::Publisher *radio_pub,
   gigatron::Steering *steer_msg,
   ros::Publisher *steer_pub,
@@ -99,6 +99,8 @@ Context::Context(Commander *commander, DCServo *servo,
 
 
   void Context::Start() {
+
+    delay(500); //$ sleep so the ROS stuff gets set up
 
     //$ clear messages
     _radio_msg->speed_left = 0;
