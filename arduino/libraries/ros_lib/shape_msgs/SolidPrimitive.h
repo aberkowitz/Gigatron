@@ -14,8 +14,8 @@ namespace shape_msgs
     public:
       uint8_t type;
       uint8_t dimensions_length;
-      double st_dimensions;
-      double * dimensions;
+      float st_dimensions;
+      float * dimensions;
       enum { BOX = 1 };
       enum { SPHERE = 2 };
       enum { CYLINDER = 3 };
@@ -45,20 +45,7 @@ namespace shape_msgs
       *(outbuffer + offset++) = 0;
       *(outbuffer + offset++) = 0;
       for( uint8_t i = 0; i < dimensions_length; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_dimensionsi;
-      u_dimensionsi.real = this->dimensions[i];
-      *(outbuffer + offset + 0) = (u_dimensionsi.base >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (u_dimensionsi.base >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (u_dimensionsi.base >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (u_dimensionsi.base >> (8 * 3)) & 0xFF;
-      *(outbuffer + offset + 4) = (u_dimensionsi.base >> (8 * 4)) & 0xFF;
-      *(outbuffer + offset + 5) = (u_dimensionsi.base >> (8 * 5)) & 0xFF;
-      *(outbuffer + offset + 6) = (u_dimensionsi.base >> (8 * 6)) & 0xFF;
-      *(outbuffer + offset + 7) = (u_dimensionsi.base >> (8 * 7)) & 0xFF;
-      offset += sizeof(this->dimensions[i]);
+      offset += serializeAvrFloat64(outbuffer + offset, this->dimensions[i]);
       }
       return offset;
     }
@@ -70,26 +57,12 @@ namespace shape_msgs
       offset += sizeof(this->type);
       uint8_t dimensions_lengthT = *(inbuffer + offset++);
       if(dimensions_lengthT > dimensions_length)
-        this->dimensions = (double*)realloc(this->dimensions, dimensions_lengthT * sizeof(double));
+        this->dimensions = (float*)realloc(this->dimensions, dimensions_lengthT * sizeof(float));
       offset += 3;
       dimensions_length = dimensions_lengthT;
       for( uint8_t i = 0; i < dimensions_length; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_st_dimensions;
-      u_st_dimensions.base = 0;
-      u_st_dimensions.base |= ((uint64_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      u_st_dimensions.base |= ((uint64_t) (*(inbuffer + offset + 1))) << (8 * 1);
-      u_st_dimensions.base |= ((uint64_t) (*(inbuffer + offset + 2))) << (8 * 2);
-      u_st_dimensions.base |= ((uint64_t) (*(inbuffer + offset + 3))) << (8 * 3);
-      u_st_dimensions.base |= ((uint64_t) (*(inbuffer + offset + 4))) << (8 * 4);
-      u_st_dimensions.base |= ((uint64_t) (*(inbuffer + offset + 5))) << (8 * 5);
-      u_st_dimensions.base |= ((uint64_t) (*(inbuffer + offset + 6))) << (8 * 6);
-      u_st_dimensions.base |= ((uint64_t) (*(inbuffer + offset + 7))) << (8 * 7);
-      this->st_dimensions = u_st_dimensions.real;
-      offset += sizeof(this->st_dimensions);
-        memcpy( &(this->dimensions[i]), &(this->st_dimensions), sizeof(double));
+      offset += deserializeAvrFloat64(inbuffer + offset, &(this->st_dimensions));
+        memcpy( &(this->dimensions[i]), &(this->st_dimensions), sizeof(float));
       }
      return offset;
     }
