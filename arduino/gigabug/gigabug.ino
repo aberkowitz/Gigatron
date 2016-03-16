@@ -1,16 +1,15 @@
 
 
 /**
-   gigatron.ino
-   Gigatron motor control Arduino code.
+   gigabug.ino
+   Gigatron motor control debugging Arduino code.
 
    @author  Bayley Wang       <bayleyw@mit.edu>
    @author  Syler Wagner      <syler@mit.edu>
    @author  Chris Desnoyers   <cjdesno@mit.edu>
    @author  Daniel Gonzalez   <dgonz@mit.edu>
 
-   @date    2015-09-16    syler   fixed odometry message sending
-   @date    2015-09-16    syler   added PID gain tuning via ROS messages
+   @date    2016-03-12    syler   creation with custom Arduino debugging message formats
 
  **/
 
@@ -21,11 +20,16 @@
 #include "commander.h"
 #include "context.h"
 #include "isr.h"
+#define USE_USBCON
 #include <ros.h>
+//#include <ros/node_handle.h>
+//#include <ArduinoHardware.h>
+
 #include <geometry_msgs/Vector3.h>
 #include <std_msgs/Float32.h> //$ for steering odometry stuff and mode
 #include <std_msgs/UInt16.h> //$ for mode switching
 
+//$ debugging messages
 #include <gigatron/Radio.h>
 #include <gigatron/Steering.h>
 #include <gigatron/Motors.h>
@@ -84,7 +88,6 @@ void CmdCallback(const geometry_msgs::Vector3& cmd) {
   jc._posCmd = servoPWM;
   jc._leftRPMCmd = (unsigned int) (cmd.y / RPM_TO_M_S);
   jc._rightRPMCmd = (unsigned int) (cmd.z / RPM_TO_M_S);
-  //jc._rightRPMCmd = 1200;
 }
 
 /*$ Swith between radio RC and autonomous/Jetson RC mode.
@@ -130,15 +133,26 @@ void setup() {
      rate setting, and will break in confusing ways if you don't set it
      right. The value below should match that in the launch file for
      Arduino control, in gigatron/launch/arduino_control.launch
-         <param name="baud" value="57600"/>
+         <param name="baud" value="<BAUD>"/>
 
      If it breaks, try one of these:
      300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, or 115200
      Do not try: 14400, 28800 (these will break)
    * */
-  Serial.begin(19200);
-  nh.getHardware()->setBaud(19200);
 
+   /*$
+     For some reason rosserial_arduino breaks if you do both 
+     Serial.begin(<BAUD>) and nh.initNode(). So either do:
+     1. Serial.begin(<BAUD>)
+     2. nh.getHardware()->setBaud(38400);
+        nh.initNode();
+     Both of the two options seem to work equally well.
+   * */
+//     Serial.begin(57600);
+//
+//  Serial.begin(19200);
+  nh.getHardware()->setBaud(38400);
+//
   nh.initNode();
 
   //$ set up publishers
@@ -157,7 +171,7 @@ void setup() {
   ros::Subscriber<geometry_msgs::Vector3> gainsub("gains", GainsCallback);
   nh.subscribe(gainsub);
 
-
+  
   // RCDecoder(int interrupt, int minV, int maxV);
   RCDecoder pos(0, 984, 1996);
   //Was 1480, expanded to add reverse
@@ -176,12 +190,6 @@ void setup() {
   servo.ConfigPot(minADU, midADU, maxADU);
   RCCommander rc(&sp, &pos, &kill);
 
-  /*$ The PID controller definitions got moved up top so that GainsCallback works */
-  // PIDController(long kp, long ki, long kd, long out_max, long out_min);
-  //PIDController lSp(0, 100, 0, 255, 0);
-  //PIDController rSp(0, 100, 0, 255, 0);
-
-
   /* Context(Commander *commander, DCServo *servo,
           SpeedSensor *left, SpeedSensor *right,
           int lPwm, int rPwm,
@@ -189,14 +197,13 @@ void setup() {
           PIDController *pos,
           ros::NodeHandle *nh,
           JetsonCommander *jcommander,
-          geometry_msgs::Vector3 *odomsg,
-          ros::Publisher *pub,
-          geometry_msgs::Vector3 *commsg,
-          ros::Publisher *compub,
-          std_msgs::Float32 *angmsg,
-          ros::Publisher *angpub,
-          std_msgs::Float32 *angcommsg,
-          ros::Publisher *angcompub) */
+          gigatron::Radio *radio_msg,
+          ros::Publisher *radio_pub,
+          gigatron::Steering *steer_msg,
+          ros::Publisher *steer_pub,
+          gigatron::Motors *mot_msg,
+          ros::Publisher *mot_pub
+          ) */
   Context context(&rc, &servo, &left, &right, lPwm, rPwm, lRev, rRev, &lSp, &rSp, &pPos, &nh, &jc, &radio_msg, &radio_pub, &steer_msg, &steer_pub, &mot_msg, &mot_pub);
 
   // Context::ConfigureLoop(int sInterval, int pInterval);

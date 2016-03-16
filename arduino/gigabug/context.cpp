@@ -65,8 +65,6 @@ Context::Context(Commander *commander, DCServo *servo,
   _nh = nh; //$ ROS node handle
   _jcommander = jcommander; //$ Jetson commander
 
-  
-  
   //$ ROS publishers and messages
   _radio_msg = radio_msg; 
   _radio_pub = radio_pub;
@@ -100,7 +98,7 @@ Context::Context(Commander *commander, DCServo *servo,
 
   void Context::Start() {
 
-    delay(500); //$ sleep so the ROS stuff gets set up
+//    delay(500); //$ sleep so the ROS stuff gets set up
 
     //$ clear messages
     _radio_msg->speed_left = 0;
@@ -251,6 +249,16 @@ Context::Context(Commander *commander, DCServo *servo,
       //$ publish message
       _mot_pub->publish(_mot_msg);
 
+      //$ write 
+      _radio_msg->speed_left = _commander->GetLeftSpeedCmd();
+      _radio_msg->speed_right = _commander->GetRightSpeedCmd();
+      _radio_msg->dir_left = _commander->GetLeftDirectionCmd();
+      _radio_msg->dir_right = _commander->GetRightDirectionCmd();
+      _radio_msg->angle = _commander->GetPositionCmd();
+      _radio_msg->kill = _commander->GetKillCmd();
+
+      _radio_pub->publish(_radio_msg);
+
     }
 
 
@@ -286,15 +294,6 @@ Context::Context(Commander *commander, DCServo *servo,
       
       //$ publish message
       _steer_pub->publish(_steer_msg);
-
-      _radio_msg->speed_left = _commander->GetLeftSpeedCmd();
-      _radio_msg->speed_right = _commander->GetRightSpeedCmd();
-      _radio_msg->dir_left = _commander->GetLeftDirectionCmd();
-      _radio_msg->dir_right = _commander->GetRightDirectionCmd();
-      _radio_msg->angle = _commander->GetPositionCmd();
-      _radio_msg->kill = _commander->GetKillCmd();
-
-      _radio_pub->publish(_radio_msg);
 
     }
   }
