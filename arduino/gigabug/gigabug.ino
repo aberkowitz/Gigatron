@@ -148,12 +148,12 @@ void setup() {
         nh.initNode();
      Both of the two options seem to work equally well.
    * */
-//     Serial.begin(57600);
+    Serial.begin(38400);
 //
 //  Serial.begin(19200);
-  nh.getHardware()->setBaud(38400);
-//
-  nh.initNode();
+  //nh.getHardware()->setBaud(460800);
+////
+  //nh.initNode();
 
   //$ set up publishers
   ros::Publisher radio_pub("arduino/radio", &radio_msg);

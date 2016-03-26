@@ -49,3 +49,4 @@ unsigned char RCDecoder::GetVal() {
   if (pw > 255) pw = 255;
   return (unsigned char) pw;
 }
+

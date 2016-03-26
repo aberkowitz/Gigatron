@@ -47,3 +47,4 @@ int PIDController::Update(int ref, int in) {
   if (tmp < _out_min) tmp = _out_min;
   return tmp;
 }
+

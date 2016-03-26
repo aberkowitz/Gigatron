@@ -257,7 +257,7 @@ Context::Context(Commander *commander, DCServo *servo,
       _radio_msg->angle = _commander->GetPositionCmd();
       _radio_msg->kill = _commander->GetKillCmd();
 
-      _radio_pub->publish(_radio_msg);
+      //_radio_pub->publish(_radio_msg);
 
     }
 
@@ -293,10 +293,11 @@ Context::Context(Commander *commander, DCServo *servo,
       _steer_msg->angle_command = pC;
       
       //$ publish message
-      _steer_pub->publish(_steer_msg);
+      //_steer_pub->publish(_steer_msg);
 
     }
   }
 }
+
 
 
