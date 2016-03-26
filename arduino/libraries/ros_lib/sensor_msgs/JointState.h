@@ -18,14 +18,14 @@ namespace sensor_msgs
       char* st_name;
       char* * name;
       uint8_t position_length;
-      double st_position;
-      double * position;
+      float st_position;
+      float * position;
       uint8_t velocity_length;
-      double st_velocity;
-      double * velocity;
+      float st_velocity;
+      float * velocity;
       uint8_t effort_length;
-      double st_effort;
-      double * effort;
+      float st_effort;
+      float * effort;
 
     JointState():
       header(),
@@ -56,60 +56,21 @@ namespace sensor_msgs
       *(outbuffer + offset++) = 0;
       *(outbuffer + offset++) = 0;
       for( uint8_t i = 0; i < position_length; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_positioni;
-      u_positioni.real = this->position[i];
-      *(outbuffer + offset + 0) = (u_positioni.base >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (u_positioni.base >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (u_positioni.base >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (u_positioni.base >> (8 * 3)) & 0xFF;
-      *(outbuffer + offset + 4) = (u_positioni.base >> (8 * 4)) & 0xFF;
-      *(outbuffer + offset + 5) = (u_positioni.base >> (8 * 5)) & 0xFF;
-      *(outbuffer + offset + 6) = (u_positioni.base >> (8 * 6)) & 0xFF;
-      *(outbuffer + offset + 7) = (u_positioni.base >> (8 * 7)) & 0xFF;
-      offset += sizeof(this->position[i]);
+      offset += serializeAvrFloat64(outbuffer + offset, this->position[i]);
       }
       *(outbuffer + offset++) = velocity_length;
       *(outbuffer + offset++) = 0;
       *(outbuffer + offset++) = 0;
       *(outbuffer + offset++) = 0;
       for( uint8_t i = 0; i < velocity_length; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_velocityi;
-      u_velocityi.real = this->velocity[i];
-      *(outbuffer + offset + 0) = (u_velocityi.base >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (u_velocityi.base >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (u_velocityi.base >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (u_velocityi.base >> (8 * 3)) & 0xFF;
-      *(outbuffer + offset + 4) = (u_velocityi.base >> (8 * 4)) & 0xFF;
-      *(outbuffer + offset + 5) = (u_velocityi.base >> (8 * 5)) & 0xFF;
-      *(outbuffer + offset + 6) = (u_velocityi.base >> (8 * 6)) & 0xFF;
-      *(outbuffer + offset + 7) = (u_velocityi.base >> (8 * 7)) & 0xFF;
-      offset += sizeof(this->velocity[i]);
+      offset += serializeAvrFloat64(outbuffer + offset, this->velocity[i]);
       }
       *(outbuffer + offset++) = effort_length;
       *(outbuffer + offset++) = 0;
       *(outbuffer + offset++) = 0;
       *(outbuffer + offset++) = 0;
       for( uint8_t i = 0; i < effort_length; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_efforti;
-      u_efforti.real = this->effort[i];
-      *(outbuffer + offset + 0) = (u_efforti.base >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (u_efforti.base >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (u_efforti.base >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (u_efforti.base >> (8 * 3)) & 0xFF;
-      *(outbuffer + offset + 4) = (u_efforti.base >> (8 * 4)) & 0xFF;
-      *(outbuffer + offset + 5) = (u_efforti.base >> (8 * 5)) & 0xFF;
-      *(outbuffer + offset + 6) = (u_efforti.base >> (8 * 6)) & 0xFF;
-      *(outbuffer + offset + 7) = (u_efforti.base >> (8 * 7)) & 0xFF;
-      offset += sizeof(this->effort[i]);
+      offset += serializeAvrFloat64(outbuffer + offset, this->effort[i]);
       }
       return offset;
     }
@@ -137,72 +98,30 @@ namespace sensor_msgs
       }
       uint8_t position_lengthT = *(inbuffer + offset++);
       if(position_lengthT > position_length)
-        this->position = (double*)realloc(this->position, position_lengthT * sizeof(double));
+        this->position = (float*)realloc(this->position, position_lengthT * sizeof(float));
       offset += 3;
       position_length = position_lengthT;
       for( uint8_t i = 0; i < position_length; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_st_position;
-      u_st_position.base = 0;
-      u_st_position.base |= ((uint64_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      u_st_position.base |= ((uint64_t) (*(inbuffer + offset + 1))) << (8 * 1);
-      u_st_position.base |= ((uint64_t) (*(inbuffer + offset + 2))) << (8 * 2);
-      u_st_position.base |= ((uint64_t) (*(inbuffer + offset + 3))) << (8 * 3);
-      u_st_position.base |= ((uint64_t) (*(inbuffer + offset + 4))) << (8 * 4);
-      u_st_position.base |= ((uint64_t) (*(inbuffer + offset + 5))) << (8 * 5);
-      u_st_position.base |= ((uint64_t) (*(inbuffer + offset + 6))) << (8 * 6);
-      u_st_position.base |= ((uint64_t) (*(inbuffer + offset + 7))) << (8 * 7);
-      this->st_position = u_st_position.real;
-      offset += sizeof(this->st_position);
-        memcpy( &(this->position[i]), &(this->st_position), sizeof(double));
+      offset += deserializeAvrFloat64(inbuffer + offset, &(this->st_position));
+        memcpy( &(this->position[i]), &(this->st_position), sizeof(float));
       }
       uint8_t velocity_lengthT = *(inbuffer + offset++);
       if(velocity_lengthT > velocity_length)
-        this->velocity = (double*)realloc(this->velocity, velocity_lengthT * sizeof(double));
+        this->velocity = (float*)realloc(this->velocity, velocity_lengthT * sizeof(float));
       offset += 3;
       velocity_length = velocity_lengthT;
       for( uint8_t i = 0; i < velocity_length; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_st_velocity;
-      u_st_velocity.base = 0;
-      u_st_velocity.base |= ((uint64_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      u_st_velocity.base |= ((uint64_t) (*(inbuffer + offset + 1))) << (8 * 1);
-      u_st_velocity.base |= ((uint64_t) (*(inbuffer + offset + 2))) << (8 * 2);
-      u_st_velocity.base |= ((uint64_t) (*(inbuffer + offset + 3))) << (8 * 3);
-      u_st_velocity.base |= ((uint64_t) (*(inbuffer + offset + 4))) << (8 * 4);
-      u_st_velocity.base |= ((uint64_t) (*(inbuffer + offset + 5))) << (8 * 5);
-      u_st_velocity.base |= ((uint64_t) (*(inbuffer + offset + 6))) << (8 * 6);
-      u_st_velocity.base |= ((uint64_t) (*(inbuffer + offset + 7))) << (8 * 7);
-      this->st_velocity = u_st_velocity.real;
-      offset += sizeof(this->st_velocity);
-        memcpy( &(this->velocity[i]), &(this->st_velocity), sizeof(double));
+      offset += deserializeAvrFloat64(inbuffer + offset, &(this->st_velocity));
+        memcpy( &(this->velocity[i]), &(this->st_velocity), sizeof(float));
       }
       uint8_t effort_lengthT = *(inbuffer + offset++);
       if(effort_lengthT > effort_length)
-        this->effort = (double*)realloc(this->effort, effort_lengthT * sizeof(double));
+        this->effort = (float*)realloc(this->effort, effort_lengthT * sizeof(float));
       offset += 3;
       effort_length = effort_lengthT;
       for( uint8_t i = 0; i < effort_length; i++){
-      union {
-        double real;
-        uint64_t base;
-      } u_st_effort;
-      u_st_effort.base = 0;
-      u_st_effort.base |= ((uint64_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      u_st_effort.base |= ((uint64_t) (*(inbuffer + offset + 1))) << (8 * 1);
-      u_st_effort.base |= ((uint64_t) (*(inbuffer + offset + 2))) << (8 * 2);
-      u_st_effort.base |= ((uint64_t) (*(inbuffer + offset + 3))) << (8 * 3);
-      u_st_effort.base |= ((uint64_t) (*(inbuffer + offset + 4))) << (8 * 4);
-      u_st_effort.base |= ((uint64_t) (*(inbuffer + offset + 5))) << (8 * 5);
-      u_st_effort.base |= ((uint64_t) (*(inbuffer + offset + 6))) << (8 * 6);
-      u_st_effort.base |= ((uint64_t) (*(inbuffer + offset + 7))) << (8 * 7);
-      this->st_effort = u_st_effort.real;
-      offset += sizeof(this->st_effort);
-        memcpy( &(this->effort[i]), &(this->st_effort), sizeof(double));
+      offset += deserializeAvrFloat64(inbuffer + offset, &(this->st_effort));
+        memcpy( &(this->effort[i]), &(this->st_effort), sizeof(float));
       }
      return offset;
     }

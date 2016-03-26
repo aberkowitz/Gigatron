@@ -50,11 +50,9 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate messages in the 'msg' folder
 add_message_files(
   FILES
-  Num.msg
-  Angle.msg
-  ArduinoInput.msg
-  ArduinoOutput.msg
-  RadioInput.msg
+  Radio.msg
+  Steering.msg
+  Motors.msg
 )
 
 ## Generate services in the 'srv' folder

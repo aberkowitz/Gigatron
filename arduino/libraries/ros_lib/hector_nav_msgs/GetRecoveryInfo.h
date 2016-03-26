@@ -17,7 +17,7 @@ static const char GETRECOVERYINFO[] = "hector_nav_msgs/GetRecoveryInfo";
   {
     public:
       ros::Time request_time;
-      double request_radius;
+      float request_radius;
 
     GetRecoveryInfoRequest():
       request_time(),
@@ -38,20 +38,7 @@ static const char GETRECOVERYINFO[] = "hector_nav_msgs/GetRecoveryInfo";
       *(outbuffer + offset + 2) = (this->request_time.nsec >> (8 * 2)) & 0xFF;
       *(outbuffer + offset + 3) = (this->request_time.nsec >> (8 * 3)) & 0xFF;
       offset += sizeof(this->request_time.nsec);
-      union {
-        double real;
-        uint64_t base;
-      } u_request_radius;
-      u_request_radius.real = this->request_radius;
-      *(outbuffer + offset + 0) = (u_request_radius.base >> (8 * 0)) & 0xFF;
-      *(outbuffer + offset + 1) = (u_request_radius.base >> (8 * 1)) & 0xFF;
-      *(outbuffer + offset + 2) = (u_request_radius.base >> (8 * 2)) & 0xFF;
-      *(outbuffer + offset + 3) = (u_request_radius.base >> (8 * 3)) & 0xFF;
-      *(outbuffer + offset + 4) = (u_request_radius.base >> (8 * 4)) & 0xFF;
-      *(outbuffer + offset + 5) = (u_request_radius.base >> (8 * 5)) & 0xFF;
-      *(outbuffer + offset + 6) = (u_request_radius.base >> (8 * 6)) & 0xFF;
-      *(outbuffer + offset + 7) = (u_request_radius.base >> (8 * 7)) & 0xFF;
-      offset += sizeof(this->request_radius);
+      offset += serializeAvrFloat64(outbuffer + offset, this->request_radius);
       return offset;
     }
 
@@ -68,21 +55,7 @@ static const char GETRECOVERYINFO[] = "hector_nav_msgs/GetRecoveryInfo";
       this->request_time.nsec |= ((uint32_t) (*(inbuffer + offset + 2))) << (8 * 2);
       this->request_time.nsec |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3);
       offset += sizeof(this->request_time.nsec);
-      union {
-        double real;
-        uint64_t base;
-      } u_request_radius;
-      u_request_radius.base = 0;
-      u_request_radius.base |= ((uint64_t) (*(inbuffer + offset + 0))) << (8 * 0);
-      u_request_radius.base |= ((uint64_t) (*(inbuffer + offset + 1))) << (8 * 1);
-      u_request_radius.base |= ((uint64_t) (*(inbuffer + offset + 2))) << (8 * 2);
-      u_request_radius.base |= ((uint64_t) (*(inbuffer + offset + 3))) << (8 * 3);
-      u_request_radius.base |= ((uint64_t) (*(inbuffer + offset + 4))) << (8 * 4);
-      u_request_radius.base |= ((uint64_t) (*(inbuffer + offset + 5))) << (8 * 5);
-      u_request_radius.base |= ((uint64_t) (*(inbuffer + offset + 6))) << (8 * 6);
-      u_request_radius.base |= ((uint64_t) (*(inbuffer + offset + 7))) << (8 * 7);
-      this->request_radius = u_request_radius.real;
-      offset += sizeof(this->request_radius);
+      offset += deserializeAvrFloat64(inbuffer + offset, &(this->request_radius));
      return offset;
     }
 

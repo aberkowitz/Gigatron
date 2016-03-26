@@ -19,6 +19,11 @@
 # source ROS Indigo setup script
 source /opt/ros/indigo/setup.bash
 
+export GIGATRON_WS=$HOME/catkin_ws
+
+# source Gigatron workspace setup script
+source $GIGATRON_WS/devel/setup.bash
+
 ## BASH ALIASES #------------------------------------------------------------------##
 
 # GO PLACES
