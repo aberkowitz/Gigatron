@@ -47,11 +47,11 @@ unsigned int SpeedSensor::GetSpeed() {
   long sp;
   if (_interrupt == 4) {// If we are the left sensor
     sp = _speed_2;
-    //dp(sp); //$ do not uncomment this print statement if you want your Hall sensors to work
+    dp(sp); //$ do not uncomment this print statement if you want your Hall sensors to work
     _speed_2 = 0;
   } else if (_interrupt == 5) { // right sensor
     sp = _speed_3;
-    //dp(sp); //$ see above - do not uncomment this print statement unless you add delay somehow  
+    dp(sp); //$ see above - do not uncomment this print statement unless you add delay somehow  
     _speed_3 = 0;
   }
   
