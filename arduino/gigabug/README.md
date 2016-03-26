@@ -4,6 +4,14 @@
 
 ![ROS Debugging Topics](LOOKATME.png)
 
+## TODO
+* fix optical encoder RPM calculation
+* test ROS Jade version of `rosserial` 
+
+## Observations
+* power cycling the Arduino without re-uploading code leads to mixed success running `rosserial` when Arduino is only powered via USB
+* using `nh.initNode()` when the Arduino is connected to the car does not work
+ * is this because of lingering `Serial.println()` statements, or actually interfering with some functionality?
 
 ## Arduino Sketch Components
 
