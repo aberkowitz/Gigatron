@@ -119,8 +119,11 @@ void GainsCallback(const geometry_msgs::Vector3& gain) {
 }
 
 void setup() {
-  Serial.begin(38400);
+  Serial.begin(115200);
 
+//  nh.getHardware()->setBaud(115200);
+//  nh.initNode();
+  
   // RCDecoder(int interrupt, int minV, int maxV);
   RCDecoder pos(0, 984, 1996); 
   //Was 1480, expanded to add reverse

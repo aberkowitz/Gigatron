@@ -2,17 +2,37 @@
  * speedsensor.cpp
  * Gigatron motor control Arduino code for Hall Effect sensors.
  * 
- * @author  Bayley Wang   <bayleyw@mit.edu>
+ * @author  Bayley Wang       <bayleyw@mit.edu>
  * @author  Chris Desnoyers   <cjdesno@mit.edu>
  * @author  Daniel Gonzalez   <dgonz@mit.edu>
+ * @author  Syler Wagner      <syler@mit.edu>
  *
  * @date    2016-01-10    syler   moved to separate .cpp file, header is in classes.h
+ * @date    2016-03-27    syler   fixed RPM calculation for new quadrature encoders
  *
  **/
 
 #include <Arduino.h>
 #include "classes.h"
 #include "isr.h"
+
+
+//$ left encoder
+#define L_ENCODER_INTERRUPT 4
+// #define L_ENCODER_PIN_A
+// #define L_ENCODER_PIN_B
+
+//$ right encoder
+#define R_ENCODER_INTERRUPT 5 //$ TODO: verify right/left
+// #define L_ENCODER_PIN_A
+// #define L_ENCODER_PIN_B
+
+//$ TODO: use digitalWriteFast library
+ //$ http://www.hessmer.org/blog/2011/01/30/quadrature-encoder-too-fast-for-arduino-with-solution/
+
+#define PULSES_PER_REV 600 //$ number of encoder pulses per full motor revolution
+const static double gearRatio = 11.0 / 60.0;  //$ gear ratio between motor and wheels
+
 
 SpeedSensor::SpeedSensor(int interrupt, int poles, int interval) {
   _interrupt = interrupt;
@@ -24,6 +44,11 @@ SpeedSensor::SpeedSensor(int interrupt, int poles, int interval) {
   //see https://www.arduino.cc/en/Reference/AttachInterrupt for interrupt documentation
   //in summary, attachInterrupt(4) likely attaches an interrupt to pin 18, and does not attach one to pin 4
 
+  /*$ actually, the link above says the Mega2560 has the following mapping:
+      Interrupt     0   1   2   3   4   5
+      Mega2560 pin  2   3   21  20  19  18
+  */
+
   pinMode(16, INPUT);
   pinMode(17, INPUT);
   pinMode(18, INPUT);
@@ -33,40 +58,52 @@ SpeedSensor::SpeedSensor(int interrupt, int poles, int interval) {
   digitalWrite(18, HIGH);
   digitalWrite(19, HIGH);
   
-  if (_interrupt == 4) {
-    attachInterrupt(4, ISR4, RISING);
+  if (_interrupt == L_ENCODER_INTERRUPT) {
+    attachInterrupt(L_ENCODER_INTERRUPT, ISR4, RISING);
   } else {
-    attachInterrupt(5, ISR5, RISING);
+    attachInterrupt(R_ENCODER_INTERRUPT, ISR5, RISING);
   }
   
-  _speed_2 = _speed_3 = 0;
+  _ticks_left = _ticks_right = 0;
 }
 
 //$ TODO: this is unsigned, need to fix!
 unsigned int SpeedSensor::GetSpeed() {
-  long sp;
-  if (_interrupt == 4) {// If we are the left sensor
-    sp = _speed_2;
-    dp(sp); //$ do not uncomment this print statement if you want your Hall sensors to work
-    _speed_2 = 0;
-  } else if (_interrupt == 5) { // right sensor
-    sp = _speed_3;
-    dp(sp); //$ see above - do not uncomment this print statement unless you add delay somehow  
-    _speed_3 = 0;
+  long ticks;
+
+  if (_interrupt == L_ENCODER_INTERRUPT) {// If we are the left sensor
+    ticks = _ticks_left;
+    // dp(sp); //$ do not uncomment this print statement if you want your Hall sensors to work
+    _ticks_left = 0;
+  } else if (_interrupt == R_ENCODER_INTERRUPT) { // right sensor
+    ticks = _ticks_right;
+    // dp(sp); //$ see above - do not uncomment this print statement unless you add delay somehow  
+    _ticks_right = 0;
   }
   
-  //Serial.println(sp);
-  //Ticks *60000 millis/minute*(1/interval)*revolutions/ 7 ticks = RPM
-  //long hz = sp * 1000 / _interval;
-  //long rpm = 120 * hz / _poles;
+  long motor_revs = ticks / PULSES_PER_REV;
+  double wheel_revs = motor_revs * gearRatio;
 
-  //TODO how does 600 pulses per motor revolution affect this code?
+  double rpm = wheel_revs * (60.0 * 1000) / _interval;
 
-  double rpm = sp*60.0*1000.0/_interval/7.0;
-  rpmSmooth = (rpm * (1 - filterVal)) + (rpmSmooth  *  filterVal);
-  //Serial.println(rpmSmooth);
-  if (rpmSmooth < 0) rpmSmooth = 0;
-//  dp(rpmSmooth);
-  return (unsigned int) rpmSmooth;
+  return rpm; 
+
+  /*$ old code that does not apply to quadrature encoders
+      plus DGonz's filter
+      //Serial.println(sp);
+      //Ticks *60000 millis/minute*(1/interval)*revolutions/ 7 ticks = RPM
+      //long hz = sp * 1000 / _interval;
+      //long rpm = 120 * hz / _poles;
+
+      //TODO how does 600 pulses per motor revolution affect this code?
+
+      double rpm = sp*60.0*1000.0/_interval/7.0;
+      rpmSmooth = (rpm * (1 - filterVal)) + (rpmSmooth  *  filterVal);
+      //Serial.println(rpmSmooth);
+      if (rpmSmooth < 0) rpmSmooth = 0;
+    //  dp(rpmSmooth);
+      return (unsigned int) rpmSmooth;
+
+  */
 }
 

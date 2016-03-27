@@ -1,8 +1,10 @@
 /**
  * isr.cpp
- * Gigatron motor control Arduino code for interrupts.
+ * Gigatron motor control Arduino code for interrupt service routines.
  * 
- * @author  Bayley Wang   <bayleyw@mit.edu>
+ * @author  Bayley Wang       <bayleyw@mit.edu>
+ * @author  Syler Wagner      <syler@mit.edu>
+ * @author  Chris Desnoyers   <cjdesno@mit.edu>
  *
  **/
 
@@ -11,7 +13,7 @@
 
 volatile unsigned long _pw0_us, _pw1_us, _pw2_us;
 volatile unsigned long _pw0_last_t, _pw1_last_t, _pw2_last_t;
-volatile int _speed_2, _speed_3;
+volatile int _ticks_left, _ticks_right;
 //if speeds need to be unsigned, we can figure out a different way to convey direction
 
 void ISR0() {
@@ -30,7 +32,6 @@ void ISR1() {
   } else {
     _pw1_us = micros() - _pw1_last_t;
   }
-  //Serial.println(_pw1_us);
 }
 
 void ISR2() {
@@ -45,26 +46,20 @@ void ISR2() {
 
 //Adapted for quadrature encoder, direction inferred from pulse alignment (11 forward, 10 backward)
 void ISR4() {
-  //Serial.println("AYY");
   if (digitalRead(16)) {
-    //Serial.println("ISR4 digitalRead(16)");
-    _speed_2++;
+    _ticks_left++;
   }
-  else{
-    //Serial.println("ISR4");
-    _speed_2--;
+  else {
+    _ticks_left--;
   }
 }
 
 void ISR5() {
-  //Serial.println("AYY");
   if (digitalRead(17)) {
-    //Serial.println("ISR5 digitalRead(17)");
-    _speed_3++;
+    _ticks_right++;
   }
-  else{
-    //Serial.println("ISR5");
-    _speed_3--;
+  else {
+    _ticks_right--;
   }
 }
 

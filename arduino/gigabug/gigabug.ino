@@ -1,5 +1,3 @@
-
-
 /**
    gigabug.ino
    Gigatron motor control debugging Arduino code.
