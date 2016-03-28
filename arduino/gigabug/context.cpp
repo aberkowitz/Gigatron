@@ -241,8 +241,8 @@ Context::Context(Commander *commander, DCServo *servo,
       // _mot_msg->rpm_right = rightWheelRPM * RPM_TO_M_S;
       
       //$ write wheel velocities
-      _mot_msg->rpm_left = _left->GetSpeed();
-      _mot_msg->rpm_right = _right->GetSpeed();
+      _mot_msg->rpm_left = _left->GetRevs();
+      _mot_msg->rpm_right = _right->GetRevs();
       _mot_msg->usec_left = ruSec;
       _mot_msg->usec_right = luSec;
 

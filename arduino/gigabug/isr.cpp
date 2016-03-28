@@ -1,10 +1,12 @@
-/**
+  /**
  * isr.cpp
  * Gigatron motor control Arduino code for interrupt service routines.
  * 
  * @author  Bayley Wang       <bayleyw@mit.edu>
  * @author  Syler Wagner      <syler@mit.edu>
  * @author  Chris Desnoyers   <cjdesno@mit.edu>
+ *
+ * @date    2016-03-27    syler   define encoder interrupts and pins, fixed ISRs for left and right encoders
  *
  **/
 
@@ -43,10 +45,10 @@ void ISR2() {
   }
 }
 
-
 //Adapted for quadrature encoder, direction inferred from pulse alignment (11 forward, 10 backward)
-void ISR4() {
-  if (digitalRead(16)) {
+//$ left encoder interrupt service routine
+void LeftISR() { 
+  if (digitalRead(L_ENCODER_PIN_B)) { 
     _ticks_left++;
   }
   else {
@@ -54,14 +56,17 @@ void ISR4() {
   }
 }
 
-void ISR5() {
-  if (digitalRead(17)) {
-    _ticks_right++;
-  }
-  else {
+//$ right encoder interrupt service routine
+void RightISR() { 
+  if (digitalRead(R_ENCODER_PIN_B)) { 
     _ticks_right--;
   }
+  else {
+    _ticks_right++;    
+  }
 }
+
+
 
 
 

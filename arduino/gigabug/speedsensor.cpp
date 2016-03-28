@@ -8,7 +8,7 @@
  * @author  Syler Wagner      <syler@mit.edu>
  *
  * @date    2016-01-10    syler   moved to separate .cpp file, header is in classes.h
- * @date    2016-03-27    syler   fixed RPM calculation for new quadrature encoders
+ * @date    2016-03-27    syler   fixed RPM calculation for new quadrature encoders and cleaned up encoder interrupt pin setup
  *
  **/
 
@@ -16,16 +16,6 @@
 #include "classes.h"
 #include "isr.h"
 
-
-//$ left encoder
-#define L_ENCODER_INTERRUPT 4
-// #define L_ENCODER_PIN_A
-// #define L_ENCODER_PIN_B
-
-//$ right encoder
-#define R_ENCODER_INTERRUPT 5 //$ TODO: verify right/left
-// #define L_ENCODER_PIN_A
-// #define L_ENCODER_PIN_B
 
 //$ TODO: use digitalWriteFast library
  //$ http://www.hessmer.org/blog/2011/01/30/quadrature-encoder-too-fast-for-arduino-with-solution/
@@ -49,22 +39,43 @@ SpeedSensor::SpeedSensor(int interrupt, int poles, int interval) {
       Mega2560 pin  2   3   21  20  19  18
   */
 
-  pinMode(16, INPUT);
-  pinMode(17, INPUT);
-  pinMode(18, INPUT);
-  pinMode(19, INPUT);
-  digitalWrite(16, HIGH);
-  digitalWrite(17, HIGH);
-  digitalWrite(18, HIGH);
-  digitalWrite(19, HIGH);
+  pinMode(L_ENCODER_PIN_A, INPUT);
+  pinMode(L_ENCODER_PIN_B, INPUT);
+  pinMode(R_ENCODER_PIN_A, INPUT);
+  pinMode(R_ENCODER_PIN_B, INPUT);
+
+  digitalWrite(L_ENCODER_PIN_A, HIGH);
+  digitalWrite(L_ENCODER_PIN_B, HIGH);
+  digitalWrite(R_ENCODER_PIN_A, HIGH);
+  digitalWrite(R_ENCODER_PIN_B, HIGH);
   
-  if (_interrupt == L_ENCODER_INTERRUPT) {
-    attachInterrupt(L_ENCODER_INTERRUPT, ISR4, RISING);
+  if (_interrupt == R_ENCODER_INTERRUPT) {
+    attachInterrupt(R_ENCODER_INTERRUPT, RightISR, RISING);
   } else {
-    attachInterrupt(R_ENCODER_INTERRUPT, ISR5, RISING);
+    attachInterrupt(L_ENCODER_INTERRUPT, LeftISR, RISING);
   }
   
   _ticks_left = _ticks_right = 0;
+}
+
+//$ returns number of wheel revolutions
+long SpeedSensor::GetRevs() {
+  long ticks;
+
+  if (_interrupt == L_ENCODER_INTERRUPT) {// If we are the left sensor
+    ticks = _ticks_left;
+     dp(ticks); //$ do not uncomment this print statement if you want your Hall sensors to work
+//    _ticks_left = 0;
+  } else if (_interrupt == R_ENCODER_INTERRUPT) { // right sensor
+    ticks = _ticks_right;
+     dp(ticks); //$ see above - do not uncomment this print statement unless you add delay somehow  
+//    _ticks_right = 0;
+  }
+  
+  long motor_revs = ticks / PULSES_PER_REV;
+  double wheel_revs = motor_revs * gearRatio;
+
+  return ticks;
 }
 
 //$ TODO: this is unsigned, need to fix!

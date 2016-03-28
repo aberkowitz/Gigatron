@@ -146,7 +146,7 @@ void setup() {
         nh.initNode();
      Both of the two options seem to work equally well.
    * */
-    Serial.begin(38400);
+    Serial.begin(115200);
 //
 //  Serial.begin(19200);
   //nh.getHardware()->setBaud(460800);
@@ -178,8 +178,8 @@ void setup() {
   RCDecoder kill(2, 996, 1988);
 
   // SpeedSensor(int interrupt, int poles, int interval);
-  SpeedSensor left(4, 14, S_LOOP_INTERVAL);
-  SpeedSensor right(5, 14, S_LOOP_INTERVAL);
+  SpeedSensor left(5, 14, S_LOOP_INTERVAL);
+  SpeedSensor right(4, 14, S_LOOP_INTERVAL);
 
   // DCServo(int pwmPin1, int pwmPin2, int posPin);
   DCServo servo(5, 6, A0);
