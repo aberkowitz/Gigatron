@@ -17,8 +17,8 @@
 volatile unsigned long _pw0_us, _pw1_us, _pw2_us;
 volatile unsigned long _pw0_last_t, _pw1_last_t, _pw2_last_t;
 
-volatile long _ticks_left, _ticks_right;
-volatile bool _read_left, _read_right;
+volatile long _ticks_left, _ticks_right;  //$ number of ticks for each encoder
+volatile bool _read_left, _read_right; //$ state of digitalRead(encoder pin B) for each encoder
 
 void ISR0() {
   int state = digitalRead(2);
@@ -50,36 +50,28 @@ void ISR2() {
 //Adapted for quadrature encoder, direction inferred from pulse alignment (11 forward, 10 backward)
 //$ left encoder interrupt service routine
 void LeftISR() { 
-  _read_left = digitalReadFast(L_ENCODER_PIN_B); //$ read input pin
+  _read_left = digitalReadFast(L_ENCODER_PIN_B); //$ read encoder input pin B
 
-  #ifdef L_ENCODER_REVERSED
-    _ticks_left += _read_left ? +1 : -1;
+  #ifdef L_ENCODER_REVERSED //$ if left encoder is reversed
+    //$ increment counter if B leads A
+    _ticks_left += _read_left ? +1 : -1; //$ if (_read_left) {_ticks_left++;} else {_ticks_left--;}
   #else
-    _ticks_left += _read_left ? -1 : +1;
+    //$ increment counter if A leads B
+    _ticks_left += _read_left ? -1 : +1; //$ if (_read_left) {_ticks_left--;} else {_ticks_left++;}
   #endif
 
 }
 
-/*$ the above is equivalent to the old code below, except it 
-    doesn't hardcode directionality
-
-  int read_pin_B = digitalRead(L_ENCODER_PIN_B);
-  if (read_pin_B) { 
-    _ticks_left++;
-  }
-  else {
-    _ticks_left--;
-  }
-*/
-
 //$ right encoder interrupt service routine
 void RightISR() { 
-  _read_right = digitalReadFast(R_ENCODER_PIN_B); //$ read input pin
+  _read_right = digitalReadFast(R_ENCODER_PIN_B); //$ read encoder input pin B
 
-  #ifdef R_ENCODER_REVERSED
-    _ticks_right += _read_right ? +1 : -1;
+  #ifdef R_ENCODER_REVERSED //$ if right encoder is reversed
+    //$ increment counter if B leads A
+    _ticks_right += _read_right ? +1 : -1; //$ if (_read_right) {_ticks_right++;} else {_ticks_right--;}
   #else
-    _ticks_right += _read_right ? -1 : +1;
+    //$ increment counter if A leads B
+    _ticks_right += _read_right ? -1 : +1; //$ if (_read_right) {_ticks_right--;} else {_ticks_right++;}
   #endif
 
 }
