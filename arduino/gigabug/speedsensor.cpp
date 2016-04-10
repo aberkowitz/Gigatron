@@ -17,10 +17,6 @@
 #include "classes.h"
 #include "isr.h"
 
-
-//$ TODO: use digitalWriteFastFast library
- //$ http://www.hessmer.org/blog/2011/01/30/quadrature-encoder-too-fast-for-arduino-with-solution/
-
 #define PULSES_PER_REV 600 //$ number of encoder pulses per full motor revolution
 const static double gearRatio = 11.0 / 60.0;  //$ gear ratio between motor and wheels
 
@@ -59,22 +55,17 @@ SpeedSensor::SpeedSensor(int interrupt, int poles, int interval) {
   _ticks_left = _ticks_right = 0;
 }
 
-//$ returns number of wheel revolutions
+//$ returns number of ticks per S_LOOP_INTERVAL
 long SpeedSensor::GetTicks() {
   long ticks;
 
-  if (_interrupt == L_ENCODER_INTERRUPT) {// If we are the left sensor
+  if (_interrupt == L_ENCODER_INTERRUPT) { // If we are the left sensor
     ticks = _ticks_left;
-     // dp(ticks); //$ do not uncomment this print statement if you want your Hall sensors to work
     _ticks_left = 0;
   } else if (_interrupt == R_ENCODER_INTERRUPT) { // right sensor
     ticks = _ticks_right;
-     // dp(ticks); //$ see above - do not uncomment this print statement unless you add delay somehow  
    _ticks_right = 0;
   }
-  
-  // long motor_revs = ticks / PULSES_PER_REV;
-  // double wheel_revs = motor_revs * gearRatio;
 
   return ticks;
 }

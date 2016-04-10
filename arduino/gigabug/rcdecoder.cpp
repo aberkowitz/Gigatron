@@ -26,7 +26,7 @@ RCDecoder::RCDecoder(int interrupt, int minV, int maxV) {
     attachInterrupt(0, ISR0, CHANGE);
   } else if (_interrupt == 1) {
     attachInterrupt(1, ISR1, CHANGE);
-  }else if (_interrupt == 2) {
+  } else if (_interrupt == 2) {
     attachInterrupt(2, ISR2, CHANGE);
   }
 }

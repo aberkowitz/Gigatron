@@ -98,8 +98,6 @@ Context::Context(Commander *commander, DCServo *servo,
 
   void Context::Start() {
 
-//    delay(500); //$ sleep so the ROS stuff gets set up
-
     //$ clear messages
     _radio_msg->speed_left = 0;
     _radio_msg->speed_right = 0;
@@ -146,18 +144,16 @@ Context::Context(Commander *commander, DCServo *servo,
       _jcommander->_autonomous = 0;
     }
 
-    //dp(_jcommander->_autonomous);
-    unsigned int lSpC;
-    unsigned int rSpC;
+    //$ left and right speed commands
+    int lSpC;
+    int rSpC;
+
       //left and right microsecond write values for ROBOCLAW
     unsigned int luSec;
     unsigned int ruSec;
-    int lDir;
-    int rDir;
-
+    
     if (d_st > _sInterval) {  //$ speed (drive motor) loop
       //$ left and right speed commands
-
 
       //$ get values from RC commander or Jetson commander
       if (_jcommander->_autonomous > 1) { //$ fully autonomous mode
@@ -179,55 +175,14 @@ Context::Context(Commander *commander, DCServo *servo,
       else { //$ RC mode and semiautomatic mode
         lSpC = _commander->GetLeftSpeedCmd();
         rSpC = _commander->GetRightSpeedCmd();
-        lDir = _commander->GetLeftDirectionCmd();
-        rDir = _commander->GetRightDirectionCmd();
-        
-        if (lDir == -1) {
-          lSpC = 0;
-        }
-        else if (lDir == 1) {
-          lSpC = (lSpC - 122) * (255 / (255 - 124));
-          //digitalWrite(_lRev, HIGH);
-        }
-        else {
-          lSpC = (255 -lSpC) * (255 / (255 - (255 - 116)));
-          //digitalWrite(_lRev, LOW);
-        }
-        
-        if (rDir == -1) {
-          rSpC = 0;
-        }
-        else if (rDir == 1) {
-          rSpC = (rSpC - 122) * (255 / (255 - 124));
-          //digitalWrite(_rRev, HIGH);
-        }
-        else {
-          rSpC = (255 - rSpC) * (255 / (255 - (255 - 116)));
-          //digitalWrite(_rRev, LOW);
-        }
       }
-      //$ write commands
-      //analogWrite(_lPwm, lSpC);
-      //analogWrite(_rPwm, rSpC);
 
-      //ROBOCLAW
-      //This is a bit uglier than it maybe needs to be because everything is unsigned...
-      if (lSpC > 250) {
-        lSpC = 250;
-      }
-      if (rSpC > 250) {
-        rSpC = 250;
-      }
-      if (lDir) {
-        luSec = 1500 + lSpC;
-      } else {
-        luSec = 1500 - lSpC;
-      }
-      if (rDir) {
-        ruSec = 1500 + rSpC;
-      } else {
-        ruSec = 1500 - rSpC;
-      }
+      //$ convert to RoboClaw format of
+      //$ servo-style timed pulses (1250-1750)
+      luSec = (unsigned int) 1500 + lSpC;
+      ruSec = (unsigned int) 1500 + rSpC;
+
+      //$ write to RoboClaw motor controller
       leftMotor.writeMicroseconds(luSec);
       rightMotor.writeMicroseconds(ruSec);
 
@@ -252,16 +207,14 @@ Context::Context(Commander *commander, DCServo *servo,
       //$ write 
       _radio_msg->speed_left = _commander->GetLeftSpeedCmd();
       _radio_msg->speed_right = _commander->GetRightSpeedCmd();
-      _radio_msg->dir_left = _commander->GetLeftDirectionCmd();
-      _radio_msg->dir_right = _commander->GetRightDirectionCmd();
+//      _radio_msg->dir_left = _commander->GetLeftDirectionCmd(); //$ TODO: remove from messages
+//      _radio_msg->dir_right = _commander->GetRightDirectionCmd();
       _radio_msg->angle = _commander->GetPositionCmd();
       _radio_msg->kill = _commander->GetKillCmd();
 
       _radio_pub->publish(_radio_msg);
 
     }
-
-
 
     if (d_pt > _pInterval) { //$ position (steering servo) loop
       unsigned char pC;
@@ -273,11 +226,7 @@ Context::Context(Commander *commander, DCServo *servo,
       }  
       unsigned char pS = _servo->GetPosLinearized();
 
-      
-      //dp(pC);
-      //dp(pS);
       int vel = _pos->Update(pC, pS); //$ update PID controller
-      //dp(vel);
 
       //$ command analogWrite/digitalWrite
       _servo->SetVelocity(vel);

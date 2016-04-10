@@ -19,7 +19,6 @@ volatile unsigned long _pw0_last_t, _pw1_last_t, _pw2_last_t;
 
 volatile long _ticks_left, _ticks_right;
 volatile bool _read_left, _read_right;
-//if speeds need to be unsigned, we can figure out a different way to convey direction
 
 void ISR0() {
   int state = digitalRead(2);

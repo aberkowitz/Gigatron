@@ -21,41 +21,24 @@ RCCommander::RCCommander(RCDecoder *sp, RCDecoder *pos, RCDecoder *kill) {
   _kill = kill;
 }
 
-int RCCommander::GetLeftDirectionCmd() {
-  unsigned int spd = _sp->GetVal();
-  if (spd > 124) {
-    return 1;
-  }
-  else if (spd < 116) {
-    return 0;
-  }
-  else {
-    return -1;
-  }
+int RCCommander::GetLeftSpeedCmd() {
+  int left_command = 2 * (int) _sp->GetVal() - 255;
+
+  //$ check edge cases
+  if (left_command > 250) left_command = 250;
+  if (left_command < -250) left_command = -250;
+  
+  return left_command;
 }
 
-//460 reverse, 510 forward
-//~120 should be reverse cutoff (120.9)
-//return +1 for forward, -1 for reverse, 0 for standstill
-int RCCommander::GetRightDirectionCmd() {
-  unsigned int spd = _sp->GetVal();
-  if (spd > 124) {
-    return 1;
-  }
-  else if (spd < 116) {
-    return 0;
-  }
-  else {
-    return -1;
-  }
-}
+int RCCommander::GetRightSpeedCmd() {
+  int right_command = 2 * (int) _sp->GetVal() - 255;
 
-unsigned char RCCommander::GetLeftSpeedCmd() {
-  return _sp->GetVal();
-}
-
-unsigned char RCCommander::GetRightSpeedCmd() {
-  return _sp->GetVal();
+  //$ check edge cases
+  if (right_command > 250) right_command = 250;
+  if (right_command < -250) right_command = -250;
+  
+  return right_command;
 }
 
 unsigned char RCCommander::GetPositionCmd() {
@@ -86,17 +69,14 @@ JetsonCommander::JetsonCommander(ros::NodeHandle *nh) {
 
 unsigned int JetsonCommander::GetLeftRPMCmd() {
   return _leftRPMCmd;
-  //return 500;
 }
 
 unsigned int JetsonCommander::GetRightRPMCmd() {
   return _rightRPMCmd;
-  //return 500;
 }
 
 unsigned char JetsonCommander::GetPositionCmd() {
   return _posCmd;
-  //return 0;
 }
 
 
