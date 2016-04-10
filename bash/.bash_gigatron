@@ -81,16 +81,14 @@ alias rb='rosbag' # 2015-09-12
 alias rbp='rosbag play' # 2015-09-12
 alias rbr='rosbag record -a' # 2015-07-26
 
-alias rqt_plot='sri; rosrun rqt_plot rqt_plot' # 2015-07-12
-alias rqt_graph='sri; rosrun rqt_graph rqt_graph' # 2015-07-16
+alias rqt_plot='sri; scw; rosrun rqt_plot rqt_plot' # 2015-07-12
+alias rqt_graph='sri; scw; rosrun rqt_graph rqt_graph' # 2015-07-16
 
 alias rsp='sri; rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0' # 2015-07-06
 alias rosserial='rsp' # 2015-07-12
 alias throttle='cdc; scw; rosrun gigatron ThrottlePub' # 2015-07-06
 alias steering='cdc; scw; rosrun gigatron SteeringPub' # 2015-07-12
 alias on2='sri; roslaunch openni2_launch openni2.launch' # 2015-07-12
-alias rqt_plot='sri; rosrun rqt_plot rqt_plot' # 2015-07-12
-alias rqt_graph='sri; rosrun rqt_graph rqt_graph' # 2015-07-16
 alias lidar='cdc; scw; rosrun lidar_lite lidar' # 2015-07-12
 alias imulib='cdc; scw; roslaunch rtimulib_ros rtimulib_ros.launch' # 2015-07-18
 alias imu='cdc; scw; roslaunch razor_imu_9dof razor-display.launch' # 2015-07-18
