@@ -166,8 +166,8 @@ Context::Context(Commander *commander, DCServo *servo,
         lDir = 0;
         rDir = 0;
         //$ sensed RPM values
-        unsigned int lRPMS = _left->GetRevs();
-        unsigned int rRPMS = _right->GetRevs();
+        unsigned int lRPMS = _left->GetTicks();
+        unsigned int rRPMS = _right->GetTicks();
         //Serial.println(rRPMS); //Controller's perceived RPM 
         //$ commanded values
         unsigned int lRPMC = _jcommander->GetLeftRPMCmd();
@@ -241,8 +241,8 @@ Context::Context(Commander *commander, DCServo *servo,
       // _mot_msg->rpm_right = rightWheelRPM * RPM_TO_M_S;
       
       //$ write wheel velocities
-      _mot_msg->rpm_left = _left->GetRevs();
-      _mot_msg->rpm_right = _right->GetRevs();
+      _mot_msg->rpm_left = _left->GetTicks();
+      _mot_msg->rpm_right = _right->GetTicks();
       _mot_msg->usec_left = ruSec;
       _mot_msg->usec_right = luSec;
 

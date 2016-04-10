@@ -35,7 +35,7 @@
 #define PI 3.1415926535897932384626433832795
 
 #define LOOP_INTERVAL 10
-#define S_LOOP_INTERVAL 85
+#define S_LOOP_INTERVAL 100
 
 //$ steering pot calibration
 int minADU = 463; //462, all right

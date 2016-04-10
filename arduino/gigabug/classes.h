@@ -38,8 +38,8 @@ private:
 class SpeedSensor {
 public:
   SpeedSensor(int interrupt, int poles, int interval);
-  unsigned int GetSpeed();
-  long GetRevs();
+  // unsigned int GetSpeed();
+  long GetTicks();
   double rpmSmooth = 0.0;
   double filterVal = 0.25;
 private:

@@ -59,7 +59,7 @@ SpeedSensor::SpeedSensor(int interrupt, int poles, int interval) {
 }
 
 //$ returns number of wheel revolutions
-long SpeedSensor::GetRevs() {
+long SpeedSensor::GetTicks() {
   long ticks;
 
   if (_interrupt == L_ENCODER_INTERRUPT) {// If we are the left sensor
@@ -72,12 +72,13 @@ long SpeedSensor::GetRevs() {
    _ticks_right = 0;
   }
   
-  long motor_revs = ticks / PULSES_PER_REV;
-  double wheel_revs = motor_revs * gearRatio;
+  // long motor_revs = ticks / PULSES_PER_REV;
+  // double wheel_revs = motor_revs * gearRatio;
 
   return ticks;
 }
 
+/*
 //$ TODO: this is unsigned, need to fix!
 unsigned int SpeedSensor::GetSpeed() {
   long ticks;
@@ -115,6 +116,7 @@ unsigned int SpeedSensor::GetSpeed() {
     //  dp(rpmSmooth);
       return (unsigned int) rpmSmooth;
 
-  */
+  
 }
+*/
 
