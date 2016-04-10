@@ -26,7 +26,7 @@
 
 extern volatile unsigned long _pw0_us, _pw1_us, _pw2_us;
 extern volatile unsigned long _pw0_last_t, _pw1_last_t, _pw2_last_t;
-extern volatile int _ticks_left, _ticks_right;
+extern volatile long _ticks_left, _ticks_right;
 
 void ISR0();
 void ISR1();

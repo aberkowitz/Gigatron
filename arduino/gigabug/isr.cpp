@@ -15,7 +15,7 @@
 
 volatile unsigned long _pw0_us, _pw1_us, _pw2_us;
 volatile unsigned long _pw0_last_t, _pw1_last_t, _pw2_last_t;
-volatile int _ticks_left, _ticks_right;
+volatile long _ticks_left, _ticks_right;
 //if speeds need to be unsigned, we can figure out a different way to convey direction
 
 void ISR0() {
@@ -48,7 +48,8 @@ void ISR2() {
 //Adapted for quadrature encoder, direction inferred from pulse alignment (11 forward, 10 backward)
 //$ left encoder interrupt service routine
 void LeftISR() { 
-  if (digitalRead(L_ENCODER_PIN_B)) { 
+  int read_pin_B = digitalRead(L_ENCODER_PIN_B);
+  if (read_pin_B) { 
     _ticks_left++;
   }
   else {
@@ -58,7 +59,8 @@ void LeftISR() {
 
 //$ right encoder interrupt service routine
 void RightISR() { 
-  if (digitalRead(R_ENCODER_PIN_B)) { 
+  int read_pin_B = digitalRead(R_ENCODER_PIN_B);
+  if (read_pin_B) { 
     _ticks_right--;
   }
   else {

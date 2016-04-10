@@ -166,8 +166,8 @@ Context::Context(Commander *commander, DCServo *servo,
         lDir = 0;
         rDir = 0;
         //$ sensed RPM values
-        unsigned int lRPMS = _left->GetSpeed();
-        unsigned int rRPMS = _right->GetSpeed();
+        unsigned int lRPMS = _left->GetRevs();
+        unsigned int rRPMS = _right->GetRevs();
         //Serial.println(rRPMS); //Controller's perceived RPM 
         //$ commanded values
         unsigned int lRPMC = _jcommander->GetLeftRPMCmd();

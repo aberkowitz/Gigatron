@@ -65,11 +65,11 @@ long SpeedSensor::GetRevs() {
   if (_interrupt == L_ENCODER_INTERRUPT) {// If we are the left sensor
     ticks = _ticks_left;
      dp(ticks); //$ do not uncomment this print statement if you want your Hall sensors to work
-//    _ticks_left = 0;
+    _ticks_left = 0;
   } else if (_interrupt == R_ENCODER_INTERRUPT) { // right sensor
     ticks = _ticks_right;
      dp(ticks); //$ see above - do not uncomment this print statement unless you add delay somehow  
-//    _ticks_right = 0;
+   _ticks_right = 0;
   }
   
   long motor_revs = ticks / PULSES_PER_REV;

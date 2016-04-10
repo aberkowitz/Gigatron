@@ -68,8 +68,11 @@ ros::NodeHandle nh;       //$ node handle
 // JetsonCommander(ros::NodeHandle *nh);
 JetsonCommander jc(&nh);  //$ Jetson commander
 
-PIDController lSp(2, 1, 1, 255, 0);
-PIDController rSp(2, 1, 1, 255, 0);
+//PIDController lSp(2, 1, 1, 255, 0);
+//PIDController rSp(2, 1, 1, 255, 0);
+
+PIDController lSp(2, 0, 0, 255, 0);
+PIDController rSp(2, 0, 0, 255, 0);
 
 PIDController pPos(150, 0, 15, 255, -255); //250, 1, 50
 
