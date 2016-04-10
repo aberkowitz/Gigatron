@@ -13,11 +13,12 @@
  **/
 
 #include <Arduino.h>
+#include <digitalWriteFast.h>
 #include "classes.h"
 #include "isr.h"
 
 
-//$ TODO: use digitalWriteFast library
+//$ TODO: use digitalWriteFastFast library
  //$ http://www.hessmer.org/blog/2011/01/30/quadrature-encoder-too-fast-for-arduino-with-solution/
 
 #define PULSES_PER_REV 600 //$ number of encoder pulses per full motor revolution
@@ -39,15 +40,15 @@ SpeedSensor::SpeedSensor(int interrupt, int poles, int interval) {
       Mega2560 pin  2   3   21  20  19  18
   */
 
-  pinMode(L_ENCODER_PIN_A, INPUT);
-  pinMode(L_ENCODER_PIN_B, INPUT);
-  pinMode(R_ENCODER_PIN_A, INPUT);
-  pinMode(R_ENCODER_PIN_B, INPUT);
+  pinModeFast(L_ENCODER_PIN_A, INPUT);
+  pinModeFast(L_ENCODER_PIN_B, INPUT);
+  pinModeFast(R_ENCODER_PIN_A, INPUT);
+  pinModeFast(R_ENCODER_PIN_B, INPUT);
 
-  digitalWrite(L_ENCODER_PIN_A, HIGH);
-  digitalWrite(L_ENCODER_PIN_B, HIGH);
-  digitalWrite(R_ENCODER_PIN_A, HIGH);
-  digitalWrite(R_ENCODER_PIN_B, HIGH);
+  digitalWriteFast(L_ENCODER_PIN_A, HIGH);
+  digitalWriteFast(L_ENCODER_PIN_B, HIGH);
+  digitalWriteFast(R_ENCODER_PIN_A, HIGH);
+  digitalWriteFast(R_ENCODER_PIN_B, HIGH);
   
   if (_interrupt == R_ENCODER_INTERRUPT) {
     attachInterrupt(R_ENCODER_INTERRUPT, RightISR, RISING);
@@ -64,11 +65,11 @@ long SpeedSensor::GetTicks() {
 
   if (_interrupt == L_ENCODER_INTERRUPT) {// If we are the left sensor
     ticks = _ticks_left;
-     dp(ticks); //$ do not uncomment this print statement if you want your Hall sensors to work
+     // dp(ticks); //$ do not uncomment this print statement if you want your Hall sensors to work
     _ticks_left = 0;
   } else if (_interrupt == R_ENCODER_INTERRUPT) { // right sensor
     ticks = _ticks_right;
-     dp(ticks); //$ see above - do not uncomment this print statement unless you add delay somehow  
+     // dp(ticks); //$ see above - do not uncomment this print statement unless you add delay somehow  
    _ticks_right = 0;
   }
   
