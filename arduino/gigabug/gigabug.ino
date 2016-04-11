@@ -24,15 +24,15 @@
 //#include <ArduinoHardware.h>
 
 #include <geometry_msgs/Vector3.h>
-#include <std_msgs/Float32.h> //$ for steering odometry stuff and mode
-#include <std_msgs/UInt16.h> //$ for mode switching
+#include <std_msgs/Float32.h>   //$ for steering odometry stuff and mode
+#include <std_msgs/UInt16.h>    //$ for mode switching
 
 //$ debugging messages
 #include <gigatron/Radio.h>
 #include <gigatron/Steering.h>
 #include <gigatron/Motors.h>
 
-#define PI 3.1415926535897932384626433832795
+
 
 #define LOOP_INTERVAL 10
 #define S_LOOP_INTERVAL 100
@@ -48,21 +48,6 @@ int rPwm = 10;
 int lRev = 30; //pin 30 left reverse
 int rRev = 31; //pin 31 right reverse
 
-const static double INCHES_TO_M = 0.0254; //$ conversion from inches to meters
-
-//$ car dimensions
-const static double wheelBaseWidth = 23.0 * INCHES_TO_M;  //$ [m]
-const static double wheelRadius = 4.90 * INCHES_TO_M;     //$ [m]
-const static double gearRatio = 11.0 / 60.0;  //$ gear ratio between motor and wheels
-
-
-//$ constants
-const static double RPM_TO_M_S = (2 * PI * wheelRadius) / 60.0;   //$ conversion from RPM to meters per second
-
-const static double STEERING_PWM_RANGE = 255.0;
-const static double STEERING_ANGLE_RANGE = 50 * (PI / 180); //$ [radians] this is the correct steering range
-const static double ABS_MAX_STEERING_ANGLE = 25 * (PI / 180); //$ [radians]
-
 ros::NodeHandle nh;       //$ node handle
 
 // JetsonCommander(ros::NodeHandle *nh);
@@ -71,8 +56,8 @@ JetsonCommander jc(&nh);  //$ Jetson commander
 //PIDController lSp(2, 1, 1, 255, 0);
 //PIDController rSp(2, 1, 1, 255, 0);
 
-PIDController lSp(2, 0, 0, 255, 0);
-PIDController rSp(2, 0, 0, 255, 0);
+PIDController lSp(50, 0, 1, 250, 0);
+PIDController rSp(20, 0, 1, 250, 0);
 
 PIDController pPos(150, 0, 15, 255, -255); //250, 1, 50
 
@@ -83,12 +68,9 @@ gigatron::Motors mot_msg;
 
 void CmdCallback(const geometry_msgs::Vector3& cmd) {
 
-  double desiredSteeringAngle = cmd.x;
-  unsigned char servoPWM = (desiredSteeringAngle + ABS_MAX_STEERING_ANGLE) * (STEERING_PWM_RANGE / STEERING_ANGLE_RANGE);
-
-  jc._posCmd = servoPWM;
-  jc._leftRPMCmd = (unsigned int) (cmd.y / RPM_TO_M_S);
-  jc._rightRPMCmd = (unsigned int) (cmd.z / RPM_TO_M_S);
+  jc._angle = cmd.x;
+  jc._left_vel = cmd.y;
+  jc._right_vel = cmd.z;
 }
 
 /*$ Swith between radio RC and autonomous/Jetson RC mode.

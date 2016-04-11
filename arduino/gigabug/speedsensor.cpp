@@ -18,8 +18,6 @@
 #include "isr.h"
 
 #define PULSES_PER_REV 600 //$ number of encoder pulses per full motor revolution
-const static double gearRatio = 11.0 / 60.0;  //$ gear ratio between motor and wheels
-
 
 SpeedSensor::SpeedSensor(int interrupt, int poles, int interval) {
   _interrupt = interrupt;

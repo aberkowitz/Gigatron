@@ -17,21 +17,6 @@
 #include "commander.h"
 #include "context.h"
  
-#define PI 3.1415926535897932384626433832795
-
-const static double INCHES_TO_M = 0.0254; //$ conversion from inches to meters
-//const static double PI = 3.141592653589793238463;
-
-const static double wheelBaseWidth = 23.0 * INCHES_TO_M;  //$ [m]
-const static double wheelRadius = 4.90 * INCHES_TO_M;     //$ [m]
-const static double gearRatio = 11.0 / 60.0;  //$ gear ratio between motor and wheels
-
-const static double RPM_TO_M_S = (2 * PI * wheelRadius) / 60.0;   //$ conversion from RPM to meters per second
-
-const static double STEERING_PWM_RANGE = 255.0;
-const static double STEERING_ANGLE_RANGE = 50 * (PI / 180); //$ [radians] this is the correct steering range
-const static double ABS_MAX_STEERING_ANGLE = 25 * (PI / 180); //$ [radians]
-
 Servo leftMotor;
 Servo rightMotor;
 
@@ -155,26 +140,29 @@ Context::Context(Commander *commander, DCServo *servo,
     if (d_st > _sInterval) {  //$ speed (drive motor) loop
       //$ left and right speed commands
 
+      int l_ticks = _left->GetTicks();
+      int r_ticks = _right->GetTicks();
       //$ get values from RC commander or Jetson commander
       if (_jcommander->_autonomous > 1) { //$ fully autonomous mode
-        //Direction is forward by default
-        //Autonomous Gigatron doesn't know how to go backwards yet
-        lDir = 0;
-        rDir = 0;
-        //$ sensed RPM values
-        unsigned int lRPMS = _left->GetTicks();
-        unsigned int rRPMS = _right->GetTicks();
-        //Serial.println(rRPMS); //Controller's perceived RPM 
+
         //$ commanded values
-        unsigned int lRPMC = _jcommander->GetLeftRPMCmd();
-        unsigned int rRPMC = _jcommander->GetRightRPMCmd();
+        int lRPMC = _jcommander->GetLeftVelCmd();
+        int rRPMC = _jcommander->GetRightVelCmd();
+        
+
         //$ update PID controllers
-        lSpC = _lSp->Update(lRPMC, lRPMS);
-        rSpC = _rSp->Update(rRPMC, rRPMS);
+        lSpC = - _lSp->Update(lRPMC, l_ticks);
+        rSpC = - _rSp->Update(rRPMC, r_ticks);
+
+        
+
+        // //$ sending open loop commands between -250 (max forward) and 250 (max backward)
+        // lSpC = lRPMC;
+        // rSpC = rRPMC;
       }
       else { //$ RC mode and semiautomatic mode
-        lSpC = _commander->GetLeftSpeedCmd();
-        rSpC = _commander->GetRightSpeedCmd();
+        lSpC = _commander->GetLeftVelCmd();
+        rSpC = _commander->GetRightVelCmd();
       }
 
       //$ convert to RoboClaw format of
@@ -196,8 +184,8 @@ Context::Context(Commander *commander, DCServo *servo,
       // _mot_msg->rpm_right = rightWheelRPM * RPM_TO_M_S;
       
       //$ write wheel velocities
-      _mot_msg->rpm_left = _left->GetTicks();
-      _mot_msg->rpm_right = _right->GetTicks();
+      _mot_msg->rpm_left = l_ticks;
+      _mot_msg->rpm_right = r_ticks;
       _mot_msg->usec_left = ruSec;
       _mot_msg->usec_right = luSec;
 
@@ -205,8 +193,8 @@ Context::Context(Commander *commander, DCServo *servo,
       _mot_pub->publish(_mot_msg);
 
       //$ write 
-      _radio_msg->speed_left = _commander->GetLeftSpeedCmd();
-      _radio_msg->speed_right = _commander->GetRightSpeedCmd();
+      _radio_msg->speed_left = _commander->GetLeftVelCmd();
+      _radio_msg->speed_right = _commander->GetRightVelCmd();
 //      _radio_msg->dir_left = _commander->GetLeftDirectionCmd(); //$ TODO: remove from messages
 //      _radio_msg->dir_right = _commander->GetRightDirectionCmd();
       _radio_msg->angle = _commander->GetPositionCmd();

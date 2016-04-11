@@ -23,11 +23,11 @@
 #define L_ENCODER_INTERRUPT 5
 #define L_ENCODER_PIN_A 18
 #define L_ENCODER_PIN_B 16
-#define L_ENCODER_REVERSED //$ encode directionality
+#define L_ENCODER_REVERSED //$ define that the left encoder is reversed to handle directionality
 
 extern volatile unsigned long _pw0_us, _pw1_us, _pw2_us;
 extern volatile unsigned long _pw0_last_t, _pw1_last_t, _pw2_last_t;
-extern volatile long _ticks_left, _ticks_right;
+extern volatile long _ticks_left, _ticks_right;		//$ number of ticks for each encoder
 
 void ISR0();
 void ISR1();

@@ -19,8 +19,8 @@
 
 class Commander {
 public:
-  virtual int GetLeftSpeedCmd() {return 0;}
-  virtual int GetRightSpeedCmd() {return 0;}
+  virtual int GetLeftVelCmd() {return 0;}
+  virtual int GetRightVelCmd() {return 0;}
   virtual unsigned char GetPositionCmd() {return 0;}
   virtual unsigned char GetKillCmd() {return 0;}
 };
@@ -28,8 +28,8 @@ public:
 class RCCommander: public Commander {
 public:
   RCCommander(RCDecoder *sp, RCDecoder *pos,  RCDecoder *kill);
-  int GetLeftSpeedCmd();
-  int GetRightSpeedCmd();
+  int GetLeftVelCmd();
+  int GetRightVelCmd();
   unsigned char GetPositionCmd();
   unsigned char GetKillCmd();
 
@@ -40,11 +40,11 @@ private:
 class JetsonCommander: public Commander { //$ wooo
 public:
   JetsonCommander(ros::NodeHandle *nh);
-  unsigned int GetLeftRPMCmd();
-  unsigned int GetRightRPMCmd();
+  int GetLeftVelCmd();
+  int GetRightVelCmd();
   unsigned char GetPositionCmd();
-  unsigned char _posCmd;
-  unsigned int _leftRPMCmd, _rightRPMCmd;
+  double _angle;
+  double _left_vel, _right_vel;
   
   unsigned int _autonomous;
 /*
