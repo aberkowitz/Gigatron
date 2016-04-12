@@ -13,7 +13,6 @@
  **/
 
 #include <Arduino.h>
-#include <digitalWriteFast.h>
 #include "classes.h"
 #include "isr.h"
 
@@ -34,20 +33,20 @@ SpeedSensor::SpeedSensor(int interrupt, int poles, int interval) {
       Mega2560 pin  2   3   21  20  19  18
   */
 
-  pinModeFast(L_ENCODER_PIN_A, INPUT);
-  pinModeFast(L_ENCODER_PIN_B, INPUT);
-  pinModeFast(R_ENCODER_PIN_A, INPUT);
-  pinModeFast(R_ENCODER_PIN_B, INPUT);
+  pinMode(L_ENCODER_PIN_A, INPUT);
+  pinMode(L_ENCODER_PIN_B, INPUT);
+  pinMode(R_ENCODER_PIN_A, INPUT);
+  pinMode(R_ENCODER_PIN_B, INPUT);
 
-  digitalWriteFast(L_ENCODER_PIN_A, HIGH);
-  digitalWriteFast(L_ENCODER_PIN_B, HIGH);
-  digitalWriteFast(R_ENCODER_PIN_A, HIGH);
-  digitalWriteFast(R_ENCODER_PIN_B, HIGH);
-  
+  digitalWrite(L_ENCODER_PIN_A, HIGH);
+  digitalWrite(L_ENCODER_PIN_B, HIGH);
+  digitalWrite(R_ENCODER_PIN_A, HIGH);
+  digitalWrite(R_ENCODER_PIN_B, HIGH);
+    
   if (_interrupt == R_ENCODER_INTERRUPT) {
-    attachInterrupt(R_ENCODER_INTERRUPT, RightISR, RISING);
+    attachInterrupt(R_ENCODER_INTERRUPT, RightISR, FALLING);
   } else {
-    attachInterrupt(L_ENCODER_INTERRUPT, LeftISR, RISING);
+    attachInterrupt(L_ENCODER_INTERRUPT, LeftISR, FALLING);
   }
   
   _ticks_left = _ticks_right = 0;
