@@ -11,7 +11,6 @@
  **/
 
 #include <Arduino.h>
-#include <digitalWriteFast.h>
 #include "isr.h"
 
 volatile unsigned long _pw0_us, _pw1_us, _pw2_us;
@@ -50,7 +49,8 @@ void ISR2() {
 //Adapted for quadrature encoder, direction inferred from pulse alignment (11 forward, 10 backward)
 //$ left encoder interrupt service routine
 void LeftISR() { 
-  _read_left = digitalReadFast(L_ENCODER_PIN_B); //$ read encoder input pin B
+  //$ read encoder input pin B
+  _read_left = bitRead(PORTH, 1); //$ equivalent to digitalRead(L_ENCODER_PIN_B) but faster 
 
   #ifdef L_ENCODER_REVERSED //$ if left encoder is reversed
     //$ increment counter if B leads A
@@ -64,7 +64,8 @@ void LeftISR() {
 
 //$ right encoder interrupt service routine
 void RightISR() { 
-  _read_right = digitalReadFast(R_ENCODER_PIN_B); //$ read encoder input pin B
+  //$ read encoder input pin B
+  _read_right = bitRead(PORTH, 0); //$ equivalent to digitalRead(R_ENCODER_PIN_B) but faster
 
   #ifdef R_ENCODER_REVERSED //$ if right encoder is reversed
     //$ increment counter if B leads A

@@ -23,7 +23,7 @@
 #define L_ENCODER_INTERRUPT 5
 #define L_ENCODER_PIN_A 18
 #define L_ENCODER_PIN_B 16
-#define L_ENCODER_REVERSED //$ define that the left encoder is reversed to handle directionality
+//#define L_ENCODER_REVERSED //$ define that the left encoder is reversed to handle directionality
 
 extern volatile unsigned long _pw0_us, _pw1_us, _pw2_us;
 extern volatile unsigned long _pw0_last_t, _pw1_last_t, _pw2_last_t;
