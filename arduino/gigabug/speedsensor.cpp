@@ -33,16 +33,11 @@ SpeedSensor::SpeedSensor(int interrupt, int poles, int interval) {
       Mega2560 pin  2   3   21  20  19  18
   */
 
-  pinMode(L_ENCODER_PIN_A, INPUT);
-  pinMode(L_ENCODER_PIN_B, INPUT);
-  pinMode(R_ENCODER_PIN_A, INPUT);
-  pinMode(R_ENCODER_PIN_B, INPUT);
+  pinMode(L_ENCODER_PIN_A, INPUT_PULLUP);
+  pinMode(L_ENCODER_PIN_B, INPUT_PULLUP);
+  pinMode(R_ENCODER_PIN_A, INPUT_PULLUP);
+  pinMode(R_ENCODER_PIN_B, INPUT_PULLUP);
 
-  digitalWrite(L_ENCODER_PIN_A, HIGH);
-  digitalWrite(L_ENCODER_PIN_B, HIGH);
-  digitalWrite(R_ENCODER_PIN_A, HIGH);
-  digitalWrite(R_ENCODER_PIN_B, HIGH);
-    
   if (_interrupt == R_ENCODER_INTERRUPT) {
     attachInterrupt(R_ENCODER_INTERRUPT, RightISR, FALLING);
   } else {

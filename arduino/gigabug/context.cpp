@@ -151,14 +151,14 @@ Context::Context(Commander *commander, DCServo *servo,
         
 
         //$ update PID controllers
-        lSpC = - _lSp->Update(lRPMC, l_ticks);
-        rSpC = - _rSp->Update(rRPMC, r_ticks);
+//        lSpC = - _lSp->Update(lRPMC, l_ticks);
+//        rSpC = - _rSp->Update(rRPMC, r_ticks);
 
         
 
         // //$ sending open loop commands between -250 (max forward) and 250 (max backward)
-        // lSpC = lRPMC;
-        // rSpC = rRPMC;
+         lSpC = lRPMC;
+         rSpC = rRPMC;
       }
       else { //$ RC mode and semiautomatic mode
         lSpC = _commander->GetLeftVelCmd();
